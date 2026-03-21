@@ -2192,7 +2192,7 @@ async function saveCalendarEntry(){
   renderCalendar();
 }
 
-function addAutoCalendarEntry(coach, type, context, result){
+async function addAutoCalendarEntry(coach, type, context, result){
   if(!coach) return;
   const entry = {
     id:Date.now(),
