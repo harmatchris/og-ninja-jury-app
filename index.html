@@ -4,6 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>OG Ninja Jury App – Overground Basel</title>
+<meta name="application-name" content="OG Jury"/>
+<meta name="apple-mobile-web-app-title" content="OG Jury"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="theme-color" content="#001F5B"/>
+<!-- SVG icon: OG JURY logo for homescreen -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23F57C00'/%3E%3Ctext x='50' y='52' font-family='Arial Black,sans-serif' font-size='38' font-weight='900' fill='%23001435' text-anchor='middle' dominant-baseline='middle'%3EOG%3C/text%3E%3Ctext x='50' y='78' font-family='Arial,sans-serif' font-size='17' font-weight='900' fill='%23001435' text-anchor='middle' letter-spacing='3'%3EJURY%3C/text%3E%3C/svg%3E"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23F57C00'/%3E%3Ctext x='50' y='52' font-family='Arial Black,sans-serif' font-size='38' font-weight='900' fill='%23001435' text-anchor='middle' dominant-baseline='middle'%3EOG%3C/text%3E%3Ctext x='50' y='78' font-family='Arial,sans-serif' font-size='17' font-weight='900' fill='%23001435' text-anchor='middle' letter-spacing='3'%3EJURY%3C/text%3E%3C/svg%3E"/>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -42,6 +50,55 @@ body{
   min-height:100vh;
   overflow-x:hidden;
 }
+
+/* ─── HISTORY ───────────────────────────────── */
+.hist-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  transition:var(--transition);
+}
+.hist-card:hover{border-color:rgba(245,124,0,.35);}
+.hist-card-head{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;cursor:pointer;
+}
+.hist-type-badge{
+  flex-shrink:0;
+  padding:3px 9px;border-radius:20px;
+  font-size:.68rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+}
+.hist-badge-ninja{background:rgba(245,124,0,.22);color:var(--og-amber);border:1px solid rgba(245,124,0,.35);}
+.hist-badge-skills{background:rgba(39,174,96,.18);color:#5dde8e;border:1px solid rgba(39,174,96,.35);}
+.hist-badge-speedrun{background:rgba(100,180,255,.18);color:#8ecfff;border:1px solid rgba(100,180,255,.35);}
+.hist-badge-chasetag{background:rgba(231,76,60,.18);color:#ff8a7a;border:1px solid rgba(231,76,60,.35);}
+.hist-meta{flex:1;min-width:0;}
+.hist-title{font-size:.88rem;font-weight:700;color:var(--og-white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hist-sub{font-size:.72rem;color:var(--og-grey);margin-top:1px;}
+.hist-result{flex-shrink:0;text-align:right;}
+.hist-result-main{font-size:.92rem;font-weight:800;color:var(--og-orange);}
+.hist-result-sub{font-size:.68rem;color:var(--og-grey);}
+.hist-expand-icon{flex-shrink:0;color:var(--og-grey);font-size:.8rem;transition:transform .2s;}
+.hist-card.open .hist-expand-icon{transform:rotate(180deg);}
+.hist-details{
+  display:none;
+  border-top:1px solid rgba(255,255,255,.07);
+  padding:12px 14px;
+  font-size:.8rem;
+  color:var(--og-light);
+}
+.hist-card.open .hist-details{display:block;}
+.hist-detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px 16px;margin-bottom:10px;}
+.hist-detail-item{}
+.hist-detail-label{font-size:.66rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px;}
+.hist-detail-val{font-size:.82rem;font-weight:600;color:var(--og-white);}
+.hist-splits-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:.76rem;}
+.hist-splits-table th{color:var(--og-grey);font-weight:600;text-align:left;padding:3px 6px;border-bottom:1px solid rgba(255,255,255,.08);}
+.hist-splits-table td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.04);}
+.hist-skills-row{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.hist-skills-row:last-child{border-bottom:none;}
+.hist-empty{text-align:center;padding:40px 20px;color:var(--og-grey);font-size:.88rem;}
 
 /* ─── INSTALL POPUP STEPS ───────────────────── */
 .ipu-step{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:var(--og-light);}
@@ -446,6 +503,9 @@ body{
   </button>
   <button class="nav-btn" onclick="showScreen('import')" data-screen="import">
     <span class="nav-icon">📥</span> Import
+  </button>
+  <button class="nav-btn" onclick="showScreen('history')" data-screen="history">
+    <span class="nav-icon">📋</span> History
   </button>
 </nav>
 
@@ -884,6 +944,7 @@ body{
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
       <button class="btn btn-primary" onclick="exportAllDay()">📥 Tages-Export (Excel)</button>
       <button class="btn btn-navy" onclick="printResults()">🖨️ Drucken</button>
+      <button class="btn btn-navy" onclick="showScreen('history')" style="background:rgba(100,160,255,.15);border:1px solid rgba(100,160,255,.3);color:#8ecfff;">📋 Alle Resultate (History)</button>
       <button class="btn btn-danger btn-sm" onclick="hcLogout()">Logout</button>
     </div>
   </div>
@@ -964,6 +1025,50 @@ body{
 <!-- Gemeinsame Athleten-Datalist für alle Modi -->
 <datalist id="athletes-datalist"></datalist>
 
+<!-- ─── SCREEN: HISTORY ───────────────────────── -->
+<section id="screen-history" class="screen">
+  <div class="section-header">
+    <div>
+      <div class="section-title">📋 Ergebnis-History</div>
+      <div class="section-sub">Alle Resultate – vollständig und chronologisch</div>
+    </div>
+    <div id="hist-coach-hint" style="font-size:.78rem;color:var(--og-amber);text-align:right;line-height:1.4;display:none;"></div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="card" style="padding:14px 16px;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+      <div style="flex:1;min-width:130px;">
+        <label class="form-label" style="font-size:.72rem;">Aktivität</label>
+        <select class="form-control" id="hist-filter-type" onchange="renderHistory()" style="padding:7px 10px;font-size:.82rem;">
+          <option value="">Alle Typen</option>
+          <option value="ninja">🥷 Ninja Stage</option>
+          <option value="skills">⭐ Skills</option>
+          <option value="speedrun">⚡ Speedrun</option>
+          <option value="chasetag">🏃 Chasetag</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:130px;">
+        <label class="form-label" style="font-size:.72rem;">Coach</label>
+        <input type="text" class="form-control" id="hist-filter-coach" placeholder="Alle Coaches" oninput="renderHistory()" style="padding:7px 10px;font-size:.82rem;" list="coach-datalist"/>
+      </div>
+      <div style="flex:1;min-width:110px;">
+        <label class="form-label" style="font-size:.72rem;">Von</label>
+        <input type="date" class="form-control" id="hist-filter-from" onchange="renderHistory()" style="padding:7px 10px;font-size:.82rem;"/>
+      </div>
+      <div style="flex:1;min-width:110px;">
+        <label class="form-label" style="font-size:.72rem;">Bis</label>
+        <input type="date" class="form-control" id="hist-filter-to" onchange="renderHistory()" style="padding:7px 10px;font-size:.82rem;"/>
+      </div>
+      <button class="btn btn-navy btn-sm" onclick="clearHistoryFilters()" style="white-space:nowrap;font-size:.78rem;padding:7px 12px;">✕ Filter</button>
+    </div>
+    <div id="hist-count" style="margin-top:8px;font-size:.75rem;color:var(--og-grey);"></div>
+  </div>
+
+  <!-- Timeline -->
+  <div id="hist-list" style="display:flex;flex-direction:column;gap:10px;margin-top:4px;"></div>
+</section>
+
 </main><!-- end main-content -->
 
 <!-- ══════════════════════════════════════════
@@ -983,9 +1088,14 @@ body{
       <label class="form-label">PIN <span style="color:var(--og-amber);font-size:.72rem;">– für diesen Coach erforderlich</span></label>
       <input type="password" class="form-control" id="coach-pin-input" maxlength="4" placeholder="••••" style="font-size:1.3rem;letter-spacing:6px;text-align:center;" onkeydown="if(event.key==='Enter')setCoach()"/>
     </div>
-    <div style="display:flex;gap:10px;margin-top:16px;">
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
       <button class="btn btn-primary" onclick="setCoach()">✓ Bestätigen</button>
       <button class="btn btn-navy" onclick="closeModal('coach-modal')">Abbrechen</button>
+    </div>
+    <div id="coach-history-link" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);">
+      <button onclick="closeModal('coach-modal');goToMyHistory()" style="width:100%;background:rgba(100,160,255,.1);border:1px solid rgba(100,160,255,.25);color:#8ecfff;border-radius:10px;padding:9px;font-size:.82rem;font-weight:700;cursor:pointer;">
+        📋 Meine Resultate ansehen →
+      </button>
     </div>
   </div>
 </div>
@@ -1282,6 +1392,7 @@ function showScreen(name){
   if(name==='speedrun') renderSpeedrunLeaderboard();
   if(name==='calendar') renderCalendar();
   if(name==='headcoach') renderHeadcoachDashboard();
+  if(name==='history') renderHistory();
 }
 
 // ════════════════════════════════════════════════
@@ -1292,6 +1403,9 @@ function openCoachModal(){
   document.getElementById('coach-name-input').value = state.currentCoach;
   document.getElementById('coach-pin-input').value = '';
   checkCoachPin();
+  // Show history link if already logged in
+  const histLink = document.getElementById('coach-history-link');
+  if(histLink) histLink.style.display = state.currentCoach ? 'block' : 'none';
   openModal('coach-modal');
 }
 
@@ -2366,20 +2480,28 @@ function renderHeadcoachDashboard(){
       <span class="badge badge-blue">${d.total} gesamt</span>
     </div>`).join('')||'<div style="color:var(--og-grey);">Noch keine Einträge</div>';
 
-  // Recent results
-  const recent=[
-    ...state.ninjaResults.map(r=>({type:'🥷 Ninja',name:r.athlete,info:r.timeStr,date:r.dateStr,coach:r.coach})),
-    ...state.skillResults.map(r=>({type:'⭐ Skills',name:r.athlete,info:r.totalPoints+' Pkt',date:r.dateStr,coach:r.coach})),
-    ...state.speedrunResults.map(r=>({type:'⚡ Speed',name:r.athlete,info:r.timeStr,date:r.dateStr,coach:r.coach})),
-  ].sort((a,b)=>b.date-a.date).slice(0,15);
+  // Recent results (last 8, newest first)
+  const allResults=[
+    ...state.ninjaResults.map(r=>({type:'🥷 Ninja',badge:'hist-badge-ninja',name:r.athlete,info:r.timeStr,date:r.date||r.dateStr,dateStr:r.dateStr,coach:r.coach})),
+    ...state.skillResults.map(r=>({type:'⭐ Skills',badge:'hist-badge-skills',name:r.athlete,info:r.totalPoints+' Pkt',date:r.date||r.dateStr,dateStr:r.dateStr,coach:r.coach})),
+    ...state.speedrunResults.map(r=>({type:'⚡ Speed',badge:'hist-badge-speedrun',name:r.athlete,info:r.timeStr,date:r.date||r.dateStr,dateStr:r.dateStr,coach:r.coach})),
+  ].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const recent = allResults.slice(0,8);
+  const totalCount = allResults.length + (state.calendarEntries||[]).filter(e=>e.auto&&e.activity==='Chasetag').length;
 
-  document.getElementById('hc-recent-results').innerHTML=recent.map(r=>`
+  document.getElementById('hc-recent-results').innerHTML=
+    (recent.map(r=>`
     <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.84rem;">
-      <span class="badge badge-blue">${r.type}</span>
-      <span style="font-weight:600;">${r.name}</span>
-      <span style="color:var(--og-grey);">${r.info}</span>
-      <span style="margin-left:auto;color:var(--og-grey);font-size:.72rem;">${r.date} · ${r.coach||'–'}</span>
-    </div>`).join('')||'<div style="color:var(--og-grey);">Noch keine Ergebnisse</div>';
+      <span class="hist-type-badge ${r.badge}" style="font-size:.65rem;">${r.type}</span>
+      <span style="font-weight:600;">${r.name||'–'}</span>
+      <span style="color:var(--og-orange);font-weight:700;">${r.info}</span>
+      <span style="margin-left:auto;color:var(--og-grey);font-size:.72rem;">${r.dateStr||'–'} · ${r.coach||'–'}</span>
+    </div>`).join('')||'<div style="color:var(--og-grey);padding:8px 0;">Noch keine Ergebnisse</div>')
+    + `<div style="text-align:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.07);">
+      <button onclick="showScreen('history')" style="background:rgba(100,160,255,.12);border:1px solid rgba(100,160,255,.25);color:#8ecfff;border-radius:8px;padding:7px 18px;font-size:.8rem;font-weight:700;cursor:pointer;">
+        📋 Alle ${totalCount} Resultate in der History anzeigen →
+      </button>
+    </div>`;
 
   // Coach PINs rendern
   renderCoachPins();
@@ -2598,6 +2720,45 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   toast('OG Ninja Jury App geladen ✓','success');
 
+  // ── Generate OG JURY PNG icon for PWA homescreen (iOS/Android) ──────
+  (function(){
+    try{
+      const sz=512;
+      const cv=document.createElement('canvas');
+      cv.width=sz; cv.height=sz;
+      const ctx=cv.getContext('2d');
+      // Rounded rect background (#F57C00)
+      const r=sz*0.22;
+      ctx.beginPath();
+      ctx.moveTo(r,0);ctx.lineTo(sz-r,0);ctx.quadraticCurveTo(sz,0,sz,r);
+      ctx.lineTo(sz,sz-r);ctx.quadraticCurveTo(sz,sz,sz-r,sz);
+      ctx.lineTo(r,sz);ctx.quadraticCurveTo(0,sz,0,sz-r);
+      ctx.lineTo(0,r);ctx.quadraticCurveTo(0,0,r,0);
+      ctx.closePath();
+      ctx.fillStyle='#F57C00'; ctx.fill();
+      // "OG" text
+      ctx.fillStyle='#001435';
+      ctx.font='bold 210px Arial Black,sans-serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('OG',sz/2,sz*0.42);
+      // "JURY" text
+      ctx.font='bold 105px Arial,sans-serif';
+      ctx.letterSpacing='12px';
+      ctx.fillText('JURY',sz/2+8,sz*0.76);
+      const png=cv.toDataURL('image/png');
+      // Set apple-touch-icon
+      let link=document.querySelector("link[rel='apple-touch-icon']");
+      if(link) link.href=png;
+      // Inject minimal manifest for Android
+      const manifest={name:'OG Ninja Jury App',short_name:'OG Jury',start_url:location.href,display:'standalone',background_color:'#001F5B',theme_color:'#F57C00',icons:[{src:png,sizes:'512x512',type:'image/png'}]};
+      const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+      const murl=URL.createObjectURL(blob);
+      let ml=document.getElementById('pwa-manifest-link');
+      if(!ml){ml=document.createElement('link');ml.id='pwa-manifest-link';ml.rel='manifest';document.head.appendChild(ml);}
+      ml.href=murl;
+    }catch(e){}
+  })();
+
   // ── One-time install popup ──────────────────────────────────────────
   if(!localStorage.getItem('og_install_shown')){
     setTimeout(()=>{
@@ -2629,6 +2790,265 @@ document.addEventListener('DOMContentLoaded',()=>{
 function closeInstallPopup(){
   document.getElementById('install-popup').style.display = 'none';
   localStorage.setItem('og_install_shown','1');
+}
+
+// ════════════════════════════════════════════════
+// HISTORY
+// ════════════════════════════════════════════════
+
+function buildHistoryItems(){
+  const items = [];
+
+  // Ninja results
+  (state.ninjaResults||[]).forEach(r=>{
+    items.push({
+      type:'ninja',
+      id: r.id,
+      date: r.date || r.dateStr,
+      dateStr: r.dateStr,
+      athlete: r.athlete,
+      coach: r.coach,
+      stage: r.stage,
+      category: r.category,
+      actType: r.actType || 'Ninja',
+      // summary
+      timeStr: r.timeStr,
+      cleared: r.clearedObstacles,
+      total: r.totalObstacles,
+      mode: r.mode,
+      // details
+      totalTimeStr: r.totalTimeStr,
+      usedSplit: r.usedSplit,
+      splits: r.splits || [],
+      _raw: r
+    });
+  });
+
+  // Skills results
+  (state.skillResults||[]).forEach(r=>{
+    items.push({
+      type:'skills',
+      id: r.id,
+      date: r.date || r.dateStr,
+      dateStr: r.dateStr,
+      athlete: r.athlete,
+      coach: r.coach,
+      category: r.category,
+      group: r.group,
+      // summary
+      totalPoints: r.totalPoints,
+      skillsArr: r.skills || [],
+      _raw: r
+    });
+  });
+
+  // Speedrun results
+  (state.speedrunResults||[]).forEach(r=>{
+    items.push({
+      type:'speedrun',
+      id: r.id,
+      date: r.date || r.dateStr,
+      dateStr: r.dateStr,
+      athlete: r.athlete,
+      coach: r.coach,
+      stage: r.stage,
+      difficulty: r.difficulty,
+      group: r.group,
+      timeStr: r.timeStr,
+      _raw: r
+    });
+  });
+
+  // Chasetag – stored in calendarEntries as auto entries
+  (state.calendarEntries||[]).filter(e=>e.auto && e.activity==='Chasetag').forEach(e=>{
+    items.push({
+      type:'chasetag',
+      id: e.id,
+      date: e.date || e.dateStr,
+      dateStr: e.dateStr,
+      coach: e.trainer,
+      group: e.group,
+      result: e.result,
+      week: e.week,
+      _raw: e
+    });
+  });
+
+  // Sort newest first
+  items.sort((a,b)=>{
+    const da = a.date ? new Date(a.date) : 0;
+    const db = b.date ? new Date(b.date) : 0;
+    return db - da;
+  });
+  return items;
+}
+
+function renderHistory(){
+  const filterType  = (document.getElementById('hist-filter-type')||{}).value || '';
+  const filterCoach = ((document.getElementById('hist-filter-coach')||{}).value || '').toLowerCase().trim();
+  const filterFrom  = (document.getElementById('hist-filter-from')||{}).value || '';
+  const filterTo    = (document.getElementById('hist-filter-to')||{}).value || '';
+
+  // Coach hint
+  const hint = document.getElementById('hist-coach-hint');
+  if(state.currentCoach){
+    hint.style.display='block';
+    hint.innerHTML = `Eingeloggt als <strong>${state.currentCoach}</strong><br><span style="color:var(--og-grey);font-size:.7rem;">Alle Resultate sichtbar</span>`;
+  } else {
+    hint.style.display='none';
+  }
+
+  let items = buildHistoryItems();
+
+  if(filterType)  items = items.filter(x=>x.type===filterType);
+  if(filterCoach) items = items.filter(x=>(x.coach||'').toLowerCase().includes(filterCoach));
+  if(filterFrom)  items = items.filter(x=>x.date >= filterFrom);
+  if(filterTo)    items = items.filter(x=>x.date <= filterTo+'T23:59:59');
+
+  const countEl = document.getElementById('hist-count');
+  if(countEl) countEl.textContent = `${items.length} Einträge`;
+
+  const listEl = document.getElementById('hist-list');
+  if(!listEl) return;
+
+  if(!items.length){
+    listEl.innerHTML = '<div class="hist-empty">📭 Keine Einträge gefunden</div>';
+    return;
+  }
+
+  listEl.innerHTML = items.map((item,i)=>renderHistoryCard(item,i)).join('');
+}
+
+function renderHistoryCard(item, idx){
+  const typeLabels = {ninja:'Ninja Stage',skills:'Skills',speedrun:'Speedrun',chasetag:'Chasetag'};
+  const badgeClass = {ninja:'hist-badge-ninja',skills:'hist-badge-skills',speedrun:'hist-badge-speedrun',chasetag:'hist-badge-chasetag'};
+
+  let mainResult = '', subResult = '';
+  let detailsHTML = '';
+
+  if(item.type==='ninja'){
+    mainResult = item.timeStr || '–';
+    subResult  = `${item.cleared||0}/${item.total||0} Hindernisse`;
+    // Detail grid
+    const grid = [
+      {l:'Athlet',    v: item.athlete||'–'},
+      {l:'Stage',     v: item.stage||'–'},
+      {l:'Kategorie', v: item.category||'–'},
+      {l:'Coach',     v: item.coach||'–'},
+      {l:'Modus',     v: item.mode==='obstacle'?'Obstacle':'Checkpoint'},
+      {l:'Wertungszeit',v: item.timeStr||'–'},
+      {l:'Gesamtzeit',v: item.totalTimeStr||item.timeStr||'–'},
+      {l:'Split genutzt',v: item.usedSplit?'Ja':'Nein'},
+      {l:'Datum',     v: item.dateStr||'–'},
+    ].map(d=>`<div class="hist-detail-item"><div class="hist-detail-label">${d.l}</div><div class="hist-detail-val">${d.v}</div></div>`).join('');
+    // Splits table
+    let splitsHTML = '';
+    if(item.splits && item.splits.length){
+      splitsHTML = `<div style="margin-top:12px;">
+        <div style="font-size:.72rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Zwischenzeiten</div>
+        <table class="hist-splits-table">
+          <thead><tr><th>#</th><th>Hindernis</th><th>Zeit</th></tr></thead>
+          <tbody>${item.splits.map((s,i)=>`<tr><td style="color:var(--og-grey)">${i+1}</td><td>${s.obstacle||('CP'+(i+1))}</td><td style="color:var(--og-amber);font-weight:700;">${s.timeStr||'–'}</td></tr>`).join('')}</tbody>
+        </table>
+      </div>`;
+    }
+    detailsHTML = `<div class="hist-detail-grid">${grid}</div>${splitsHTML}`;
+  }
+  else if(item.type==='skills'){
+    mainResult = `${item.totalPoints||0} Pkt`;
+    subResult  = `${(item.skillsArr||[]).filter(s=>s.attempt).length} Skills versucht`;
+    const grid = [
+      {l:'Athlet',    v: item.athlete||'–'},
+      {l:'Kategorie', v: item.category||'–'},
+      {l:'Gruppe',    v: item.group||'–'},
+      {l:'Coach',     v: item.coach||'–'},
+      {l:'Gesamtpunkte', v: `${item.totalPoints||0} Punkte`},
+      {l:'Datum',     v: item.dateStr||'–'},
+    ].map(d=>`<div class="hist-detail-item"><div class="hist-detail-label">${d.l}</div><div class="hist-detail-val">${d.v}</div></div>`).join('');
+    let skillsHTML = '';
+    if(item.skillsArr && item.skillsArr.length){
+      const attemptLabel = {1:'1. Versuch (100)',2:'2. Versuch (50)',3:'3. Versuch (10)'};
+      skillsHTML = `<div style="margin-top:12px;">
+        <div style="font-size:.72rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Skill Details</div>
+        <div>${item.skillsArr.map(s=>`<div class="hist-skills-row">
+          <span>${s.name||'–'}</span>
+          <span style="color:var(--og-grey);font-size:.76rem;">${s.attempt ? attemptLabel[s.attempt]||'' : 'Nicht versucht'}</span>
+          <span style="font-weight:800;color:${s.points>0?'#5dde8e':'var(--og-grey)'};">${s.points||0} Pkt</span>
+        </div>`).join('')}</div>
+      </div>`;
+    }
+    detailsHTML = `<div class="hist-detail-grid">${grid}</div>${skillsHTML}`;
+  }
+  else if(item.type==='speedrun'){
+    mainResult = item.timeStr || '–';
+    subResult  = item.difficulty||'';
+    const grid = [
+      {l:'Athlet',        v: item.athlete||'–'},
+      {l:'Stage/Parcours',v: item.stage||'–'},
+      {l:'Schwierigkeit', v: item.difficulty||'–'},
+      {l:'Gruppe',        v: item.group||'–'},
+      {l:'Coach',         v: item.coach||'–'},
+      {l:'Zeit',          v: item.timeStr||'–'},
+      {l:'Datum',         v: item.dateStr||'–'},
+    ].map(d=>`<div class="hist-detail-item"><div class="hist-detail-label">${d.l}</div><div class="hist-detail-val">${d.v}</div></div>`).join('');
+    detailsHTML = `<div class="hist-detail-grid">${grid}</div>`;
+  }
+  else if(item.type==='chasetag'){
+    mainResult = '–';
+    subResult  = item.group||'';
+    const grid = [
+      {l:'Teams/Kontext', v: item.group||'–'},
+      {l:'Ergebnis',      v: item.result||'–'},
+      {l:'Coach',         v: item.coach||'–'},
+      {l:'Woche',         v: item.week||'–'},
+      {l:'Datum',         v: item.dateStr||'–'},
+    ].map(d=>`<div class="hist-detail-item"><div class="hist-detail-label">${d.l}</div><div class="hist-detail-val">${d.v}</div></div>`).join('');
+    detailsHTML = `<div class="hist-detail-grid">${grid}</div>
+      <div style="margin-top:8px;font-size:.8rem;color:var(--og-light);background:rgba(255,255,255,.04);border-radius:8px;padding:8px 10px;">
+        <span style="color:var(--og-grey);font-size:.7rem;text-transform:uppercase;letter-spacing:.4px;">Vollständiges Ergebnis</span><br>
+        ${item.result||'–'}
+      </div>`;
+  }
+
+  const title = item.athlete ? `${item.athlete}` : (item.group||'–');
+  const stageLine = item.stage ? ` · ${item.stage}` : (item.group ? ` · ${item.group}` : '');
+  const coachLine = item.coach ? `👤 ${item.coach}` : '';
+  const dateLine  = item.dateStr || '';
+
+  return `<div class="hist-card" id="hcard-${idx}">
+    <div class="hist-card-head" onclick="toggleHistCard(${idx})">
+      <span class="hist-type-badge ${badgeClass[item.type]}">${typeLabels[item.type]}</span>
+      <div class="hist-meta">
+        <div class="hist-title">${title}${stageLine}</div>
+        <div class="hist-sub">${[coachLine,dateLine].filter(Boolean).join(' · ')}</div>
+      </div>
+      <div class="hist-result">
+        <div class="hist-result-main">${mainResult}</div>
+        <div class="hist-result-sub">${subResult}</div>
+      </div>
+      <span class="hist-expand-icon">▾</span>
+    </div>
+    <div class="hist-details">${detailsHTML}</div>
+  </div>`;
+}
+
+function toggleHistCard(idx){
+  const card = document.getElementById('hcard-'+idx);
+  if(card) card.classList.toggle('open');
+}
+
+function clearHistoryFilters(){
+  ['hist-filter-type','hist-filter-coach','hist-filter-from','hist-filter-to'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value='';
+  });
+  renderHistory();
+}
+
+function goToMyHistory(){
+  const coachEl = document.getElementById('hist-filter-coach');
+  if(coachEl && state.currentCoach) coachEl.value = state.currentCoach;
+  showScreen('history');
 }
 </script>
 
