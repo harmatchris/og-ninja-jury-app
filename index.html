@@ -43,6 +43,15 @@ body{
   overflow-x:hidden;
 }
 
+/* ─── INSTALL POPUP STEPS ───────────────────── */
+.ipu-step{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:var(--og-light);}
+.ipu-icon{
+  width:24px;height:24px;flex-shrink:0;
+  background:rgba(245,124,0,.2);border:1px solid var(--og-orange);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:800;color:var(--og-amber);
+}
+
 /* ─── HEADER ────────────────────────────────── */
 #app-header{
   background:linear-gradient(135deg,var(--og-dark) 0%,var(--og-navy) 60%,#0a2d7a 100%);
@@ -53,13 +62,17 @@ body{
   box-shadow:var(--shadow-md);
 }
 #app-header .logo-mark{
-  width:46px;height:46px;
+  width:54px;height:50px;
   background:var(--og-orange);
   border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;font-weight:900;color:var(--og-navy);
-  letter-spacing:-1px;flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--og-navy);
+  letter-spacing:-0.5px;flex-shrink:0;
+  line-height:1;
+  padding:4px 6px;
 }
+#app-header .logo-mark .lm-og{font-size:20px;font-weight:900;}
+#app-header .logo-mark .lm-jury{font-size:9.5px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;}
 #app-header h1{font-size:1.2rem;font-weight:800;letter-spacing:.5px;line-height:1.1;}
 #app-header h1 span{color:var(--og-orange);}
 #app-header .header-sub{font-size:.72rem;color:var(--og-grey);margin-top:2px;}
@@ -399,7 +412,7 @@ body{
      HEADER
 ══════════════════════════════════════════ -->
 <header id="app-header">
-  <div class="logo-mark">OG</div>
+  <div class="logo-mark"><span class="lm-og">OG</span><span class="lm-jury">JURY</span></div>
   <div>
     <h1>Ninja Jury <span>App</span></h1>
     <div class="header-sub">Overground Basel – Coach Tools</div>
@@ -2584,7 +2597,64 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('cal-filter-week').value=week;
 
   toast('OG Ninja Jury App geladen ✓','success');
+
+  // ── One-time install popup ──────────────────────────────────────────
+  if(!localStorage.getItem('og_install_shown')){
+    setTimeout(()=>{
+      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      const isAndroid = /android/i.test(navigator.userAgent);
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      let steps = '';
+      if(isIOS){
+        steps = `
+          <div class="ipu-step"><span class="ipu-icon">1</span><div><strong>Safari öffnen</strong> (falls noch nicht offen)</div></div>
+          <div class="ipu-step"><span class="ipu-icon">2</span><div>Auf <strong>Teilen</strong> tippen <span style="font-size:1.2em">⬆️</span> (unten in der Leiste)</div></div>
+          <div class="ipu-step"><span class="ipu-icon">3</span><div><strong>„Zum Home-Bildschirm"</strong> wählen</div></div>
+          <div class="ipu-step"><span class="ipu-icon">4</span><div>Mit <strong>„Hinzufügen"</strong> bestätigen – fertig! 🎉</div></div>`;
+      } else if(isAndroid){
+        steps = `
+          <div class="ipu-step"><span class="ipu-icon">1</span><div>Im Browser oben rechts auf <strong>⋮ Menü</strong> tippen</div></div>
+          <div class="ipu-step"><span class="ipu-icon">2</span><div><strong>„Zum Startbildschirm hinzufügen"</strong> wählen</div></div>
+          <div class="ipu-step"><span class="ipu-icon">3</span><div>Mit <strong>„Hinzufügen"</strong> bestätigen – fertig! 🎉</div></div>`;
+      } else {
+        steps = `
+          <div class="ipu-step"><span class="ipu-icon">📱</span><div>Auf dem <strong>Handy</strong> diese Seite öffnen und dann über das Browser-Menü <strong>„Zum Home-Bildschirm hinzufügen"</strong> wählen.</div></div>`;
+      }
+      document.getElementById('ipu-steps').innerHTML = steps;
+      document.getElementById('install-popup').style.display = 'flex';
+    }, 1200);
+  }
 });
+
+function closeInstallPopup(){
+  document.getElementById('install-popup').style.display = 'none';
+  localStorage.setItem('og_install_shown','1');
+}
 </script>
+
+<!-- ══════════════════════════════════════════
+     INSTALL POPUP (einmalig)
+══════════════════════════════════════════ -->
+<div id="install-popup" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;padding:16px;background:linear-gradient(0deg,rgba(0,20,61,.98) 80%,transparent);align-items:flex-end;justify-content:center;">
+  <div style="background:linear-gradient(135deg,#0a2050,#001435);border:2px solid var(--og-orange);border-radius:20px;padding:22px 20px 18px;width:min(420px,100%);box-shadow:0 -4px 40px rgba(0,0,0,.6);position:relative;">
+    <button onclick="closeInstallPopup()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--og-grey);font-size:1.3rem;cursor:pointer;line-height:1;">✕</button>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+      <div style="width:48px;height:48px;background:var(--og-orange);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="font-size:17px;font-weight:900;color:#001435;line-height:1;">OG</span>
+        <span style="font-size:8.5px;font-weight:900;color:#001435;letter-spacing:1.5px;">JURY</span>
+      </div>
+      <div>
+        <div style="font-size:1rem;font-weight:800;color:var(--og-white);">App zum Homescreen hinzufügen</div>
+        <div style="font-size:.75rem;color:var(--og-grey);margin-top:2px;">So hast du sie immer griffbereit 📲</div>
+      </div>
+    </div>
+    <div id="ipu-steps" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
+    <button onclick="closeInstallPopup()" style="width:100%;background:var(--og-orange);color:var(--og-navy);border:none;border-radius:12px;padding:12px;font-size:.95rem;font-weight:800;cursor:pointer;letter-spacing:.3px;">
+      Alles klar! 👊
+    </button>
+    <div style="text-align:center;margin-top:10px;font-size:.7rem;color:var(--og-grey);cursor:pointer;" onclick="closeInstallPopup()">Nicht mehr anzeigen</div>
+  </div>
+</div>
+
 </body>
 </html>
