@@ -1,0 +1,2590 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>OG Ninja Jury App – Overground Basel</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS – Overground Basel
+═══════════════════════════════════════════════ */
+:root {
+  --og-navy:   #001F5B;
+  --og-blue:   #0033A0;
+  --og-orange: #F57C00;
+  --og-amber:  #FFB300;
+  --og-white:  #FFFFFF;
+  --og-light:  #EEF2FF;
+  --og-grey:   #8090B0;
+  --og-dark:   #00143D;
+  --og-success:#27AE60;
+  --og-danger: #E74C3C;
+  --og-warn:   #F39C12;
+  --shadow-sm: 0 2px 8px rgba(0,31,91,.15);
+  --shadow-md: 0 4px 20px rgba(0,31,91,.22);
+  --shadow-lg: 0 8px 40px rgba(0,31,91,.30);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --transition: all .18s cubic-bezier(.4,0,.2,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  background:var(--og-navy);
+  color:var(--og-white);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ─── HEADER ────────────────────────────────── */
+#app-header{
+  background:linear-gradient(135deg,var(--og-dark) 0%,var(--og-navy) 60%,#0a2d7a 100%);
+  border-bottom:3px solid var(--og-orange);
+  padding:12px 20px;
+  display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:var(--shadow-md);
+}
+#app-header .logo-mark{
+  width:46px;height:46px;
+  background:var(--og-orange);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:900;color:var(--og-navy);
+  letter-spacing:-1px;flex-shrink:0;
+}
+#app-header h1{font-size:1.2rem;font-weight:800;letter-spacing:.5px;line-height:1.1;}
+#app-header h1 span{color:var(--og-orange);}
+#app-header .header-sub{font-size:.72rem;color:var(--og-grey);margin-top:2px;}
+#app-header .header-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+#coach-badge{
+  background:rgba(245,124,0,.18);
+  border:1px solid var(--og-orange);
+  border-radius:20px;padding:5px 14px;
+  font-size:.78rem;font-weight:600;color:var(--og-amber);
+  cursor:pointer;transition:var(--transition);
+}
+#coach-badge:hover{background:rgba(245,124,0,.32);}
+
+/* ─── NAV ────────────────────────────────────── */
+#main-nav{
+  background:var(--og-dark);
+  border-bottom:2px solid rgba(255,255,255,.07);
+  display:flex;overflow-x:auto;padding:0 8px;
+  scrollbar-width:none;
+}
+#main-nav::-webkit-scrollbar{display:none;}
+.nav-btn{
+  flex-shrink:0;
+  padding:12px 18px;
+  border:none;background:none;color:var(--og-grey);
+  font-size:.8rem;font-weight:600;letter-spacing:.3px;
+  cursor:pointer;transition:var(--transition);
+  border-bottom:3px solid transparent;
+  display:flex;align-items:center;gap:7px;
+  text-transform:uppercase;
+}
+.nav-btn:hover{color:var(--og-white);}
+.nav-btn.active{color:var(--og-orange);border-bottom-color:var(--og-orange);}
+.nav-btn .nav-icon{font-size:1rem;}
+
+/* ─── MAIN CONTENT ───────────────────────────── */
+#main-content{
+  max-width:900px;margin:0 auto;
+  padding:20px 16px 80px;
+}
+
+/* ─── SCREENS ────────────────────────────────── */
+.screen{display:none;animation:fadeUp .25s ease;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+/* ─── CARDS ──────────────────────────────────── */
+.card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-md);
+  padding:20px;margin-bottom:18px;
+}
+.card-title{
+  font-size:1rem;font-weight:700;color:var(--og-amber);
+  margin-bottom:14px;display:flex;align-items:center;gap:8px;
+}
+
+/* ─── BUTTONS ────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 22px;border:none;border-radius:var(--radius-sm);
+  font-size:.88rem;font-weight:700;cursor:pointer;
+  transition:var(--transition);letter-spacing:.3px;
+  text-transform:uppercase;
+}
+.btn:active{transform:scale(.96);}
+.btn-primary{background:var(--og-orange);color:var(--og-white);}
+.btn-primary:hover{background:#e06500;}
+.btn-navy{background:var(--og-navy);color:var(--og-white);border:1px solid rgba(255,255,255,.2);}
+.btn-navy:hover{background:var(--og-blue);}
+.btn-success{background:var(--og-success);color:#fff;}
+.btn-danger{background:var(--og-danger);color:#fff;}
+.btn-warn{background:var(--og-warn);color:#fff;}
+.btn-sm{padding:7px 14px;font-size:.78rem;}
+.btn-lg{padding:14px 32px;font-size:1rem;}
+.btn-xl{padding:18px 42px;font-size:1.1rem;border-radius:var(--radius-md);}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+
+/* ─── INPUTS ─────────────────────────────────── */
+.form-group{margin-bottom:14px;}
+.form-label{font-size:.78rem;font-weight:600;color:var(--og-grey);margin-bottom:5px;display:block;letter-spacing:.3px;text-transform:uppercase;}
+.form-control{
+  width:100%;padding:10px 14px;
+  background:rgba(255,255,255,.08);
+  border:1.5px solid rgba(255,255,255,.14);
+  border-radius:var(--radius-sm);
+  color:var(--og-white);font-size:.92rem;
+  transition:var(--transition);
+}
+.form-control:focus{outline:none;border-color:var(--og-orange);background:rgba(255,255,255,.12);}
+.form-control option{background:var(--og-navy);color:#fff;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* ─── TIMER DISPLAY ──────────────────────────── */
+.timer-display{
+  font-family:'Courier New',monospace;
+  font-size:4rem;font-weight:900;
+  color:var(--og-white);letter-spacing:2px;
+  text-align:center;padding:20px 0;
+  text-shadow:0 0 30px rgba(245,124,0,.5);
+}
+.timer-display.running{color:var(--og-amber);animation:timerPulse 1s ease-in-out infinite;}
+.timer-display.countdown{color:var(--og-orange);font-size:5rem;}
+.timer-display.stopped{color:#5a9;}
+@keyframes timerPulse{0%,100%{text-shadow:0 0 20px rgba(255,179,0,.4);}50%{text-shadow:0 0 50px rgba(255,179,0,.9);}}
+
+/* ─── OBSTACLE GRID ──────────────────────────── */
+.obstacle-grid{display:flex;flex-wrap:wrap;gap:10px;padding:10px 0;}
+.obstacle-btn{
+  width:56px;height:56px;border-radius:12px;
+  border:2px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.06);
+  color:var(--og-white);font-size:1.1rem;font-weight:700;
+  cursor:pointer;transition:var(--transition);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  font-family:'Courier New',monospace;
+}
+.obstacle-btn.cleared{
+  background:var(--og-success);border-color:var(--og-success);
+  transform:scale(1.05);
+}
+.obstacle-btn.missed{background:var(--og-danger);border-color:var(--og-danger);}
+.obstacle-label{font-size:.55rem;font-weight:600;letter-spacing:.5px;opacity:.8;}
+
+/* ─── LEADERBOARD ────────────────────────────── */
+.leaderboard-row{
+  display:grid;align-items:center;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius-sm);
+  padding:12px 16px;margin-bottom:8px;
+  transition:var(--transition);
+}
+.leaderboard-row:hover{background:rgba(255,255,255,.09);}
+.rank-badge{
+  font-size:1.1rem;font-weight:900;
+  width:32px;text-align:center;
+}
+.rank-1{color:gold;} .rank-2{color:silver;} .rank-3{color:#cd7f32;}
+
+/* ─── CHASETAG ───────────────────────────────── */
+.team-card{
+  background:rgba(255,255,255,.06);
+  border-radius:var(--radius-md);
+  padding:16px;
+}
+.player-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:20px;padding:6px 14px;
+  margin:4px;cursor:grab;font-size:.85rem;
+  transition:var(--transition);
+  user-select:none;
+}
+.player-chip.chaser{background:rgba(245,124,0,.25);border-color:var(--og-orange);}
+.player-chip.evader{background:rgba(39,174,96,.25);border-color:var(--og-success);}
+.player-chip.active{box-shadow:0 0 0 3px var(--og-amber);transform:scale(1.05);}
+.chasetag-score{
+  font-size:3.5rem;font-weight:900;text-align:center;
+  font-family:'Courier New',monospace;
+  padding:10px;
+}
+.vs-divider{text-align:center;font-size:1.2rem;font-weight:800;color:var(--og-grey);padding:10px;}
+
+/* ─── BADGE PILL ─────────────────────────────── */
+.badge{
+  display:inline-block;padding:3px 10px;
+  border-radius:20px;font-size:.7rem;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;
+}
+.badge-orange{background:rgba(245,124,0,.25);color:var(--og-amber);}
+.badge-blue{background:rgba(0,51,160,.4);color:#7eb3ff;}
+.badge-green{background:rgba(39,174,96,.25);color:#5dde8a;}
+.badge-red{background:rgba(231,76,60,.25);color:#ff8077;}
+
+/* ─── TABS ───────────────────────────────────── */
+.tab-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.tab-btn{
+  padding:8px 18px;border:1.5px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.05);
+  border-radius:20px;color:var(--og-grey);
+  font-size:.8rem;font-weight:600;cursor:pointer;transition:var(--transition);
+}
+.tab-btn.active{background:var(--og-orange);border-color:var(--og-orange);color:#fff;}
+
+/* ─── MODAL ──────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  z-index:500;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:linear-gradient(160deg,#0d2463,var(--og-navy));
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--radius-lg);
+  padding:28px;max-width:500px;width:100%;
+  box-shadow:var(--shadow-lg);
+  animation:modalIn .22s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:none;}}
+.modal-title{font-size:1.2rem;font-weight:800;color:var(--og-amber);margin-bottom:20px;}
+
+/* ─── TOAST ──────────────────────────────────── */
+#toast-container{position:fixed;bottom:24px;right:16px;z-index:999;display:flex;flex-direction:column;gap:8px;}
+.toast{
+  background:var(--og-dark);border-left:4px solid var(--og-orange);
+  border-radius:var(--radius-sm);padding:12px 18px;
+  font-size:.88rem;font-weight:600;
+  box-shadow:var(--shadow-md);animation:slideIn .2s ease;
+  max-width:300px;
+}
+.toast.success{border-left-color:var(--og-success);}
+.toast.error{border-left-color:var(--og-danger);}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:none;}}
+
+/* ─── SECTION HEADER ──────────────────────────── */
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:18px;flex-wrap:wrap;gap:10px;
+}
+.section-title{font-size:1.3rem;font-weight:800;color:var(--og-white);}
+.section-sub{font-size:.78rem;color:var(--og-grey);margin-top:2px;}
+
+/* ─── SKILL CHALLENGE ────────────────────────── */
+.skill-row{
+  display:grid;grid-template-columns:1fr auto auto auto;
+  align-items:center;gap:10px;
+  background:rgba(255,255,255,.05);
+  border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.attempt-btn{
+  width:38px;height:38px;border-radius:8px;border:2px solid;
+  font-size:.8rem;font-weight:800;cursor:pointer;transition:var(--transition);
+  display:flex;align-items:center;justify-content:center;
+}
+.attempt-btn.v1{border-color:#27AE60;color:#27AE60;background:transparent;}
+.attempt-btn.v1.active{background:#27AE60;color:#fff;}
+.attempt-btn.v2{border-color:var(--og-amber);color:var(--og-amber);background:transparent;}
+.attempt-btn.v2.active{background:var(--og-amber);color:#fff;}
+.attempt-btn.v3{border-color:var(--og-danger);color:var(--og-danger);background:transparent;}
+.attempt-btn.v3.active{background:var(--og-danger);color:#fff;}
+
+/* ─── SPEEDRUN ───────────────────────────────── */
+.speedrun-row{
+  display:grid;grid-template-columns:auto 1fr auto auto;
+  align-items:center;gap:10px;
+  background:rgba(255,255,255,.05);border-radius:var(--radius-sm);
+  padding:10px 14px;margin-bottom:6px;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+/* ─── CALENDAR ───────────────────────────────── */
+.calendar-entry{
+  background:rgba(255,255,255,.05);border-radius:var(--radius-sm);
+  padding:14px;margin-bottom:10px;border-left:4px solid var(--og-orange);
+}
+
+/* ─── CHASETAG TIMER ────────────────────────── */
+.chasetag-timer{
+  font-size:5rem;font-weight:900;text-align:center;
+  font-family:'Courier New',monospace;
+  color:var(--og-amber);padding:10px 0;
+  text-shadow:0 0 40px rgba(255,179,0,.5);
+}
+.chasetag-timer.danger{color:var(--og-danger);animation:timerPulse .5s ease-in-out infinite;}
+.round-badge{
+  text-align:center;font-size:.9rem;font-weight:700;
+  color:var(--og-grey);padding-bottom:8px;
+}
+
+/* ─── DRAG & DROP ────────────────────────────── */
+.drop-zone{
+  border:2px dashed rgba(255,255,255,.2);
+  border-radius:var(--radius-md);padding:30px;
+  text-align:center;cursor:pointer;transition:var(--transition);
+}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--og-orange);background:rgba(245,124,0,.08);}
+
+/* ─── HEADCOACH ──────────────────────────────── */
+.stat-card{
+  background:rgba(255,255,255,.07);border-radius:var(--radius-md);
+  padding:18px;text-align:center;
+}
+.stat-num{font-size:2.2rem;font-weight:900;color:var(--og-amber);}
+.stat-label{font-size:.75rem;color:var(--og-grey);font-weight:600;text-transform:uppercase;margin-top:4px;}
+
+/* ─── PRINT ──────────────────────────────────── */
+@media print{
+  #app-header,#main-nav,#toast-container,.no-print{display:none!important;}
+  body{background:#fff;color:#000;}
+  .card{border:1px solid #ccc;background:#fff;}
+}
+
+/* ─── RESPONSIVE ─────────────────────────────── */
+@media(max-width:600px){
+  .timer-display{font-size:2.8rem;}
+  .chasetag-timer{font-size:3.5rem;}
+  .form-row{grid-template-columns:1fr;}
+  .skill-row{grid-template-columns:1fr;gap:8px;}
+}
+
+/* ─── DRAG CURSOR ────────────────────────────── */
+[draggable]{cursor:grab;}
+[draggable]:active{cursor:grabbing;}
+.drag-over{outline:2px dashed var(--og-orange)!important;}
+
+/* Start countdown overlay */
+#start-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,20,61,.92);
+  z-index:800;align-items:center;justify-content:center;
+  flex-direction:column;gap:16px;
+}
+#start-overlay.visible{display:flex;}
+#start-countdown{font-size:9rem;font-weight:900;color:var(--og-orange);
+  animation:countPop .3s ease;font-family:'Courier New',monospace;}
+@keyframes countPop{0%{transform:scale(1.4);}100%{transform:scale(1);}}
+#start-label{font-size:1.4rem;font-weight:600;color:var(--og-grey);letter-spacing:2px;}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     START COUNTDOWN OVERLAY
+══════════════════════════════════════════ -->
+<div id="start-overlay">
+  <div id="start-countdown">3</div>
+  <div id="start-label">BEREIT...</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════ -->
+<header id="app-header">
+  <div class="logo-mark">OG</div>
+  <div>
+    <h1>Ninja Jury <span>App</span></h1>
+    <div class="header-sub">Overground Basel – Coach Tools</div>
+  </div>
+  <div class="header-right">
+    <div id="coach-badge" onclick="openCoachModal()">👤 <span id="coach-name-display">Kein Coach</span></div>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════════ -->
+<nav id="main-nav">
+  <button class="nav-btn active" onclick="showScreen('ninja')" data-screen="ninja">
+    <span class="nav-icon">🥷</span> Ninja Stage
+  </button>
+  <button class="nav-btn" onclick="showScreen('skills')" data-screen="skills">
+    <span class="nav-icon">⭐</span> Skills
+  </button>
+  <button class="nav-btn" onclick="showScreen('chasetag')" data-screen="chasetag">
+    <span class="nav-icon">🏃</span> Chasetag
+  </button>
+  <button class="nav-btn" onclick="showScreen('speedrun')" data-screen="speedrun">
+    <span class="nav-icon">⚡</span> Speedrun
+  </button>
+  <button class="nav-btn" onclick="showScreen('calendar')" data-screen="calendar">
+    <span class="nav-icon">📅</span> Kalender
+  </button>
+  <button class="nav-btn" onclick="showScreen('headcoach')" data-screen="headcoach">
+    <span class="nav-icon">🔐</span> HeadCoach
+  </button>
+  <button class="nav-btn" onclick="showScreen('import')" data-screen="import">
+    <span class="nav-icon">📥</span> Import
+  </button>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════ -->
+<main id="main-content">
+
+<!-- ─── SCREEN: NINJA STAGE ──────────────────── -->
+<section id="screen-ninja" class="screen active">
+  <div class="section-header">
+    <div>
+      <div class="section-title">🥷 Ninja Stage Timer</div>
+      <div class="section-sub">Messe jede Stage auf die Hundertstelsekunde</div>
+    </div>
+  </div>
+
+  <!-- Setup -->
+  <div class="card" id="ninja-setup">
+    <div class="card-title">⚙️ Setup</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Stage Name</label>
+        <input type="text" class="form-control" id="ninja-stage-select" list="stages-datalist" placeholder="Stage tippen oder aus Liste wählen..." autocomplete="off"/>
+        <datalist id="stages-datalist"></datalist>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Kurs / Gruppe</label>
+        <select class="form-control" id="ninja-group-select" onchange="renderGroupQueue('ninja')">
+          <option value="">– Gruppe wählen (optional) –</option>
+        </select>
+      </div>
+    </div>
+    <!-- Gruppen-Athleten-Queue -->
+    <div id="ninja-group-queue" style="display:none;margin-bottom:14px;">
+      <div style="font-size:.72rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">👥 Athleten in dieser Gruppe – tippe zum Auswählen</div>
+      <div id="ninja-group-athletes" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Athlet Name</label>
+        <input type="text" class="form-control" id="ninja-athlete-select" list="athletes-datalist" placeholder="Name tippen oder aus Liste wählen..." autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Aktivitätstyp</label>
+        <select class="form-control" id="ninja-activity-type">
+          <option value="ninja">🥷 Ninja</option>
+          <option value="polysport">🤸 Polysport</option>
+          <option value="parkour">🏃 Parkour</option>
+          <option value="freerun">⭐ Freerun</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Modus</label>
+        <select class="form-control" id="ninja-mode" onchange="updateNinjaMode()">
+          <option value="checkpoint">Checkpoint (geschaffte Hindernisse)</option>
+          <option value="obstacle">Hindernis (jedes einzeln abhaken)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Anzahl Hindernisse</label>
+        <input type="number" class="form-control" id="ninja-obstacle-count" value="6" min="1" max="30" onchange="renderObstacles()"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Coach</label>
+        <input type="text" class="form-control" id="ninja-coach" placeholder="Coach Name" value=""/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Kategorie</label>
+        <select class="form-control" id="ninja-category">
+          <option>5-7j</option>
+          <option>8-11j M LK1</option><option>8-11j M LK2</option>
+          <option>8-11j W LK1</option><option>8-11j W LK2</option>
+          <option>12-15j M LK1</option><option>12-15j M LK2</option>
+          <option>12-15j W LK1</option><option>12-15j W LK2</option>
+          <option>16-39j M LK1</option><option>16-39j M LK2</option>
+          <option>16-39j W LK1</option><option>16-39j W LK2</option>
+          <option>Ü40 M</option><option>Ü40 W</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timer -->
+  <div class="card">
+    <div class="timer-display" id="ninja-timer">00:00.00</div>
+    <div id="obstacle-container" style="margin-bottom:16px;"></div>
+    <!-- Zwischenzeiten (live + wählbar nach Stopp) -->
+    <div id="ninja-splits" style="display:none;margin-bottom:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);padding:12px;">
+      <div style="font-size:.72rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;" id="ninja-splits-label">⏱ Zwischenzeiten</div>
+      <div id="ninja-splits-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+      <div id="ninja-splits-selected" style="margin-top:8px;font-size:.82rem;color:var(--og-success);display:none;"></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-xl" id="ninja-start-btn" onclick="startNinjaTimer()">▶ START</button>
+      <button class="btn btn-danger btn-xl" id="ninja-stop-btn" onclick="stopNinjaTimer()" disabled>⏹ STOP</button>
+      <button class="btn btn-navy btn-lg" onclick="resetNinjaTimer()">↺ RESET</button>
+      <button class="btn btn-success btn-lg" id="ninja-save-btn" onclick="saveNinjaResult()" disabled>💾 SPEICHERN</button>
+    </div>
+    <div id="ninja-result-info" style="text-align:center;margin-top:14px;font-size:.9rem;color:var(--og-grey);"></div>
+    <!-- Nächster Athlet Quick-Button (erscheint nach Speichern) -->
+    <div id="ninja-next-bar" style="display:none;text-align:center;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);">
+      <button class="btn btn-primary btn-lg" onclick="nextAthlete()" style="gap:10px;">
+        ⏩ Nächster Athlet
+      </button>
+      <div style="font-size:.72rem;color:var(--og-grey);margin-top:6px;">Stage, Kategorie & Coach bleiben gleich</div>
+    </div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="card">
+    <div class="card-title">🏆 Tages-Rangliste</div>
+    <div class="tab-row" id="ninja-cat-tabs"></div>
+    <div id="ninja-leaderboard"></div>
+  </div>
+</section>
+
+<!-- ─── SCREEN: SKILLS CHALLENGE ─────────────── -->
+<section id="screen-skills" class="screen">
+  <div class="section-header">
+    <div>
+      <div class="section-title">⭐ Skills Challenge</div>
+      <div class="section-sub">1. Versuch = 100 | 2. Versuch = 50 | 3. Versuch = 10 Punkte</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙️ Session Setup</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Athlet</label>
+        <input type="text" class="form-control" id="skills-athlete" list="athletes-datalist" placeholder="Name tippen oder aus Liste wählen..." autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Coach</label>
+        <input type="text" class="form-control" id="skills-coach" placeholder="Coach Name"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Kategorie</label>
+        <select class="form-control" id="skills-category">
+          <option>5-7j</option>
+          <option>8-11j M LK1</option><option>8-11j M LK2</option>
+          <option>8-11j W LK1</option><option>8-11j W LK2</option>
+          <option>12-15j M LK1</option><option>12-15j M LK2</option>
+          <option>12-15j W LK1</option><option>12-15j W LK2</option>
+          <option>16-39j M LK1</option><option>16-39j M LK2</option>
+          <option>16-39j W LK1</option><option>16-39j W LK2</option>
+          <option>Ü40 M</option><option>Ü40 W</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gruppe / Kurs</label>
+        <input type="text" class="form-control" id="skills-group" placeholder="z.B. Ninja U12"/>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="loadSkillsForAthlete()">✓ Athlet laden</button>
+  </div>
+
+  <!-- Skills List -->
+  <div class="card" id="skills-card" style="display:none;">
+    <div class="card-title">📋 Skills – <span id="skills-athlete-name"></span></div>
+    <div id="skills-list"></div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="saveSkillsResult()">💾 Speichern</button>
+      <button class="btn btn-navy" onclick="addCustomSkill()">+ Skill hinzufügen</button>
+    </div>
+  </div>
+
+  <!-- Live Tabelle -->
+  <div class="card">
+    <div class="card-title">🏆 Live Tabelle</div>
+    <div class="tab-row" id="skills-cat-tabs"></div>
+    <div id="skills-leaderboard"></div>
+  </div>
+</section>
+
+<!-- ─── SCREEN: CHASETAG ──────────────────────── -->
+<section id="screen-chasetag" class="screen">
+  <div class="section-header">
+    <div>
+      <div class="section-title">🏃 Chasetag</div>
+      <div class="section-sub">20 Sek. Timer · Bis zu 6vs6 · Max. 16 Runden</div>
+    </div>
+  </div>
+
+  <!-- Tab: Setup / Game -->
+  <div class="tab-row">
+    <button class="tab-btn active" onclick="switchChasetag('setup')" id="ctab-setup">🔧 Setup</button>
+    <button class="tab-btn" onclick="switchChasetag('game')" id="ctab-game">🎮 Spiel</button>
+  </div>
+
+  <!-- Setup -->
+  <div id="chasetag-setup">
+    <div class="card">
+      <div class="card-title">👥 Teams</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Team A Name</label>
+          <input type="text" class="form-control" id="ct-teamA-name" value="Team A"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Team B Name</label>
+          <input type="text" class="form-control" id="ct-teamB-name" value="Team B"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Spieler pro Team (1–6)</label>
+        <input type="number" class="form-control" id="ct-player-count" value="2" min="1" max="6" onchange="renderChasetaPlayers()"/>
+      </div>
+      <div class="form-row" id="ct-players-inputs"></div>
+      <div class="form-row" style="margin-top:14px;">
+        <div class="form-group">
+          <label class="form-label">Max. Runden (Standard: 16)</label>
+          <input type="number" class="form-control" id="ct-max-rounds" value="16" min="2" max="32"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Timer Dauer (Sek.)</label>
+          <input type="number" class="form-control" id="ct-timer-duration" value="20" min="5" max="60"/>
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:14px;cursor:pointer;">
+        <input type="checkbox" id="ct-anon" style="width:18px;height:18px;accent-color:var(--og-orange);"/>
+        <span style="font-size:.88rem;">Anonym spielen (Nummern statt Namen)</span>
+      </label>
+      <button class="btn btn-primary btn-lg" onclick="initChasetag()">🚀 Spiel starten</button>
+    </div>
+  </div>
+
+  <!-- Game -->
+  <div id="chasetag-game" style="display:none;">
+    <div class="round-badge" id="ct-round-display">Runde 1 / 16</div>
+
+    <!-- Scores -->
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;margin-bottom:18px;align-items:center;">
+      <div class="card" style="text-align:center;padding:14px;">
+        <div style="font-size:.75rem;color:var(--og-grey);font-weight:700;text-transform:uppercase;" id="ct-teamA-label">Team A</div>
+        <div class="chasetag-score" id="ct-scoreA">0</div>
+        <div id="ct-runnerA" style="font-size:.82rem;color:var(--og-amber);">–</div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="card" style="text-align:center;padding:14px;">
+        <div style="font-size:.75rem;color:var(--og-grey);font-weight:700;text-transform:uppercase;" id="ct-teamB-label">Team B</div>
+        <div class="chasetag-score" id="ct-scoreB">0</div>
+        <div id="ct-runnerB" style="font-size:.82rem;color:var(--og-success);">–</div>
+      </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="card" style="text-align:center;">
+      <div style="font-size:.8rem;color:var(--og-grey);margin-bottom:4px;" id="ct-role-display">Evader: – | Chaser: –</div>
+      <div class="chasetag-timer" id="ct-timer">20.0</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;">
+        <button class="btn btn-primary btn-xl" id="ct-start-btn" onclick="startChasetag()">▶ START</button>
+        <button class="btn btn-danger" id="ct-caught-btn" onclick="caughtEvader()" disabled>🏴 GEFANGEN</button>
+        <button class="btn btn-navy" id="ct-next-btn" onclick="nextChasetag()" disabled>→ WEITER</button>
+      </div>
+      <button class="btn btn-warn btn-sm" onclick="activateSuddenDeath()" style="margin-top:12px;" id="ct-sd-btn">⚡ Sudden Death aktivieren</button>
+    </div>
+
+    <!-- Queue -->
+    <div class="card">
+      <div class="card-title">🔄 Nächste Spieler (Drag & Drop)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div>
+          <div style="font-size:.75rem;color:var(--og-grey);font-weight:700;margin-bottom:8px;text-transform:uppercase;" id="ct-qA-label">Team A Queue</div>
+          <div id="ct-queueA" class="drop-zone" style="min-height:80px;padding:10px;" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="dropPlayer(event,'A')"></div>
+        </div>
+        <div>
+          <div style="font-size:.75rem;color:var(--og-grey);font-weight:700;margin-bottom:8px;text-transform:uppercase;" id="ct-qB-label">Team B Queue</div>
+          <div id="ct-queueB" class="drop-zone" style="min-height:80px;padding:10px;" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="dropPlayer(event,'B')"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="card">
+      <div class="card-title">📋 Rundenlog</div>
+      <div id="ct-history" style="max-height:220px;overflow-y:auto;"></div>
+    </div>
+
+    <button class="btn btn-danger" onclick="resetChasetag()" style="margin-top:10px;">✕ Spiel beenden</button>
+  </div>
+</section>
+
+<!-- ─── SCREEN: SPEEDRUN ───────────────────────── -->
+<section id="screen-speedrun" class="screen">
+  <div class="section-header">
+    <div>
+      <div class="section-title">⚡ Parkour Speedrun</div>
+      <div class="section-sub">Timer nach Stage, Schwierigkeit und Gruppe</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙️ Setup</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Athlet</label>
+        <input type="text" class="form-control" id="sr-athlete" list="athletes-datalist" placeholder="Name tippen oder aus Liste wählen..." autocomplete="off"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stage / Parcours</label>
+        <input type="text" class="form-control" id="sr-stage" placeholder="Stage Name"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Schwierigkeitsgrad</label>
+        <select class="form-control" id="sr-difficulty">
+          <option>⭐ Einfach</option>
+          <option>⭐⭐ Mittel</option>
+          <option>⭐⭐⭐ Schwer</option>
+          <option>⭐⭐⭐⭐ Expert</option>
+          <option>⭐⭐⭐⭐⭐ Elite</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gruppe / Kurs</label>
+        <input type="text" class="form-control" id="sr-group" placeholder="Gruppenname"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Coach</label>
+      <input type="text" class="form-control" id="sr-coach" placeholder="Coach Name"/>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="timer-display" id="sr-timer">00:00.00</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-xl" onclick="startSpeedrun()">▶ START</button>
+      <button class="btn btn-danger btn-xl" id="sr-stop-btn" onclick="stopSpeedrun()" disabled>⏹ STOP</button>
+      <button class="btn btn-navy btn-lg" onclick="resetSpeedrun()">↺ RESET</button>
+      <button class="btn btn-success btn-lg" id="sr-save-btn" onclick="saveSpeedrun()" disabled>💾 SPEICHERN</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏆 Bestzeiten</div>
+    <div id="sr-leaderboard"></div>
+  </div>
+</section>
+
+<!-- ─── SCREEN: KALENDER ──────────────────────── -->
+<section id="screen-calendar" class="screen">
+  <div class="section-header">
+    <div>
+      <div class="section-title">📅 Trainer Kalender</div>
+      <div class="section-sub">Wer hat wann welche Challenge gemacht?</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openCalendarModal()">+ Eintrag</button>
+  </div>
+
+  <div class="card" id="calendar-filter-card">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Filter: Trainer</label>
+        <select class="form-control" id="cal-filter-trainer" onchange="renderCalendar()">
+          <option value="">Alle Trainer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Filter: Woche</label>
+        <input type="week" class="form-control" id="cal-filter-week" onchange="renderCalendar()"/>
+      </div>
+    </div>
+  </div>
+
+  <div id="calendar-entries"></div>
+</section>
+
+<!-- ─── SCREEN: HEADCOACH ─────────────────────── -->
+<section id="screen-headcoach" class="screen">
+  <div class="section-title" style="margin-bottom:18px;">🔐 HeadCoach Bereich</div>
+
+  <!-- Login -->
+  <div id="hc-login" class="card">
+    <div class="card-title">PIN Eingabe</div>
+    <div class="form-group">
+      <label class="form-label">4-stelliger PIN</label>
+      <input type="password" class="form-control" id="hc-pin" maxlength="4" placeholder="••••" style="font-size:1.5rem;letter-spacing:8px;text-align:center;"/>
+    </div>
+    <button class="btn btn-primary" onclick="hcLogin()">Einloggen</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="hc-dashboard" style="display:none;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;">
+      <div class="stat-card"><div class="stat-num" id="hc-stat-sessions">–</div><div class="stat-label">Sessions heute</div></div>
+      <div class="stat-card"><div class="stat-num" id="hc-stat-athletes">–</div><div class="stat-label">Athleten</div></div>
+      <div class="stat-card"><div class="stat-num" id="hc-stat-coaches">–</div><div class="stat-label">Aktive Coaches</div></div>
+      <div class="stat-card"><div class="stat-num" id="hc-stat-week">–</div><div class="stat-label">Sessions diese Woche</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">👤 Coach Aktivität</div>
+      <div id="hc-coach-activity"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Letzte Ergebnisse</div>
+      <div id="hc-recent-results"></div>
+    </div>
+
+    <!-- Coach Verwaltung / Logins -->
+    <div class="card">
+      <div class="card-title">🔑 Coach Logins & PINs</div>
+      <div style="font-size:.8rem;color:var(--og-grey);margin-bottom:12px;">Coaches ohne PIN können sich ohne Bestätigung einloggen. Mit PIN ist eine Bestätigung erforderlich.</div>
+      <div id="hc-coach-pins"></div>
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+        <input type="text" class="form-control" id="hc-new-coach-name" placeholder="Coach Name" style="max-width:180px;" list="coach-datalist"/>
+        <input type="password" class="form-control" id="hc-new-coach-pin" placeholder="PIN (4-stellig)" maxlength="4" style="max-width:130px;letter-spacing:4px;text-align:center;font-size:1rem;"/>
+        <button class="btn btn-primary btn-sm" onclick="hcSetCoachPin()">✓ PIN setzen</button>
+      </div>
+    </div>
+
+    <!-- QR-Code für schnellen Zugriff der Coaches -->
+    <div class="card">
+      <div class="card-title">📱 App-Link & QR-Code</div>
+      <div style="font-size:.82rem;color:var(--og-grey);margin-bottom:12px;">Coaches können diesen QR-Code scannen um die App direkt zu öffnen.</div>
+      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+        <div id="hc-qr-code" style="background:#fff;padding:8px;border-radius:8px;display:inline-block;"></div>
+        <div>
+          <div id="hc-app-url" style="font-size:.78rem;color:var(--og-amber);word-break:break-all;margin-bottom:10px;"></div>
+          <button class="btn btn-navy btn-sm" onclick="copyAppUrl()">📋 Link kopieren</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+      <button class="btn btn-primary" onclick="exportAllDay()">📥 Tages-Export (Excel)</button>
+      <button class="btn btn-navy" onclick="printResults()">🖨️ Drucken</button>
+      <button class="btn btn-danger btn-sm" onclick="hcLogout()">Logout</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SCREEN: IMPORT ────────────────────────── -->
+<section id="screen-import" class="screen">
+  <div class="section-header">
+    <div>
+      <div class="section-title">📥 Excel Import</div>
+      <div class="section-sub">Athleten, Stages, Trainer & Skills importieren</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📤 Excel Datei hochladen</div>
+    <div class="drop-zone" id="import-dropzone" onclick="document.getElementById('import-file').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleImportDrop(event)">
+      <div style="font-size:2.5rem;margin-bottom:10px;">📊</div>
+      <div style="font-weight:700;margin-bottom:6px;">Excel Datei hier ablegen</div>
+      <div style="font-size:.82rem;color:var(--og-grey);">oder klicken zum Auswählen (.xlsx)</div>
+    </div>
+    <input type="file" id="import-file" accept=".xlsx" style="display:none" onchange="handleImportFile(event)"/>
+    <div id="import-status" style="margin-top:14px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔊 Sounds hochladen (optional)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <label class="form-label">Start-Signal (Beep)</label>
+        <input type="file" class="form-control" accept="audio/*" onchange="loadSound('start',this)"/>
+      </div>
+      <div>
+        <label class="form-label">Checkpoint-Sound</label>
+        <input type="file" class="form-control" accept="audio/*" onchange="loadSound('checkpoint',this)"/>
+      </div>
+      <div>
+        <label class="form-label">Erfolgs-Sound (geschafft)</label>
+        <input type="file" class="form-control" accept="audio/*" onchange="loadSound('success',this)"/>
+      </div>
+      <div>
+        <label class="form-label">Button-Click Sound</label>
+        <input type="file" class="form-control" accept="audio/*" onchange="loadSound('click',this)"/>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <button class="btn btn-navy btn-sm" onclick="testSounds()">🔊 Sounds testen</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔧 Firebase Echtzeit-Sync</div>
+    <div style="font-size:.82rem;color:var(--og-grey);margin-bottom:12px;">
+      Für Echtzeit-Sync über alle Geräte: Firebase-Projekt erstellen auf <a href="https://console.firebase.google.com" target="_blank" style="color:var(--og-amber);">console.firebase.google.com</a>,
+      dann unter Projekteinstellungen → Web-App → Firebase SDK-Konfiguration den JSON-Block einfügen.<br>
+      <span style="color:var(--og-success);">✅ Sobald konfiguriert sehen alle Coaches & Geräte alle Ergebnisse sofort in Echtzeit.</span>
+    </div>
+    <div id="firebase-status" style="margin-bottom:10px;font-size:.82rem;font-weight:600;"></div>
+    <div class="form-group">
+      <label class="form-label">Firebase Config (JSON)</label>
+      <textarea class="form-control" id="firebase-config-input" rows="7" placeholder='{"apiKey":"AIza...","authDomain":"xxx.firebaseapp.com","projectId":"xxx","storageBucket":"xxx.appspot.com","messagingSenderId":"000","appId":"1:000:web:000"}'></textarea>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="btn btn-primary" onclick="saveFirebaseConfig()">💾 Config speichern & verbinden</button>
+      <button class="btn btn-navy btn-sm" onclick="clearFirebaseConfig()" style="font-size:.78rem;">🗑 Config löschen (lokaler Modus)</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📥 Export</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="exportAllDay()">📊 Tages-Export (Excel)</button>
+      <button class="btn btn-navy" onclick="printResults()">🖨️ Ergebnisse drucken</button>
+    </div>
+  </div>
+</section>
+
+<!-- Gemeinsame Athleten-Datalist für alle Modi -->
+<datalist id="athletes-datalist"></datalist>
+
+</main><!-- end main-content -->
+
+<!-- ══════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════ -->
+
+<!-- Coach Select Modal -->
+<div class="modal-overlay" id="coach-modal">
+  <div class="modal">
+    <div class="modal-title">👤 Coach auswählen</div>
+    <div class="form-group">
+      <label class="form-label">Coach Name</label>
+      <input type="text" class="form-control" id="coach-name-input" placeholder="Name eingeben..." list="coach-datalist" oninput="checkCoachPin()"/>
+      <datalist id="coach-datalist"></datalist>
+    </div>
+    <div class="form-group" id="coach-pin-group" style="display:none;">
+      <label class="form-label">PIN <span style="color:var(--og-amber);font-size:.72rem;">– für diesen Coach erforderlich</span></label>
+      <input type="password" class="form-control" id="coach-pin-input" maxlength="4" placeholder="••••" style="font-size:1.3rem;letter-spacing:6px;text-align:center;" onkeydown="if(event.key==='Enter')setCoach()"/>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-primary" onclick="setCoach()">✓ Bestätigen</button>
+      <button class="btn btn-navy" onclick="closeModal('coach-modal')">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Calendar Entry Modal -->
+<div class="modal-overlay" id="calendar-modal">
+  <div class="modal">
+    <div class="modal-title">📅 Kalender Eintrag</div>
+    <div class="form-group">
+      <label class="form-label">Trainer</label>
+      <input type="text" class="form-control" id="cal-trainer" placeholder="Trainer Name"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Gruppe</label>
+      <input type="text" class="form-control" id="cal-group" placeholder="Gruppe / Kurs"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Challenge / Aktivität</label>
+      <input type="text" class="form-control" id="cal-activity" placeholder="z.B. Ninja Stage 1, Skills Challenge"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Ergebnis / Notizen</label>
+      <textarea class="form-control" id="cal-result" rows="3" placeholder="Ergebnisse, Beobachtungen..."></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Datum</label>
+        <input type="date" class="form-control" id="cal-date"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Teilnehmer Anzahl</label>
+        <input type="number" class="form-control" id="cal-participants" min="1" value="8"/>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-primary" onclick="saveCalendarEntry()">💾 Speichern</button>
+      <button class="btn btn-navy" onclick="closeModal('calendar-modal')">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Skill Modal -->
+<div class="modal-overlay" id="skill-modal">
+  <div class="modal">
+    <div class="modal-title">⭐ Skill hinzufügen</div>
+    <div class="form-group">
+      <label class="form-label">Skill Name</label>
+      <input type="text" class="form-control" id="new-skill-name" placeholder="z.B. Precision Jump"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Kategorie</label>
+      <input type="text" class="form-control" id="new-skill-cat" placeholder="z.B. Sprung, Vault, Balance"/>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-primary" onclick="confirmAddSkill()">✓ Hinzufügen</button>
+      <button class="btn btn-navy" onclick="closeModal('skill-modal')">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+// ════════════════════════════════════════════════
+// FIREBASE INIT
+// ════════════════════════════════════════════════
+let db = null;
+let firebaseReady = false;
+let _fsUnsubs = []; // Firestore onSnapshot unsubscribe functions
+
+function initFirebase(){
+  const stored = localStorage.getItem('og_firebase_config');
+  let config = null;
+  if(stored){ try{ config = JSON.parse(stored); }catch(e){} }
+  if(!config || config.apiKey === 'REPLACE_WITH_YOUR_KEY'){
+    document.getElementById('firebase-status').textContent = '⚠️ Kein Firebase – lokaler Modus aktiv';
+    console.warn('Firebase nicht konfiguriert – lokaler Modus aktiv');
+    return;
+  }
+  try{
+    if(!firebase.apps.length){ firebase.initializeApp(config); }
+    db = firebase.firestore();
+    firebaseReady = true;
+    document.getElementById('firebase-status').textContent = '🔄 Verbinde…';
+
+    // ── Unsubscribe old listeners ──
+    _fsUnsubs.forEach(u=>u());
+    _fsUnsubs = [];
+
+    // ── Real-time result listeners ──
+    _fsUnsubs.push(
+      db.collection('ninjaResults').orderBy('date','asc').onSnapshot(snap=>{
+        state.ninjaResults = snap.docs.map(d=>({...d.data(), firestoreId:d.id}));
+        LS.set('ninjaResults', state.ninjaResults);
+        renderNinjaLeaderboard();
+      }, e=>console.warn('ninjaResults sync',e))
+    );
+    _fsUnsubs.push(
+      db.collection('skillResults').orderBy('date','asc').onSnapshot(snap=>{
+        state.skillResults = snap.docs.map(d=>({...d.data(), firestoreId:d.id}));
+        LS.set('skillResults', state.skillResults);
+        renderSkillsLeaderboard();
+      }, e=>console.warn('skillResults sync',e))
+    );
+    _fsUnsubs.push(
+      db.collection('speedrunResults').orderBy('date','asc').onSnapshot(snap=>{
+        state.speedrunResults = snap.docs.map(d=>({...d.data(), firestoreId:d.id}));
+        LS.set('speedrunResults', state.speedrunResults);
+        renderSpeedrunLeaderboard();
+      }, e=>console.warn('speedrunResults sync',e))
+    );
+    _fsUnsubs.push(
+      db.collection('calendarEntries').orderBy('date','desc').onSnapshot(snap=>{
+        state.calendarEntries = snap.docs.map(d=>({...d.data(), firestoreId:d.id}));
+        LS.set('calendarEntries', state.calendarEntries);
+        renderCalendar();
+      }, e=>console.warn('calendarEntries sync',e))
+    );
+
+    // ── Shared config listener (athletes, stages, coachPINs) ──
+    _fsUnsubs.push(
+      db.collection('config').doc('shared').onSnapshot(doc=>{
+        if(doc.exists){
+          const d = doc.data();
+          if(d.athletes){ state.athletes=d.athletes; LS.set('athletes',d.athletes); populateDropdowns(); }
+          if(d.stages){ state.stages=d.stages; LS.set('stages',d.stages); }
+          if(d.trainers){ state.trainers=d.trainers; LS.set('trainers',d.trainers); }
+          if(d.skills){ state.skills=d.skills; LS.set('skills',d.skills); }
+          if(d.coachPINs){ state.coachPINs=d.coachPINs; LS.set('coachPINs',d.coachPINs); }
+          if(d.headcoachPIN){ state.headcoachPIN=d.headcoachPIN; LS.set('headcoachPIN',d.headcoachPIN); }
+        }
+      }, e=>console.warn('config sync',e))
+    );
+
+    document.getElementById('firebase-status').textContent = '✅ Firebase verbunden – Echtzeit-Sync aktiv';
+  }catch(e){
+    console.warn('Firebase init error:', e);
+    document.getElementById('firebase-status').textContent = '❌ Firebase Fehler: '+e.message;
+  }
+}
+
+// Helper: push shared config to Firestore
+function _syncConfigToFirestore(){
+  if(!firebaseReady||!db) return;
+  db.collection('config').doc('shared').set({
+    athletes: state.athletes,
+    stages: state.stages,
+    trainers: state.trainers,
+    skills: state.skills,
+    coachPINs: state.coachPINs,
+    headcoachPIN: state.headcoachPIN
+  },{merge:true}).catch(e=>console.warn('config sync write error',e));
+}
+
+// ════════════════════════════════════════════════
+// LOCAL STORAGE FALLBACK
+// ════════════════════════════════════════════════
+const LS = {
+  get:(k)=>{ try{ return JSON.parse(localStorage.getItem('og_'+k)||'null'); }catch(e){return null;} },
+  set:(k,v)=>{ localStorage.setItem('og_'+k, JSON.stringify(v)); },
+  push:(k,v)=>{ const arr=LS.get(k)||[]; arr.push(v); LS.set(k,arr); }
+};
+
+// ════════════════════════════════════════════════
+// APP STATE
+// ════════════════════════════════════════════════
+let state = {
+  currentCoach: LS.get('currentCoach') || '',
+  athletes: LS.get('athletes') || [],
+  stages: LS.get('stages') || [],
+  trainers: LS.get('trainers') || [],
+  skills: LS.get('skills') || [],
+  ninjaResults: LS.get('ninjaResults') || [],
+  skillResults: LS.get('skillResults') || [],
+  speedrunResults: LS.get('speedrunResults') || [],
+  calendarEntries: LS.get('calendarEntries') || [],
+  chasetag: null,
+  headcoachPIN: LS.get('headcoachPIN') || '1234',
+  coachPINs: LS.get('coachPINs') || {}   // { "Name": "1234", ... }
+};
+
+// ════════════════════════════════════════════════
+// SOUNDS
+// ════════════════════════════════════════════════
+let audioCtx = null;
+const customSounds = {};
+
+function getAudioCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function beep(freq=440, dur=0.15, vol=0.4, type='sine'){
+  try{
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = freq;
+    osc.type = type;
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+dur);
+    osc.start(); osc.stop(ctx.currentTime+dur);
+  }catch(e){}
+}
+
+function playSound(name){
+  if(customSounds[name]){
+    try{ const a=new Audio(customSounds[name]);a.play(); }catch(e){}
+    return;
+  }
+  // Synthetic fallback
+  const sounds = {
+    click:     ()=>beep(800,0.04,0.2,'square'),
+    checkpoint:()=>{ beep(660,0.1,0.4); setTimeout(()=>beep(880,0.12,0.4),120); },
+    success:   ()=>{ beep(523,0.1,0.4);setTimeout(()=>beep(659,0.1,0.4),120);setTimeout(()=>beep(784,0.2,0.5),240); },
+    start:     ()=>{ /* handled by startCountdown */ },
+    catch:     ()=>{ beep(330,0.2,0.5,'sawtooth'); },
+    escape:    ()=>{ beep(523,0.1,0.4);setTimeout(()=>beep(659,0.15,0.4),150); },
+    timeout:   ()=>beep(220,0.4,0.5,'square')
+  };
+  if(sounds[name]) sounds[name]();
+}
+
+function loadSound(name, input){
+  const file = input.files[0];
+  if(!file) return;
+  const url = URL.createObjectURL(file);
+  customSounds[name] = url;
+  toast(`Sound "${name}" geladen ✓`,'success');
+}
+
+function testSounds(){
+  playSound('click');
+  setTimeout(()=>playSound('checkpoint'),400);
+  setTimeout(()=>playSound('success'),900);
+}
+
+// ════════════════════════════════════════════════
+// START COUNTDOWN
+// ════════════════════════════════════════════════
+function startCountdown(callback){
+  const overlay = document.getElementById('start-overlay');
+  const countEl = document.getElementById('start-countdown');
+  const labelEl = document.getElementById('start-label');
+  overlay.classList.add('visible');
+
+  // Sequenz: beep · beep · beep → beeeeeep
+  // 3-2-1: kurze, klare Töne (660 Hz)
+  // GO: langer, deutlich höherer Ton (1320 Hz)
+  let count = 3;
+  countEl.textContent = count;
+  labelEl.textContent = 'BEREIT...';
+
+  const tick = ()=>{
+    // Kurzer, klarer Beep für 3/2/1
+    beep(660, 0.12, 0.6, 'sine');
+    count--;
+    if(count > 0){
+      countEl.textContent = count;
+      countEl.style.animation='none';
+      void countEl.offsetWidth;
+      countEl.style.animation='countPop .3s ease';
+      setTimeout(tick, 1000);
+    } else {
+      countEl.textContent = 'GO!';
+      labelEl.textContent = '';
+      // GO: langer, hoher Ton – klar unterscheidbar vom Countdown
+      beep(1320, 0.7, 1.0, 'sine');
+      setTimeout(()=>{
+        overlay.classList.remove('visible');
+        callback();
+      }, 800);
+    }
+  };
+  setTimeout(tick, 1000);
+}
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function showScreen(name){
+  playSound('click');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.querySelector(`[data-screen="${name}"]`).classList.add('active');
+  if(name==='ninja') renderNinjaLeaderboard();
+  if(name==='skills') renderSkillsLeaderboard();
+  if(name==='speedrun') renderSpeedrunLeaderboard();
+  if(name==='calendar') renderCalendar();
+  if(name==='headcoach') renderHeadcoachDashboard();
+}
+
+// ════════════════════════════════════════════════
+// COACH
+// ════════════════════════════════════════════════
+function openCoachModal(){
+  playSound('click');
+  document.getElementById('coach-name-input').value = state.currentCoach;
+  document.getElementById('coach-pin-input').value = '';
+  checkCoachPin();
+  openModal('coach-modal');
+}
+
+function checkCoachPin(){
+  const name = document.getElementById('coach-name-input').value.trim();
+  const hasPin = !!state.coachPINs[name];
+  document.getElementById('coach-pin-group').style.display = hasPin ? 'block' : 'none';
+  if(!hasPin) document.getElementById('coach-pin-input').value='';
+}
+
+function setCoach(){
+  const name = document.getElementById('coach-name-input').value.trim();
+  if(!name){ toast('Bitte Namen eingeben','error'); return; }
+  // PIN prüfen wenn vorhanden
+  const requiredPin = state.coachPINs[name];
+  if(requiredPin){
+    const entered = document.getElementById('coach-pin-input').value;
+    if(!entered){ toast('Bitte PIN eingeben','error'); document.getElementById('coach-pin-input').focus(); return; }
+    if(entered !== requiredPin){
+      toast('Falscher PIN','error');
+      beep(220,0.3,0.5,'sawtooth');
+      document.getElementById('coach-pin-input').value='';
+      document.getElementById('coach-pin-input').focus();
+      return;
+    }
+  }
+  state.currentCoach = name;
+  LS.set('currentCoach',name);
+  document.getElementById('coach-name-display').textContent = name;
+  ['ninja-coach','skills-coach','sr-coach'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value=name;
+  });
+  closeModal('coach-modal');
+  toast(`Coach: ${name} ✓`,'success');
+}
+
+// ════════════════════════════════════════════════
+// NINJA STAGE TIMER
+// ════════════════════════════════════════════════
+let ninjaTimer = { running:false, startTime:0, elapsed:0, interval:null, cleared:[], count:0, splits:[], usedTime:null };
+
+function updateNinjaMode(){
+  renderObstacles();
+}
+
+function renderObstacles(){
+  const count = parseInt(document.getElementById('ninja-obstacle-count').value)||6;
+  const mode = document.getElementById('ninja-mode').value;
+  ninjaTimer.count = count;
+  ninjaTimer.cleared = new Array(count).fill(false);
+  const container = document.getElementById('obstacle-container');
+
+  if(mode==='obstacle'){
+    let html = `<div style="margin-bottom:8px;font-size:.78rem;color:var(--og-grey);text-align:center;text-transform:uppercase;letter-spacing:.5px;">Hindernisse – tippe zum abhaken</div>`;
+    html += '<div class="obstacle-grid">';
+    for(let i=0;i<count;i++){
+      html += `<button class="obstacle-btn" id="obs-${i}" onclick="toggleObstacle(${i})">
+        <span>${i+1}</span>
+        <span class="obstacle-label">OBS</span>
+      </button>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+  } else {
+    // Checkpoint mode – just show cleared count
+    container.innerHTML = `<div style="text-align:center;padding:8px 0;font-size:.9rem;color:var(--og-grey);">
+      Checkpoint Modus – <span id="cp-cleared">0</span> / ${count} Hindernisse geschafft
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <button class="btn btn-success btn-sm" onclick="addCheckpoint()">✓ Checkpoint</button>
+        <button class="btn btn-danger btn-sm" onclick="removeCheckpoint()">✗ Zurück</button>
+      </div>
+    </div>`;
+  }
+}
+
+function toggleObstacle(idx){
+  if(!ninjaTimer.running) return;
+  playSound('checkpoint');
+  ninjaTimer.cleared[idx] = !ninjaTimer.cleared[idx];
+  const btn = document.getElementById('obs-'+idx);
+  btn.classList.toggle('cleared', ninjaTimer.cleared[idx]);
+
+  // Zwischenzeit aufzeichnen / entfernen
+  if(ninjaTimer.cleared[idx]){
+    const splitTime = Date.now() - ninjaTimer.startTime;
+    ninjaTimer.splits.push({ obstacle: idx+1, time: splitTime });
+  } else {
+    ninjaTimer.splits = ninjaTimer.splits.filter(s => s.obstacle !== idx+1);
+  }
+  renderSplits(true);
+
+  if(ninjaTimer.cleared.every(c=>c)){
+    playSound('success');
+    stopNinjaTimer();
+  }
+}
+
+function addCheckpoint(){
+  const count = parseInt(document.getElementById('ninja-obstacle-count').value)||6;
+  const cleared = document.getElementById('cp-cleared');
+  let v = parseInt(cleared.textContent)||0;
+  if(v<count){
+    v++;
+    cleared.textContent=v;
+    playSound('checkpoint');
+    // Zwischenzeit aufzeichnen
+    const splitTime = Date.now() - ninjaTimer.startTime;
+    ninjaTimer.splits.push({ obstacle: v, time: splitTime });
+    renderSplits(true);
+  }
+  if(v>=count){ playSound('success'); stopNinjaTimer(); }
+}
+function removeCheckpoint(){
+  const cleared = document.getElementById('cp-cleared');
+  let v = parseInt(cleared.textContent)||0;
+  if(v>0){
+    // Letzten Split entfernen
+    ninjaTimer.splits = ninjaTimer.splits.filter(s => s.obstacle !== v);
+    v--;
+    cleared.textContent=v;
+    renderSplits(true);
+  }
+}
+
+// ── ZWISCHENZEITEN ────────────────────────────────
+function renderSplits(live){
+  const container = document.getElementById('ninja-splits');
+  const listEl    = document.getElementById('ninja-splits-list');
+  const labelEl   = document.getElementById('ninja-splits-label');
+  const selEl     = document.getElementById('ninja-splits-selected');
+  if(!ninjaTimer.splits.length){ container.style.display='none'; return; }
+  container.style.display='block';
+  labelEl.textContent = live ? '⏱ Zwischenzeiten (laufend)' : '⏱ Zwischenzeiten – Tippe zum Auswählen der Wertungszeit';
+
+  listEl.innerHTML = ninjaTimer.splits.map((s,i)=>{
+    const isSelected = ninjaTimer.usedTime !== null && ninjaTimer.usedTime === s.time;
+    return `<button
+      class="obstacle-btn ${isSelected?'cleared':''}"
+      style="width:auto;min-width:64px;padding:8px 10px;height:auto;${live?'pointer-events:none;opacity:.85;':''}"
+      onclick="${live?'':'selectSplit('+i+')'}"
+    >
+      <span style="font-size:.82rem;font-weight:700;">CP${s.obstacle}</span>
+      <span class="obstacle-label" style="font-size:.6rem;">${formatTime(s.time)}</span>
+    </button>`;
+  }).join('');
+
+  if(ninjaTimer.usedTime !== null){
+    selEl.style.display='block';
+    selEl.innerHTML = `✓ Wertungszeit: <strong>${formatTime(ninjaTimer.usedTime)}</strong> &nbsp;<span style="font-size:.75rem;opacity:.7;">(klicke erneut zum Aufheben)</span>`;
+  } else {
+    selEl.style.display='none';
+  }
+}
+
+function selectSplit(idx){
+  const split = ninjaTimer.splits[idx];
+  if(!split) return;
+  playSound('checkpoint');
+  // Toggle: nochmals klicken = aufheben, Gesamtzeit wird verwendet
+  ninjaTimer.usedTime = (ninjaTimer.usedTime === split.time) ? null : split.time;
+  renderSplits(false);
+  // Ergebnis-Anzeige aktualisieren
+  const cleared = document.getElementById('ninja-mode').value==='obstacle'
+    ? ninjaTimer.cleared.filter(Boolean).length
+    : parseInt(document.getElementById('cp-cleared')?.textContent||0);
+  const displayTime = ninjaTimer.usedTime ?? ninjaTimer.elapsed;
+  const splitHint = ninjaTimer.usedTime !== null ? ' <span style="color:var(--og-success);font-size:.78rem;">(Zwischenzeit)</span>' : '';
+  document.getElementById('ninja-result-info').innerHTML =
+    `Zeit: <strong>${formatTime(displayTime)}</strong>${splitHint} &nbsp;|&nbsp; Hindernisse: <strong>${cleared}/${ninjaTimer.count}</strong>`;
+}
+
+function formatTime(ms){
+  const min = Math.floor(ms/60000);
+  const sec = Math.floor((ms%60000)/1000);
+  const cs  = Math.floor((ms%1000)/10);
+  return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(cs).padStart(2,'0')}`;
+}
+
+function startNinjaTimer(){
+  playSound('click');
+  startCountdown(()=>{
+    ninjaTimer.startTime = Date.now() - ninjaTimer.elapsed;
+    ninjaTimer.running = true;
+    document.getElementById('ninja-start-btn').disabled = true;
+    document.getElementById('ninja-stop-btn').disabled = false;
+    document.getElementById('ninja-timer').className = 'timer-display running';
+    ninjaTimer.interval = setInterval(()=>{
+      ninjaTimer.elapsed = Date.now()-ninjaTimer.startTime;
+      document.getElementById('ninja-timer').textContent = formatTime(ninjaTimer.elapsed);
+    },10);
+  });
+}
+
+function stopNinjaTimer(){
+  if(!ninjaTimer.running) return;
+  clearInterval(ninjaTimer.interval);
+  ninjaTimer.elapsed = Date.now()-ninjaTimer.startTime;
+  ninjaTimer.running = false;
+  document.getElementById('ninja-timer').className = 'timer-display stopped';
+  document.getElementById('ninja-stop-btn').disabled = true;
+  document.getElementById('ninja-start-btn').disabled = false;
+  document.getElementById('ninja-save-btn').disabled = false;
+  playSound('success');
+
+  const cleared = document.getElementById('ninja-mode').value==='obstacle'
+    ? ninjaTimer.cleared.filter(Boolean).length
+    : parseInt(document.getElementById('cp-cleared')?.textContent||0);
+
+  document.getElementById('ninja-result-info').innerHTML =
+    `Zeit: <strong>${formatTime(ninjaTimer.elapsed)}</strong> &nbsp;|&nbsp; Hindernisse: <strong>${cleared}/${ninjaTimer.count}</strong>`;
+
+  // Zwischenzeiten jetzt als wählbar anzeigen (falls vorhanden)
+  if(ninjaTimer.splits.length > 0){
+    renderSplits(false);
+  }
+}
+
+function resetNinjaTimer(){
+  playSound('click');
+  clearInterval(ninjaTimer.interval);
+  ninjaTimer = { running:false, startTime:0, elapsed:0, interval:null, cleared:[], count:ninjaTimer.count, splits:[], usedTime:null };
+  document.getElementById('ninja-timer').textContent = '00:00.00';
+  document.getElementById('ninja-timer').className = 'timer-display';
+  document.getElementById('ninja-start-btn').disabled = false;
+  document.getElementById('ninja-stop-btn').disabled = true;
+  document.getElementById('ninja-save-btn').disabled = true;
+  document.getElementById('ninja-result-info').textContent = '';
+  const splitsEl = document.getElementById('ninja-splits');
+  if(splitsEl) splitsEl.style.display='none';
+  document.getElementById('ninja-next-bar').style.display='none';
+  renderObstacles();
+}
+
+// ── NÄCHSTER ATHLET ────────────────────────────────
+function nextAthlete(){
+  playSound('click');
+  document.getElementById('ninja-athlete-select').value = '';
+  document.getElementById('ninja-next-bar').style.display = 'none';
+  resetNinjaTimer();
+  document.getElementById('ninja-athlete-select').focus();
+}
+
+// ── GRUPPEN-QUEUE ──────────────────────────────────
+function renderGroupQueue(mode){
+  const selectId = mode==='ninja' ? 'ninja-group-select' : null;
+  if(!selectId) return;
+  const groupVal = document.getElementById(selectId).value;
+  const queueEl  = document.getElementById('ninja-group-queue');
+  const listEl   = document.getElementById('ninja-group-athletes');
+  if(!queueEl || !listEl) return;
+  if(!groupVal || !state.athletes.length){ queueEl.style.display='none'; return; }
+
+  const groupAthletes = state.athletes.filter(a=>
+    (a.trainer||'').toLowerCase() === groupVal.toLowerCase() ||
+    (a.gruppe||'').toLowerCase() === groupVal.toLowerCase()
+  );
+  if(!groupAthletes.length){
+    queueEl.style.display='block';
+    listEl.innerHTML='<span style="color:var(--og-grey);font-size:.82rem;">Keine Athleten gefunden</span>';
+    return;
+  }
+  queueEl.style.display='block';
+  listEl.innerHTML = groupAthletes.map(a=>
+    `<button class="player-chip" onclick="selectAthleteFromQueue('${a.name.replace(/'/g,"\\'")}','ninja')" title="${a.kategorie||''}">${a.name}</button>`
+  ).join('');
+}
+
+function selectAthleteFromQueue(name, mode){
+  playSound('click');
+  if(mode==='ninja') document.getElementById('ninja-athlete-select').value = name;
+  else if(mode==='skills') document.getElementById('skills-athlete').value = name;
+  else if(mode==='speedrun') document.getElementById('sr-athlete').value = name;
+  // Visuelles Feedback: aktiven Chip markieren
+  document.querySelectorAll('#ninja-group-athletes .player-chip').forEach(c=>{
+    c.classList.toggle('active', c.textContent.trim()===name);
+  });
+}
+
+async function saveNinjaResult(){
+  const athlete   = document.getElementById('ninja-athlete-select').value || 'Unbekannt';
+  const stage     = document.getElementById('ninja-stage-select').value || 'Stage';
+  const cat       = document.getElementById('ninja-category').value;
+  const coach     = document.getElementById('ninja-coach').value || state.currentCoach;
+  const mode      = document.getElementById('ninja-mode').value;
+  const actType   = document.getElementById('ninja-activity-type').value || 'ninja';
+  const cleared = mode==='obstacle'
+    ? ninjaTimer.cleared.filter(Boolean).length
+    : parseInt(document.getElementById('cp-cleared')?.textContent||0);
+
+  // Wertungszeit: gewählte Zwischenzeit oder Gesamtzeit
+  const finalTime = ninjaTimer.usedTime ?? ninjaTimer.elapsed;
+  const result = {
+    id: Date.now(),
+    athlete, stage, category:cat, coach, mode, actType,
+    clearedObstacles: cleared, totalObstacles: ninjaTimer.count,
+    time: finalTime, timeStr: formatTime(finalTime),
+    totalTime: ninjaTimer.elapsed, totalTimeStr: formatTime(ninjaTimer.elapsed),
+    usedSplit: ninjaTimer.usedTime !== null,
+    splits: ninjaTimer.splits.map(s=>({ obstacle:s.obstacle, time:s.time, timeStr:formatTime(s.time) })),
+    date: new Date().toISOString(),
+    dateStr: new Date().toLocaleDateString('de-CH')
+  };
+
+  if(firebaseReady && db){
+    try{ await db.collection('ninjaResults').add(result); }catch(e){
+      // Fallback: local only
+      state.ninjaResults.push(result);
+      LS.set('ninjaResults', state.ninjaResults);
+    }
+  } else {
+    state.ninjaResults.push(result);
+    LS.set('ninjaResults', state.ninjaResults);
+  }
+  // Calendar entry
+  addAutoCalendarEntry(coach, 'Ninja Stage', stage, `${athlete}: ${result.timeStr} (${cleared}/${ninjaTimer.count} Hindernisse)`);
+
+  toast(`✓ Gespeichert: ${athlete} – ${result.timeStr}`,'success');
+  document.getElementById('ninja-save-btn').disabled = true;
+  document.getElementById('ninja-next-bar').style.display = 'block';
+  renderNinjaLeaderboard();
+  // Direkt zur gespeicherten Kategorie springen
+  const tabs = document.getElementById('ninja-cat-tabs');
+  const targetTab = Array.from(tabs.querySelectorAll('.tab-btn')).find(b=>b.textContent.trim()===cat);
+  if(targetTab){
+    document.querySelectorAll('#ninja-cat-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    targetTab.classList.add('active');
+    renderNinjaTable(cat);
+  }
+}
+
+// Kategorien in logischer Wettkampf-Reihenfolge sortieren
+function sortCategories(a, b){
+  const order = ['5-7j','8-11j M LK1','8-11j M LK2','8-11j W LK1','8-11j W LK2',
+    '12-15j M LK1','12-15j M LK2','12-15j W LK1','12-15j W LK2',
+    '16-39j M LK1','16-39j M LK2','16-39j W LK1','16-39j W LK2',
+    'Ü40 M','Ü40 W'];
+  const ia = order.indexOf(a), ib = order.indexOf(b);
+  if(ia >= 0 && ib >= 0) return ia - ib;
+  if(ia >= 0) return -1;
+  if(ib >= 0) return 1;
+  return a.localeCompare(b);
+}
+
+function renderNinjaLeaderboard(){
+  const results = state.ninjaResults;
+  const tabs = document.getElementById('ninja-cat-tabs');
+  if(!results.length){
+    document.getElementById('ninja-leaderboard').innerHTML='<div style="color:var(--og-grey);text-align:center;padding:20px;">Noch keine Ergebnisse</div>';
+    tabs.innerHTML='';
+    return;
+  }
+  const cats = [...new Set(results.map(r=>r.category))].sort(sortCategories);
+  // Aktiven Tab merken, dann immer neu bauen (damit neue Kategorien erscheinen)
+  const prevActive = tabs.querySelector('.tab-btn.active')?.textContent;
+  const activeCat = (prevActive && cats.includes(prevActive)) ? prevActive : cats[0];
+  tabs.innerHTML = cats.map(c=>`<button class="tab-btn ${c===activeCat?'active':''}" onclick="filterNinjaCat('${c}',this)">${c}</button>`).join('');
+  renderNinjaTable(activeCat);
+}
+
+function filterNinjaCat(cat,btn){
+  playSound('click');
+  document.querySelectorAll('#ninja-cat-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderNinjaTable(cat);
+}
+
+function renderNinjaTable(cat){
+  const results = state.ninjaResults.filter(r=>r.category===cat);
+  results.sort((a,b)=>b.clearedObstacles-a.clearedObstacles || a.time-b.time);
+  const lb = document.getElementById('ninja-leaderboard');
+  if(!results.length){ lb.innerHTML='<div style="color:var(--og-grey);padding:14px;">Keine Ergebnisse in dieser Kategorie.</div>'; return; }
+  lb.innerHTML = results.map((r,i)=>`
+    <div class="leaderboard-row" style="grid-template-columns:40px 1fr auto auto auto;">
+      <div class="rank-badge rank-${i+1}">${i<3?['🥇','🥈','🥉'][i]:i+1}</div>
+      <div>
+        <div style="font-weight:700;">${r.athlete}</div>
+        <div style="font-size:.75rem;color:var(--og-grey);">${r.stage} · ${r.dateStr} · ${r.coach||''}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="badge badge-green">${r.clearedObstacles}/${r.totalObstacles}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Courier New',monospace;font-weight:700;font-size:1rem;">${r.timeStr}</div>
+        ${r.usedSplit ? `<div style="font-size:.65rem;color:var(--og-amber);">⏱ Zwischenzeit</div>` : ''}
+      </div>
+      <button onclick="deleteNinjaResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:.85rem;flex-shrink:0;" class="no-print">✕</button>
+    </div>`).join('');
+}
+
+async function deleteNinjaResult(id){
+  if(!confirm('Dieses Ergebnis wirklich löschen?')) return;
+  const r = state.ninjaResults.find(x=>x.id===id);
+  if(firebaseReady && db && r?.firestoreId){
+    try{ await db.collection('ninjaResults').doc(r.firestoreId).delete(); }catch(e){
+      state.ninjaResults = state.ninjaResults.filter(x=>x.id!==id);
+      LS.set('ninjaResults', state.ninjaResults);
+      renderNinjaLeaderboard();
+    }
+  } else {
+    state.ninjaResults = state.ninjaResults.filter(x=>x.id!==id);
+    LS.set('ninjaResults', state.ninjaResults);
+    renderNinjaLeaderboard();
+  }
+  toast('Ergebnis gelöscht','success');
+}
+
+// ════════════════════════════════════════════════
+// SKILLS CHALLENGE
+// ════════════════════════════════════════════════
+let currentSkillsSession = [];
+
+function loadSkillsForAthlete(){
+  playSound('click');
+  const athleteName = document.getElementById('skills-athlete').value || 'Athlet';
+  document.getElementById('skills-athlete-name').textContent = athleteName;
+
+  // Load skills from imported list or defaults
+  const skillList = state.skills.length ? state.skills : [
+    {name:'Precision Jump 1m', category:'Sprung'},
+    {name:'Kong Vault', category:'Vault'},
+    {name:'Balance Traverse 5m', category:'Balance'},
+    {name:'Cat Leap', category:'Sprung'},
+    {name:'Speed Vault', category:'Vault'},
+  ];
+
+  currentSkillsSession = skillList.map(s=>({...s, attempt:null}));
+  renderSkillsList();
+  document.getElementById('skills-card').style.display='block';
+}
+
+function renderSkillsList(){
+  const list = document.getElementById('skills-list');
+  list.innerHTML = currentSkillsSession.map((s,i)=>`
+    <div class="skill-row">
+      <div>
+        <div style="font-weight:600;">${s.name}</div>
+        <div style="font-size:.72rem;color:var(--og-grey);">${s.category||''}</div>
+      </div>
+      <button class="attempt-btn v1 ${s.attempt===1?'active':''}" onclick="setAttempt(${i},1)" title="1. Versuch = 100 Pkt">V1</button>
+      <button class="attempt-btn v2 ${s.attempt===2?'active':''}" onclick="setAttempt(${i},2)" title="2. Versuch = 50 Pkt">V2</button>
+      <button class="attempt-btn v3 ${s.attempt===3?'active':''}" onclick="setAttempt(${i},3)" title="3. Versuch = 10 Pkt">V3</button>
+    </div>`).join('');
+}
+
+function setAttempt(idx, attempt){
+  playSound('checkpoint');
+  currentSkillsSession[idx].attempt = currentSkillsSession[idx].attempt===attempt ? null : attempt;
+  if(currentSkillsSession[idx].attempt) playSound('checkpoint');
+  renderSkillsList();
+}
+
+async function saveSkillsResult(){
+  const athlete = document.getElementById('skills-athlete').value || 'Athlet';
+  const cat     = document.getElementById('skills-category').value;
+  const coach   = document.getElementById('skills-coach').value || state.currentCoach;
+  const group   = document.getElementById('skills-group').value;
+
+  const scored = currentSkillsSession.filter(s=>s.attempt);
+  if(!scored.length){ toast('Kein Skill bewertet','error'); return; }
+
+  const pts = {1:100,2:50,3:10};
+  const total = scored.reduce((s,sk)=>s+(pts[sk.attempt]||0),0);
+
+  const result = {
+    id: Date.now(),
+    athlete, category:cat, coach, group,
+    skills: currentSkillsSession.map(s=>({name:s.name,attempt:s.attempt,points:pts[s.attempt]||0})),
+    totalPoints: total,
+    date: new Date().toISOString(),
+    dateStr: new Date().toLocaleDateString('de-CH')
+  };
+
+  if(firebaseReady && db){
+    try{ await db.collection('skillResults').add(result); }catch(e){
+      state.skillResults.push(result);
+      LS.set('skillResults', state.skillResults);
+    }
+  } else {
+    state.skillResults.push(result);
+    LS.set('skillResults', state.skillResults);
+  }
+  addAutoCalendarEntry(coach, 'Skills Challenge', group, `${athlete}: ${total} Punkte`);
+
+  playSound('success');
+  toast(`✓ ${athlete} – ${total} Punkte`,'success');
+  renderSkillsLeaderboard();
+  // Direkt zur gespeicherten Kategorie springen
+  const stabs = document.getElementById('skills-cat-tabs');
+  const stargetTab = Array.from(stabs.querySelectorAll('.tab-btn')).find(b=>b.textContent.trim()===cat);
+  if(stargetTab){
+    document.querySelectorAll('#skills-cat-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    stargetTab.classList.add('active');
+    renderSkillsTable(cat);
+  }
+}
+
+function renderSkillsLeaderboard(){
+  const results = state.skillResults;
+  const tabs = document.getElementById('skills-cat-tabs');
+  if(!results.length){
+    document.getElementById('skills-leaderboard').innerHTML='<div style="color:var(--og-grey);text-align:center;padding:20px;">Noch keine Ergebnisse</div>';
+    tabs.innerHTML='';
+    return;
+  }
+  const cats = [...new Set(results.map(r=>r.category))].sort(sortCategories);
+  const prevActive = tabs.querySelector('.tab-btn.active')?.textContent;
+  const activeCat = (prevActive && cats.includes(prevActive)) ? prevActive : cats[0];
+  tabs.innerHTML = cats.map(c=>`<button class="tab-btn ${c===activeCat?'active':''}" onclick="filterSkillsCat('${c}',this)">${c}</button>`).join('');
+  renderSkillsTable(activeCat);
+}
+
+function filterSkillsCat(cat,btn){
+  playSound('click');
+  document.querySelectorAll('#skills-cat-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSkillsTable(cat);
+}
+
+function renderSkillsTable(cat){
+  const results = state.skillResults.filter(r=>r.category===cat);
+  results.sort((a,b)=>b.totalPoints-a.totalPoints);
+  const lb = document.getElementById('skills-leaderboard');
+  if(!results.length){ lb.innerHTML='<div style="color:var(--og-grey);padding:14px;">Keine Ergebnisse.</div>'; return; }
+  lb.innerHTML = results.map((r,i)=>`
+    <div class="leaderboard-row" style="grid-template-columns:40px 1fr auto auto;">
+      <div class="rank-badge rank-${i+1}">${i<3?['🥇','🥈','🥉'][i]:i+1}</div>
+      <div>
+        <div style="font-weight:700;">${r.athlete}</div>
+        <div style="font-size:.75rem;color:var(--og-grey);">${r.dateStr} · ${r.skills.filter(s=>s.attempt).length} Skills · ${r.coach||''}</div>
+      </div>
+      <div style="font-family:'Courier New',monospace;font-weight:900;font-size:1.3rem;color:var(--og-amber);">${r.totalPoints}</div>
+      <button onclick="deleteSkillResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:.85rem;flex-shrink:0;" class="no-print">✕</button>
+    </div>`).join('');
+}
+
+async function deleteSkillResult(id){
+  if(!confirm('Dieses Ergebnis wirklich löschen?')) return;
+  const r = state.skillResults.find(x=>x.id===id);
+  if(firebaseReady && db && r?.firestoreId){
+    try{ await db.collection('skillResults').doc(r.firestoreId).delete(); }catch(e){
+      state.skillResults = state.skillResults.filter(x=>x.id!==id);
+      LS.set('skillResults', state.skillResults);
+      renderSkillsLeaderboard();
+    }
+  } else {
+    state.skillResults = state.skillResults.filter(x=>x.id!==id);
+    LS.set('skillResults', state.skillResults);
+    renderSkillsLeaderboard();
+  }
+  toast('Ergebnis gelöscht','success');
+}
+
+function addCustomSkill(){
+  playSound('click');
+  openModal('skill-modal');
+}
+function confirmAddSkill(){
+  const name = document.getElementById('new-skill-name').value.trim();
+  const cat  = document.getElementById('new-skill-cat').value.trim();
+  if(!name){ toast('Name eingeben','error'); return; }
+  currentSkillsSession.push({name, category:cat, attempt:null});
+  renderSkillsList();
+  closeModal('skill-modal');
+  toast(`Skill "${name}" hinzugefügt`,'success');
+}
+
+// ════════════════════════════════════════════════
+// CHASETAG
+// ════════════════════════════════════════════════
+let ct = {
+  running:false, timer:null, timeLeft:20,
+  round:1, maxRounds:16, timerDur:20,
+  scoreA:0, scoreB:0,
+  teamA:'Team A', teamB:'Team B',
+  playersA:[], playersB:[],
+  queueA:[], queueB:[],
+  currentEvader:null, currentChaser:null,
+  evaderTeam:null, history:[], suddenDeath:false
+};
+
+function renderChasetaPlayers(){
+  const n = parseInt(document.getElementById('ct-player-count').value)||2;
+  const anon = document.getElementById('ct-anon').checked;
+  let html = '';
+  for(let i=0;i<n;i++){
+    html+=`<div class="form-group">
+      <label class="form-label">Team A – Spieler ${i+1}</label>
+      <input type="text" class="form-control ct-player-a" placeholder="${anon?'Spieler '+(i+1):'Name Spieler '+(i+1)}"/>
+    </div>`;
+  }
+  html += '<div style="border-left:2px solid rgba(255,255,255,.1);"></div>';
+  for(let i=0;i<n;i++){
+    html+=`<div class="form-group">
+      <label class="form-label">Team B – Spieler ${i+1}</label>
+      <input type="text" class="form-control ct-player-b" placeholder="${anon?'Spieler '+(i+1):'Name Spieler '+(i+1)}"/>
+    </div>`;
+  }
+  document.getElementById('ct-players-inputs').innerHTML = html;
+}
+
+function switchChasetag(tab){
+  playSound('click');
+  document.getElementById('chasetag-setup').style.display = tab==='setup'?'block':'none';
+  document.getElementById('chasetag-game').style.display  = tab==='game'?'block':'none';
+  document.getElementById('ctab-setup').classList.toggle('active',tab==='setup');
+  document.getElementById('ctab-game').classList.toggle('active',tab==='game');
+}
+
+function initChasetag(){
+  playSound('click');
+  const n = parseInt(document.getElementById('ct-player-count').value)||2;
+  const anon = document.getElementById('ct-anon').checked;
+
+  ct.teamA = document.getElementById('ct-teamA-name').value || 'Team A';
+  ct.teamB = document.getElementById('ct-teamB-name').value || 'Team B';
+  ct.maxRounds = parseInt(document.getElementById('ct-max-rounds').value)||16;
+  ct.timerDur  = parseInt(document.getElementById('ct-timer-duration').value)||20;
+  ct.round = 1; ct.scoreA=0; ct.scoreB=0; ct.history=[];
+  ct.suddenDeath = false;
+
+  const inputsA = document.querySelectorAll('.ct-player-a');
+  const inputsB = document.querySelectorAll('.ct-player-b');
+  ct.playersA = Array.from(inputsA).map((el,i)=>el.value||`${ct.teamA} ${i+1}`);
+  ct.playersB = Array.from(inputsB).map((el,i)=>el.value||`${ct.teamB} ${i+1}`);
+  ct.queueA = [...ct.playersA];
+  ct.queueB = [...ct.playersB];
+
+  // First round: A evades, B chases
+  ct.evaderTeam = 'A';
+  ct.currentEvader = ct.queueA.shift();
+  ct.currentChaser = ct.queueB.shift();
+
+  updateChasetag();
+  switchChasetag('game');
+}
+
+function updateChasetag(){
+  document.getElementById('ct-teamA-label').textContent = ct.teamA;
+  document.getElementById('ct-teamB-label').textContent = ct.teamB;
+  document.getElementById('ct-qA-label').textContent = `${ct.teamA} Queue`;
+  document.getElementById('ct-qB-label').textContent = `${ct.teamB} Queue`;
+  document.getElementById('ct-scoreA').textContent = ct.scoreA;
+  document.getElementById('ct-scoreB').textContent = ct.scoreB;
+  document.getElementById('ct-round-display').textContent =
+    ct.suddenDeath ? '⚡ SUDDEN DEATH' : `Runde ${ct.round} / ${ct.maxRounds}`;
+  document.getElementById('ct-timer').textContent = ct.timerDur.toFixed(1);
+  document.getElementById('ct-role-display').textContent =
+    `Evader: ${ct.currentEvader||'–'} (${ct.evaderTeam==='A'?ct.teamA:ct.teamB}) | Chaser: ${ct.currentChaser||'–'}`;
+  document.getElementById('ct-runnerA').textContent = ct.evaderTeam==='A' ? `▶ ${ct.currentEvader}` : `🏃 ${ct.currentChaser}`;
+  document.getElementById('ct-runnerB').textContent = ct.evaderTeam==='B' ? `▶ ${ct.currentEvader}` : `🏃 ${ct.currentChaser}`;
+
+  renderQueueChips();
+  renderChasetHistory();
+}
+
+function renderQueueChips(){
+  const renderQ=(q,team)=>q.map((p,i)=>`
+    <div class="player-chip" draggable="true" ondragstart="dragPlayer(event,'${team}',${i})">${p}</div>`).join('');
+  document.getElementById('ct-queueA').innerHTML = ct.queueA.length ? renderQ(ct.queueA,'A') : '<span style="color:var(--og-grey);font-size:.8rem;">Warteschlange leer</span>';
+  document.getElementById('ct-queueB').innerHTML = ct.queueB.length ? renderQ(ct.queueB,'B') : '<span style="color:var(--og-grey);font-size:.8rem;">Warteschlange leer</span>';
+}
+
+let draggedPlayer = null;
+function dragPlayer(e, team, idx){
+  draggedPlayer = {team, idx};
+  e.dataTransfer.effectAllowed='move';
+}
+function dropPlayer(e, targetTeam){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if(!draggedPlayer) return;
+  // Move player to front of target queue
+  const srcQ = draggedPlayer.team==='A' ? ct.queueA : ct.queueB;
+  const dstQ = targetTeam==='A' ? ct.queueA : ct.queueB;
+  const [p] = srcQ.splice(draggedPlayer.idx,1);
+  dstQ.unshift(p);
+  draggedPlayer = null;
+  renderQueueChips();
+}
+
+function startChasetag(){
+  playSound('click');
+  startCountdown(()=>{
+    ct.timeLeft = ct.timerDur;
+    ct.running = true;
+    document.getElementById('ct-start-btn').disabled = true;
+    document.getElementById('ct-caught-btn').disabled = false;
+    document.getElementById('ct-timer').className = 'chasetag-timer';
+
+    ct.timer = setInterval(()=>{
+      ct.timeLeft -= 0.1;
+      const el = document.getElementById('ct-timer');
+      el.textContent = Math.max(0,ct.timeLeft).toFixed(1);
+      if(ct.timeLeft <= 5) el.className = 'chasetag-timer danger';
+      if(ct.timeLeft <= 0){
+        clearInterval(ct.timer);
+        ct.running = false;
+        playSound('escape');
+        // Evader escaped – point for evader team
+        if(ct.evaderTeam==='A') ct.scoreA++;
+        else ct.scoreB++;
+        ct.history.push({round:ct.round, result:'Escaped', evader:ct.currentEvader, chaser:ct.currentChaser, team:ct.evaderTeam});
+        endRound();
+      }
+    },100);
+  });
+}
+
+function caughtEvader(){
+  if(!ct.running) return;
+  clearInterval(ct.timer);
+  ct.running = false;
+  playSound('catch');
+  ct.history.push({round:ct.round, result:'Caught', evader:ct.currentEvader, chaser:ct.currentChaser, team:ct.evaderTeam});
+  // Switch roles next round
+  ct.evaderTeam = ct.evaderTeam==='A'?'B':'A';
+  endRound();
+}
+
+function endRound(){
+  document.getElementById('ct-start-btn').disabled = false;
+  document.getElementById('ct-caught-btn').disabled = true;
+  document.getElementById('ct-next-btn').disabled = false;
+  document.getElementById('ct-scoreA').textContent = ct.scoreA;
+  document.getElementById('ct-scoreB').textContent = ct.scoreB;
+  renderChasetHistory();
+}
+
+function nextChasetag(){
+  playSound('click');
+  ct.round++;
+  document.getElementById('ct-next-btn').disabled = true;
+
+  if(!ct.suddenDeath && ct.round > ct.maxRounds){
+    endChasetag();
+    return;
+  }
+
+  // Rotate queues
+  ct.queueA.push(ct.currentEvader||ct.queueA[0]);
+  ct.queueB.push(ct.currentChaser||ct.queueB[0]);
+  ct.currentEvader = ct.evaderTeam==='A' ? (ct.queueA.shift()||ct.playersA[0]) : (ct.queueB.shift()||ct.playersB[0]);
+  ct.currentChaser = ct.evaderTeam==='A' ? (ct.queueB.shift()||ct.playersB[0]) : (ct.queueA.shift()||ct.playersA[0]);
+  updateChasetag();
+}
+
+function activateSuddenDeath(){
+  playSound('click');
+  ct.suddenDeath = true;
+  ct.round = ct.maxRounds+1;
+  document.getElementById('ct-round-display').textContent = '⚡ SUDDEN DEATH';
+  toast('⚡ Sudden Death aktiviert!','success');
+  beep(440,0.3,0.6,'sawtooth');
+}
+
+function endChasetag(){
+  clearInterval(ct.timer);
+  const winner = ct.scoreA>ct.scoreB ? ct.teamA : ct.scoreB>ct.scoreA ? ct.teamB : 'Unentschieden';
+  playSound('success');
+  toast(`🏆 Spiel beendet! Gewinner: ${winner} (${ct.scoreA}:${ct.scoreB})`,'success');
+  document.getElementById('ct-start-btn').disabled = true;
+  document.getElementById('ct-caught-btn').disabled = true;
+  addAutoCalendarEntry(state.currentCoach,'Chasetag',`${ct.teamA} vs ${ct.teamB}`,`${ct.scoreA}:${ct.scoreB} – Gewinner: ${winner}`);
+}
+
+function resetChasetag(){
+  playSound('click');
+  clearInterval(ct.timer);
+  ct = {...ct, running:false, round:1, scoreA:0, scoreB:0, history:[]};
+  switchChasetag('setup');
+}
+
+function renderChasetHistory(){
+  const hist = document.getElementById('ct-history');
+  if(!ct.history.length){ hist.innerHTML='<div style="color:var(--og-grey);font-size:.82rem;">Noch keine Runden</div>'; return; }
+  hist.innerHTML = [...ct.history].reverse().map(h=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.82rem;">
+      <span class="badge ${h.result==='Escaped'?'badge-green':'badge-red'}">${h.result==='Escaped'?'Escaped':'Caught'}</span>
+      <span>R${h.round}: <strong>${h.evader}</strong> vs <strong>${h.chaser}</strong></span>
+      <span style="color:var(--og-grey);margin-left:auto;">${h.team==='A'?ct.teamA:ct.teamB}</span>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════════
+// SPEEDRUN
+// ════════════════════════════════════════════════
+let srTimer = { running:false, startTime:0, elapsed:0, interval:null };
+
+function startSpeedrun(){
+  playSound('click');
+  startCountdown(()=>{
+    srTimer.startTime = Date.now() - srTimer.elapsed;
+    srTimer.running = true;
+    document.getElementById('sr-stop-btn').disabled = false;
+    document.getElementById('sr-timer').className = 'timer-display running';
+    srTimer.interval = setInterval(()=>{
+      srTimer.elapsed = Date.now()-srTimer.startTime;
+      document.getElementById('sr-timer').textContent = formatTime(srTimer.elapsed);
+    },10);
+  });
+}
+function stopSpeedrun(){
+  clearInterval(srTimer.interval);
+  srTimer.running=false;
+  srTimer.elapsed=Date.now()-srTimer.startTime;
+  document.getElementById('sr-timer').className='timer-display stopped';
+  document.getElementById('sr-stop-btn').disabled=true;
+  document.getElementById('sr-save-btn').disabled=false;
+  playSound('success');
+}
+function resetSpeedrun(){
+  clearInterval(srTimer.interval);
+  srTimer={running:false,startTime:0,elapsed:0,interval:null};
+  document.getElementById('sr-timer').textContent='00:00.00';
+  document.getElementById('sr-timer').className='timer-display';
+  document.getElementById('sr-stop-btn').disabled=true;
+  document.getElementById('sr-save-btn').disabled=true;
+}
+async function saveSpeedrun(){
+  const athlete = document.getElementById('sr-athlete').value||'Athlet';
+  const stage   = document.getElementById('sr-stage').value||'Stage';
+  const diff    = document.getElementById('sr-difficulty').value;
+  const group   = document.getElementById('sr-group').value;
+  const coach   = document.getElementById('sr-coach').value||state.currentCoach;
+  const result  = {
+    id:Date.now(), athlete, stage, difficulty:diff, group, coach,
+    time:srTimer.elapsed, timeStr:formatTime(srTimer.elapsed),
+    date:new Date().toISOString(), dateStr:new Date().toLocaleDateString('de-CH')
+  };
+  if(firebaseReady&&db){
+    try{await db.collection('speedrunResults').add(result);}catch(e){
+      state.speedrunResults.push(result);
+      LS.set('speedrunResults',state.speedrunResults);
+    }
+  } else {
+    state.speedrunResults.push(result);
+    LS.set('speedrunResults',state.speedrunResults);
+  }
+  addAutoCalendarEntry(coach,'Speedrun',stage,`${athlete}: ${result.timeStr}`);
+  toast(`✓ ${athlete} – ${result.timeStr}`,'success');
+  document.getElementById('sr-save-btn').disabled=true;
+  renderSpeedrunLeaderboard();
+}
+function renderSpeedrunLeaderboard(){
+  const results=[...state.speedrunResults].sort((a,b)=>a.time-b.time);
+  const lb=document.getElementById('sr-leaderboard');
+  if(!results.length){ lb.innerHTML='<div style="color:var(--og-grey);text-align:center;padding:20px;">Noch keine Ergebnisse</div>'; return; }
+  lb.innerHTML=results.map((r,i)=>`
+    <div class="speedrun-row" style="grid-template-columns:auto 1fr auto auto auto;">
+      <div class="rank-badge rank-${i+1}">${i<3?['🥇','🥈','🥉'][i]:i+1}</div>
+      <div>
+        <div style="font-weight:700;">${r.athlete}</div>
+        <div style="font-size:.72rem;color:var(--og-grey);">${r.stage} · ${r.difficulty} · ${r.dateStr}</div>
+      </div>
+      <div class="badge badge-blue">${r.group||'–'}</div>
+      <div style="font-family:'Courier New',monospace;font-weight:700;">${r.timeStr}</div>
+      <button onclick="deleteSpeedrunResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:.85rem;" class="no-print">✕</button>
+    </div>`).join('');
+}
+
+async function deleteSpeedrunResult(id){
+  if(!confirm('Dieses Ergebnis wirklich löschen?')) return;
+  const r = state.speedrunResults.find(x=>x.id===id);
+  if(firebaseReady && db && r?.firestoreId){
+    try{ await db.collection('speedrunResults').doc(r.firestoreId).delete(); }catch(e){
+      state.speedrunResults = state.speedrunResults.filter(x=>x.id!==id);
+      LS.set('speedrunResults', state.speedrunResults);
+      renderSpeedrunLeaderboard();
+    }
+  } else {
+    state.speedrunResults = state.speedrunResults.filter(x=>x.id!==id);
+    LS.set('speedrunResults', state.speedrunResults);
+    renderSpeedrunLeaderboard();
+  }
+  toast('Ergebnis gelöscht','success');
+}
+
+// ════════════════════════════════════════════════
+// CALENDAR
+// ════════════════════════════════════════════════
+function openCalendarModal(){
+  playSound('click');
+  document.getElementById('cal-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('cal-trainer').value = state.currentCoach||'';
+  openModal('calendar-modal');
+}
+
+async function saveCalendarEntry(){
+  const entry = {
+    id:Date.now(),
+    trainer:document.getElementById('cal-trainer').value||'Unbekannt',
+    group:document.getElementById('cal-group').value,
+    activity:document.getElementById('cal-activity').value,
+    result:document.getElementById('cal-result').value,
+    participants:document.getElementById('cal-participants').value,
+    date:document.getElementById('cal-date').value,
+    dateStr:new Date(document.getElementById('cal-date').value).toLocaleDateString('de-CH'),
+    week:getWeekStr(new Date(document.getElementById('cal-date').value))
+  };
+  if(firebaseReady&&db){
+    try{await db.collection('calendarEntries').add(entry);}catch(e){
+      state.calendarEntries.push(entry);
+      LS.set('calendarEntries',state.calendarEntries);
+    }
+  } else {
+    state.calendarEntries.push(entry);
+    LS.set('calendarEntries',state.calendarEntries);
+  }
+  closeModal('calendar-modal');
+  toast('Kalender Eintrag gespeichert ✓','success');
+  renderCalendar();
+}
+
+function addAutoCalendarEntry(coach, type, context, result){
+  if(!coach) return;
+  const entry = {
+    id:Date.now(),
+    trainer:coach,
+    group:context,
+    activity:type,
+    result,
+    participants:1,
+    date:new Date().toISOString().split('T')[0],
+    dateStr:new Date().toLocaleDateString('de-CH'),
+    week:getWeekStr(new Date()),
+    auto:true
+  };
+  if(firebaseReady&&db){
+    try{await db.collection('calendarEntries').add(entry);}catch(e){
+      state.calendarEntries.push(entry);
+      LS.set('calendarEntries',state.calendarEntries);
+    }
+  } else {
+    state.calendarEntries.push(entry);
+    LS.set('calendarEntries',state.calendarEntries);
+  }
+}
+
+function getWeekStr(d){
+  const onejan=new Date(d.getFullYear(),0,1);
+  const week=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
+  return `${d.getFullYear()}-W${String(week).padStart(2,'0')}`;
+}
+
+function renderCalendar(){
+  const filterTrainer=document.getElementById('cal-filter-trainer').value;
+  const filterWeek=document.getElementById('cal-filter-week').value;
+
+  let entries=[...state.calendarEntries];
+  if(filterTrainer) entries=entries.filter(e=>e.trainer===filterTrainer);
+  if(filterWeek)    entries=entries.filter(e=>e.week===filterWeek);
+  entries.sort((a,b)=>b.id-a.id);
+
+  // Update trainer filter options
+  const trainers=[...new Set(state.calendarEntries.map(e=>e.trainer))];
+  const sel=document.getElementById('cal-filter-trainer');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Alle Trainer</option>'+trainers.map(t=>`<option value="${t}" ${t===cur?'selected':''}>${t}</option>`).join('');
+
+  const cont=document.getElementById('calendar-entries');
+  if(!entries.length){ cont.innerHTML='<div class="card" style="text-align:center;color:var(--og-grey);">Keine Einträge</div>'; return; }
+  cont.innerHTML=entries.map(e=>`
+    <div class="calendar-entry">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span class="badge badge-orange">${e.trainer}</span>
+        <span class="badge badge-blue">${e.activity}</span>
+        <span style="margin-left:auto;font-size:.75rem;color:var(--og-grey);">${e.dateStr}</span>
+      </div>
+      <div style="font-weight:600;margin-bottom:4px;">${e.group||'–'}</div>
+      <div style="font-size:.82rem;color:var(--og-grey);">${e.result||''}</div>
+      ${e.participants?`<div style="font-size:.72rem;color:var(--og-grey);margin-top:4px;">👤 ${e.participants} Teilnehmer</div>`:''}
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════════════
+// HEADCOACH
+// ════════════════════════════════════════════════
+function hcLogin(){
+  const pin=document.getElementById('hc-pin').value;
+  if(pin===state.headcoachPIN){
+    document.getElementById('hc-login').style.display='none';
+    document.getElementById('hc-dashboard').style.display='block';
+    renderHeadcoachDashboard();
+    toast('HeadCoach eingeloggt ✓','success');
+    playSound('success');
+  } else {
+    toast('Falscher PIN','error');
+    beep(220,0.3,0.5,'sawtooth');
+    document.getElementById('hc-pin').value='';
+  }
+}
+function hcLogout(){
+  document.getElementById('hc-login').style.display='block';
+  document.getElementById('hc-dashboard').style.display='none';
+  document.getElementById('hc-pin').value='';
+}
+
+// ── COACH PIN VERWALTUNG ──────────────────────────
+function hcSetCoachPin(){
+  const name = document.getElementById('hc-new-coach-name').value.trim();
+  const pin  = document.getElementById('hc-new-coach-pin').value.trim();
+  if(!name){ toast('Coach-Name eingeben','error'); return; }
+  if(pin && pin.length!==4){ toast('PIN muss 4-stellig sein','error'); return; }
+  if(pin){
+    state.coachPINs[name] = pin;
+    toast(`PIN für ${name} gesetzt ✓`,'success');
+  } else {
+    delete state.coachPINs[name];
+    toast(`PIN für ${name} entfernt`,'success');
+  }
+  LS.set('coachPINs', state.coachPINs);
+  _syncConfigToFirestore();
+  document.getElementById('hc-new-coach-name').value='';
+  document.getElementById('hc-new-coach-pin').value='';
+  renderCoachPins();
+}
+
+function hcRemoveCoachPin(name){
+  delete state.coachPINs[name];
+  LS.set('coachPINs', state.coachPINs);
+  _syncConfigToFirestore();
+  renderCoachPins();
+  toast(`PIN für ${name} entfernt`,'success');
+}
+
+function renderCoachPins(){
+  const el = document.getElementById('hc-coach-pins');
+  if(!el) return;
+  const pins = Object.entries(state.coachPINs);
+  // Coaches aus Import ohne PIN
+  const allCoachNames = [...new Set([
+    ...state.trainers.map(t=>t.name),
+    ...Object.keys(state.coachPINs)
+  ])];
+  if(!allCoachNames.length){ el.innerHTML='<div style="color:var(--og-grey);font-size:.82rem;">Noch keine Coaches importiert. PINs können manuell gesetzt werden.</div>'; return; }
+  el.innerHTML = allCoachNames.map(name=>{
+    const hasPin = !!state.coachPINs[name];
+    return `<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);">
+      <span style="font-weight:600;flex:1;">${name}</span>
+      ${hasPin
+        ? `<span class="badge badge-green">PIN gesetzt</span>
+           <button class="btn btn-danger btn-sm" style="padding:3px 10px;font-size:.72rem;" onclick="hcRemoveCoachPin('${name}')">✕ Entfernen</button>`
+        : `<span class="badge badge-orange">Kein PIN</span>`}
+    </div>`;
+  }).join('');
+}
+
+function renderHeadcoachDashboard(){
+  const today=new Date().toLocaleDateString('de-CH');
+  const weekStr=getWeekStr(new Date());
+  const todaySessions=state.calendarEntries.filter(e=>e.dateStr===today).length;
+  const weekSessions=state.calendarEntries.filter(e=>e.week===weekStr).length;
+  const uniqueCoaches=[...new Set(state.calendarEntries.filter(e=>e.week===weekStr).map(e=>e.trainer))].length;
+
+  document.getElementById('hc-stat-sessions').textContent=todaySessions;
+  document.getElementById('hc-stat-athletes').textContent=state.athletes.length||'–';
+  document.getElementById('hc-stat-coaches').textContent=uniqueCoaches||'–';
+  document.getElementById('hc-stat-week').textContent=weekSessions;
+
+  // Coach activity
+  const coachMap={};
+  state.calendarEntries.forEach(e=>{
+    if(!coachMap[e.trainer]) coachMap[e.trainer]={total:0,week:0};
+    coachMap[e.trainer].total++;
+    if(e.week===weekStr) coachMap[e.trainer].week++;
+  });
+  const act=document.getElementById('hc-coach-activity');
+  act.innerHTML=Object.entries(coachMap).sort((a,b)=>b[1].week-a[1].week).map(([name,d])=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);">
+      <span style="font-weight:600;flex:1;">${name}</span>
+      <span class="badge badge-orange">${d.week} diese Woche</span>
+      <span class="badge badge-blue">${d.total} gesamt</span>
+    </div>`).join('')||'<div style="color:var(--og-grey);">Noch keine Einträge</div>';
+
+  // Recent results
+  const recent=[
+    ...state.ninjaResults.map(r=>({type:'🥷 Ninja',name:r.athlete,info:r.timeStr,date:r.dateStr,coach:r.coach})),
+    ...state.skillResults.map(r=>({type:'⭐ Skills',name:r.athlete,info:r.totalPoints+' Pkt',date:r.dateStr,coach:r.coach})),
+    ...state.speedrunResults.map(r=>({type:'⚡ Speed',name:r.athlete,info:r.timeStr,date:r.dateStr,coach:r.coach})),
+  ].sort((a,b)=>b.date-a.date).slice(0,15);
+
+  document.getElementById('hc-recent-results').innerHTML=recent.map(r=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.84rem;">
+      <span class="badge badge-blue">${r.type}</span>
+      <span style="font-weight:600;">${r.name}</span>
+      <span style="color:var(--og-grey);">${r.info}</span>
+      <span style="margin-left:auto;color:var(--og-grey);font-size:.72rem;">${r.date} · ${r.coach||'–'}</span>
+    </div>`).join('')||'<div style="color:var(--og-grey);">Noch keine Ergebnisse</div>';
+
+  // Coach PINs rendern
+  renderCoachPins();
+  // QR-Code
+  renderQrCode();
+}
+
+function renderQrCode(){
+  const urlEl = document.getElementById('hc-app-url');
+  const qrEl  = document.getElementById('hc-qr-code');
+  if(!urlEl || !qrEl) return;
+  const url = window.location.href.split('?')[0];
+  urlEl.textContent = url;
+  qrEl.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(url)}" alt="QR Code" style="display:block;width:140px;height:140px;" onerror="this.parentElement.innerHTML='<span style=color:var(--og-grey);font-size:.8rem;>QR-Code benötigt Internetverbindung</span>'"/>`;
+}
+
+function copyAppUrl(){
+  const url = window.location.href.split('?')[0];
+  navigator.clipboard?.writeText(url).then(()=>toast('Link kopiert ✓','success')).catch(()=>toast(url,'info',6000));
+}
+
+// ════════════════════════════════════════════════
+// IMPORT / EXPORT
+// ════════════════════════════════════════════════
+function saveFirebaseConfig(){
+  const val=document.getElementById('firebase-config-input').value.trim();
+  try{
+    JSON.parse(val);
+    localStorage.setItem('og_firebase_config',val);
+    toast('Config gespeichert – verbinde...','success');
+    setTimeout(()=>{ initFirebase(); },800);
+  }catch(e){ toast('Ungültiges JSON','error'); }
+}
+
+function clearFirebaseConfig(){
+  localStorage.removeItem('og_firebase_config');
+  _fsUnsubs.forEach(u=>u()); _fsUnsubs=[];
+  firebaseReady=false; db=null;
+  document.getElementById('firebase-status').textContent='⚠️ Config gelöscht – lokaler Modus aktiv';
+  document.getElementById('firebase-config-input').value='';
+  toast('Firebase Config entfernt – lokaler Modus aktiv','success');
+}
+
+function handleImportDrop(e){
+  e.preventDefault();
+  document.getElementById('import-dropzone').classList.remove('dragover');
+  const file=e.dataTransfer.files[0];
+  if(file) processImportFile(file);
+}
+function handleImportFile(e){
+  const file=e.target.files[0];
+  if(file) processImportFile(file);
+}
+
+function processImportFile(file){
+  const status=document.getElementById('import-status');
+  status.innerHTML='<span style="color:var(--og-amber);">⏳ Importiere...</span>';
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'array'});
+      let counts={athletes:0,stages:0,trainers:0,skills:0};
+
+      // Athleten
+      if(wb.SheetNames.includes('Athleten')){
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets['Athleten'],{header:1});
+        const data=rows.slice(4).filter(r=>r[0]||r[1]);
+        state.athletes=data.map(r=>({vorname:r[0]||'',nachname:r[1]||'',name:(r[0]||'')+' '+(r[1]||''),geburtsdatum:r[2]||'',geschlecht:r[3]||'',kategorie:r[5]||'',verein:r[6]||'',trainer:r[7]||''}));
+        counts.athletes=state.athletes.length;
+        LS.set('athletes',state.athletes);
+      }
+      // Stages
+      if(wb.SheetNames.includes('Stages')){
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets['Stages'],{header:1});
+        const data=rows.slice(4).filter(r=>r[0]);
+        state.stages=data.map(r=>({name:r[0]||'',event:r[1]||'',datum:r[2]||'',modus:r[3]||'Checkpoint',hindernisse:r[4]||6,zeitlimit:r[5]||120,notizen:r[6]||''}));
+        counts.stages=state.stages.length;
+        LS.set('stages',state.stages);
+      }
+      // Trainer
+      if(wb.SheetNames.includes('Trainer')){
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets['Trainer'],{header:1});
+        const data=rows.slice(4).filter(r=>r[0]||r[1]);
+        state.trainers=data.map(r=>({vorname:r[0]||'',nachname:r[1]||'',name:(r[0]||'')+' '+(r[1]||''),email:r[2]||'',pin:String(r[3]||''),rolle:r[4]||'Coach',gruppen:r[5]||''}));
+        counts.trainers=state.trainers.length;
+        LS.set('trainers',state.trainers);
+        // Update PIN if HeadCoach found
+        const hc=state.trainers.find(t=>t.rolle==='HeadCoach');
+        if(hc&&hc.pin){ state.headcoachPIN=hc.pin; LS.set('headcoachPIN',hc.pin); }
+      }
+      // Skills
+      if(wb.SheetNames.includes('Skills Challenges')){
+        const rows=XLSX.utils.sheet_to_json(wb.Sheets['Skills Challenges'],{header:1});
+        const data=rows.slice(4).filter(r=>r[0]);
+        state.skills=data.map(r=>({name:r[0]||'',category:r[1]||'',difficulty:r[2]||1,description:r[3]||'',event:r[4]||''}));
+        counts.skills=state.skills.length;
+        LS.set('skills',state.skills);
+      }
+
+      populateDropdowns();
+      _syncConfigToFirestore(); // Sync imported data to all devices
+      status.innerHTML=`<span style="color:var(--og-success);">✅ Import erfolgreich: ${counts.athletes} Athleten · ${counts.stages} Stages · ${counts.trainers} Trainer · ${counts.skills} Skills${firebaseReady?' – Sync aktiv':''}</span>`;
+      toast('Import abgeschlossen ✓','success');
+      playSound('success');
+    }catch(err){
+      status.innerHTML=`<span style="color:var(--og-danger);">❌ Fehler: ${err.message}</span>`;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function populateDropdowns(){
+  // Athleten-Datalist (gemeinsam für alle Modi – unterstützt freie Eingabe)
+  const athsDl=document.getElementById('athletes-datalist');
+  if(athsDl) athsDl.innerHTML=state.athletes.map(a=>`<option value="${a.name}">`).join('');
+  // Stages-Datalist
+  const stagesDl=document.getElementById('stages-datalist');
+  if(stagesDl) stagesDl.innerHTML=state.stages.map(s=>`<option value="${s.name}">`).join('');
+  // Coach datalist
+  const dl=document.getElementById('coach-datalist');
+  if(dl) dl.innerHTML=state.trainers.map(t=>`<option value="${t.name}">`).join('');
+  // Calendar trainer filter
+  const trainers=[...new Set(state.calendarEntries.map(e=>e.trainer))];
+  const filterSel=document.getElementById('cal-filter-trainer');
+  filterSel.innerHTML='<option value="">Alle Trainer</option>'+[...new Set([...trainers,...state.trainers.map(t=>t.name)])].map(t=>`<option value="${t}">${t}</option>`).join('');
+  // Gruppen-Select (Ninja): aus Trainer-Feld der Athleten ableiten
+  const groups=[...new Set(state.athletes.map(a=>a.trainer).filter(Boolean))].sort();
+  const groupSel=document.getElementById('ninja-group-select');
+  if(groupSel){
+    const cur=groupSel.value;
+    groupSel.innerHTML='<option value="">– Gruppe wählen (optional) –</option>'+groups.map(g=>`<option value="${g}" ${g===cur?'selected':''}>${g}</option>`).join('');
+  }
+}
+
+// ════════════════════════════════════════════════
+// EXPORT
+// ════════════════════════════════════════════════
+function exportAllDay(){
+  playSound('click');
+  const today=new Date().toLocaleDateString('de-CH');
+  const wb=XLSX.utils.book_new();
+
+  // Ninja Results
+  const ninjaData=state.ninjaResults.map(r=>[r.dateStr,r.athlete,r.category,r.stage,r.timeStr,r.clearedObstacles,r.totalObstacles,r.mode,r.coach]);
+  const ninjaSheet=XLSX.utils.aoa_to_sheet([['Datum','Athlet','Kategorie','Stage','Zeit','Hindernisse','Total','Modus','Coach'],...ninjaData]);
+  XLSX.utils.book_append_sheet(wb,ninjaSheet,'Ninja Ergebnisse');
+
+  // Skills Results
+  const skillsData=state.skillResults.map(r=>[r.dateStr,r.athlete,r.category,r.totalPoints,r.coach,r.group]);
+  const skillsSheet=XLSX.utils.aoa_to_sheet([['Datum','Athlet','Kategorie','Punkte','Coach','Gruppe'],...skillsData]);
+  XLSX.utils.book_append_sheet(wb,skillsSheet,'Skills Ergebnisse');
+
+  // Speedrun Results
+  const srData=state.speedrunResults.map(r=>[r.dateStr,r.athlete,r.stage,r.difficulty,r.timeStr,r.group,r.coach]);
+  const srSheet=XLSX.utils.aoa_to_sheet([['Datum','Athlet','Stage','Schwierigkeit','Zeit','Gruppe','Coach'],...srData]);
+  XLSX.utils.book_append_sheet(wb,srSheet,'Speedrun Ergebnisse');
+
+  // Calendar
+  const calData=state.calendarEntries.map(e=>[e.dateStr,e.week,e.trainer,e.group,e.activity,e.result,e.participants]);
+  const calSheet=XLSX.utils.aoa_to_sheet([['Datum','Woche','Trainer','Gruppe','Aktivität','Ergebnis','Teilnehmer'],...calData]);
+  XLSX.utils.book_append_sheet(wb,calSheet,'Kalender');
+
+  XLSX.writeFile(wb,`OG_Ninja_Export_${today.replace(/\./g,'-')}.xlsx`);
+  toast('Export fertig ✓','success');
+}
+
+function printResults(){
+  window.print();
+}
+
+// ════════════════════════════════════════════════
+// MODAL HELPERS
+// ════════════════════════════════════════════════
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
+});
+
+// ════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════
+function toast(msg,type='info',dur=3000){
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.textContent=msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0';t.style.transform='translateX(40px)';t.style.transition='all .3s'; setTimeout(()=>t.remove(),300); },dur);
+}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  initFirebase();
+  renderObstacles();
+  renderChasetaPlayers();
+  populateDropdowns();
+  renderNinjaLeaderboard();
+  renderSkillsLeaderboard();
+  renderSpeedrunLeaderboard();
+  renderCalendar();
+
+  // Set current coach display
+  if(state.currentCoach){
+    document.getElementById('coach-name-display').textContent=state.currentCoach;
+    ['ninja-coach','skills-coach','sr-coach'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.value=state.currentCoach;
+    });
+  }
+
+  // Set today's date in calendar filter
+  const today=new Date();
+  const week=getWeekStr(today);
+  document.getElementById('cal-filter-week').value=week;
+
+  toast('OG Ninja Jury App geladen ✓','success');
+});
+</script>
+</body>
+</html>
