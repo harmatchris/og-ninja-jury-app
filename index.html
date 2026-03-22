@@ -358,15 +358,15 @@ body{
 
 /* ─── SKILL CHALLENGE ────────────────────────── */
 .skill-row{
-  display:grid;grid-template-columns:1fr auto auto auto;
-  align-items:center;gap:10px;
+  display:grid;grid-template-columns:1fr auto auto auto auto;
+  align-items:center;gap:8px;
   background:rgba(255,255,255,.05);
-  border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;
+  border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;
   border:1px solid rgba(255,255,255,.08);
 }
 .attempt-btn{
-  width:38px;height:38px;border-radius:8px;border:2px solid;
-  font-size:.8rem;font-weight:800;cursor:pointer;transition:var(--transition);
+  width:36px;height:36px;border-radius:8px;border:2px solid;
+  font-size:.78rem;font-weight:800;cursor:pointer;transition:var(--transition);
   display:flex;align-items:center;justify-content:center;
 }
 .attempt-btn.v1{border-color:#27AE60;color:#27AE60;background:transparent;}
@@ -375,6 +375,11 @@ body{
 .attempt-btn.v2.active{background:var(--og-amber);color:#fff;}
 .attempt-btn.v3{border-color:var(--og-danger);color:var(--og-danger);background:transparent;}
 .attempt-btn.v3.active{background:var(--og-danger);color:#fff;}
+.attempt-btn.vx{border-color:#888;color:#888;background:transparent;font-size:1rem;}
+.attempt-btn.vx.active{background:#555;border-color:#777;color:#fff;}
+.skill-setup-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.skill-setup-row:last-child{border-bottom:none;}
+.athlete-saved-badge{display:inline-block;background:rgba(39,174,96,.2);color:#5dde8e;border-radius:20px;padding:2px 8px;font-size:.68rem;font-weight:700;}
 
 /* ─── SPEEDRUN ───────────────────────────────── */
 .speedrun-row{
@@ -432,7 +437,7 @@ body{
   .timer-display{font-size:2.8rem;}
   .chasetag-timer{font-size:3.5rem;}
   .form-row{grid-template-columns:1fr;}
-  .skill-row{grid-template-columns:1fr;gap:8px;}
+  .skill-row{grid-template-columns:1fr auto auto auto auto;gap:6px;}
 }
 
 /* ─── DRAG CURSOR ────────────────────────────── */
@@ -632,51 +637,82 @@ body{
   <div class="section-header">
     <div>
       <div class="section-title">⭐ Skills Challenge</div>
-      <div class="section-sub">1. Versuch = 100 | 2. Versuch = 50 | 3. Versuch = 10 Punkte</div>
+      <div class="section-sub">V1=100 · V2=50 · V3=10 · ✗=0 Punkte</div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-title">⚙️ Session Setup</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Athlet</label>
-        <input type="text" class="form-control" id="skills-athlete" list="athletes-datalist" placeholder="Name tippen oder aus Liste wählen..." autocomplete="off"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Coach</label>
-        <input type="text" class="form-control" id="skills-coach" placeholder="Coach Name"/>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Kategorie</label>
-        <select class="form-control" id="skills-category">
-          <option>5-7j</option>
-          <option>8-11j M LK1</option><option>8-11j M LK2</option>
-          <option>8-11j W LK1</option><option>8-11j W LK2</option>
-          <option>12-15j M LK1</option><option>12-15j M LK2</option>
-          <option>12-15j W LK1</option><option>12-15j W LK2</option>
-          <option>16-39j M LK1</option><option>16-39j M LK2</option>
-          <option>16-39j W LK1</option><option>16-39j W LK2</option>
-          <option>Ü40 M</option><option>Ü40 W</option>
-        </select>
+  <!-- ── PHASE 1: SETUP ────────────────────── -->
+  <div id="skills-setup-phase">
+
+    <!-- Session Info -->
+    <div class="card">
+      <div class="card-title">⚙️ Session Info</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Coach</label>
+          <input type="text" class="form-control" id="skills-coach" placeholder="Coach Name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kategorie</label>
+          <select class="form-control" id="skills-category">
+            <option>5-7j</option>
+            <option>8-11j M LK1</option><option>8-11j M LK2</option>
+            <option>8-11j W LK1</option><option>8-11j W LK2</option>
+            <option>12-15j M LK1</option><option>12-15j M LK2</option>
+            <option>12-15j W LK1</option><option>12-15j W LK2</option>
+            <option>16-39j M LK1</option><option>16-39j M LK2</option>
+            <option>16-39j W LK1</option><option>16-39j W LK2</option>
+            <option>Ü40 M</option><option>Ü40 W</option>
+          </select>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Gruppe / Kurs</label>
         <input type="text" class="form-control" id="skills-group" placeholder="z.B. Ninja U12"/>
       </div>
     </div>
-    <button class="btn btn-primary" onclick="loadSkillsForAthlete()">✓ Athlet laden</button>
+
+    <!-- Skills Liste -->
+    <div class="card">
+      <div class="card-title">📋 Skills für diese Session</div>
+      <div id="setup-skills-list"></div>
+      <button class="btn btn-navy" style="margin-top:12px;" onclick="openAddSkillSetup()">+ Skill hinzufügen</button>
+    </div>
+
+    <!-- Athleten -->
+    <div class="card">
+      <div class="card-title">👥 Athleten</div>
+      <div id="setup-athletes-list"></div>
+      <button class="btn btn-navy" style="margin-top:10px;" onclick="addSkillAthleteRow()">+ Athlet hinzufügen</button>
+    </div>
+
+    <button class="btn btn-primary btn-lg" style="width:100%;margin-bottom:16px;" onclick="startSkillsSession()">🚀 Session starten</button>
   </div>
 
-  <!-- Skills List -->
-  <div class="card" id="skills-card" style="display:none;">
-    <div class="card-title">📋 Skills – <span id="skills-athlete-name"></span></div>
-    <div id="skills-list"></div>
-    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-      <button class="btn btn-primary" onclick="saveSkillsResult()">💾 Speichern</button>
-      <button class="btn btn-navy" onclick="addCustomSkill()">+ Skill hinzufügen</button>
+  <!-- ── PHASE 2: AKTIVE SESSION ───────────── -->
+  <div id="skills-session-phase" style="display:none;">
+
+    <div class="card" style="padding:10px 14px;margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div id="skills-session-info" style="font-size:.8rem;color:var(--og-grey);"></div>
+        <button onclick="endSkillsSession()" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:5px 12px;font-size:.78rem;font-weight:700;cursor:pointer;">✕ Session beenden</button>
+      </div>
+    </div>
+
+    <!-- Athleten-Tabs -->
+    <div class="tab-row" id="skills-athlete-tabs" style="flex-wrap:wrap;gap:6px;"></div>
+
+    <!-- Skills des aktuellen Athleten -->
+    <div class="card" id="skills-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+        <div style="font-weight:800;font-size:1rem;color:var(--og-white);">📋 <span id="skills-athlete-name"></span></div>
+        <div id="skills-save-status" style="font-size:.8rem;"></div>
+      </div>
+      <div id="skills-list"></div>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="saveSkillsResult()">💾 Speichern</button>
+        <button class="btn btn-navy" onclick="saveAllSkillsResults()">💾 Alle speichern</button>
+      </div>
     </div>
   </div>
 
@@ -1388,7 +1424,7 @@ function showScreen(name){
   document.getElementById('screen-'+name).classList.add('active');
   document.querySelector(`[data-screen="${name}"]`).classList.add('active');
   if(name==='ninja') renderNinjaLeaderboard();
-  if(name==='skills') renderSkillsLeaderboard();
+  if(name==='skills'){ if(!skillsSessionActive) initSkillsSetup(); renderSkillsLeaderboard(); }
   if(name==='speedrun') renderSpeedrunLeaderboard();
   if(name==='calendar') renderCalendar();
   if(name==='headcoach') renderHeadcoachDashboard();
@@ -1815,84 +1851,209 @@ async function deleteNinjaResult(id){
 // ════════════════════════════════════════════════
 // SKILLS CHALLENGE
 // ════════════════════════════════════════════════
-let currentSkillsSession = [];
+// ── Skills Session State ─────────────────────────
+let skillsSetupData = { skills: [], athletes: [] };
+let skillsSessionAthletes = []; // [{name, skills:[{name,category,attempt}], saved}]
+let skillsCurrentAthleteIdx = 0;
+let skillsSessionActive = false;
 
-function loadSkillsForAthlete(){
-  playSound('click');
-  const athleteName = document.getElementById('skills-athlete').value || 'Athlet';
-  document.getElementById('skills-athlete-name').textContent = athleteName;
+function initSkillsSetup(){
+  // Populate coach if logged in
+  const coachEl = document.getElementById('skills-coach');
+  if(coachEl && !coachEl.value && state.currentCoach) coachEl.value = state.currentCoach;
 
-  // Load skills from imported list or defaults
-  const skillList = state.skills.length ? state.skills : [
+  // Default skills
+  skillsSetupData.skills = (state.skills && state.skills.length ? state.skills : [
     {name:'Precision Jump 1m', category:'Sprung'},
     {name:'Kong Vault', category:'Vault'},
     {name:'Balance Traverse 5m', category:'Balance'},
     {name:'Cat Leap', category:'Sprung'},
     {name:'Speed Vault', category:'Vault'},
-  ];
+  ]).map(s=>({name:s.name, category:s.category||''}));
 
-  currentSkillsSession = skillList.map(s=>({...s, attempt:null}));
-  renderSkillsList();
-  document.getElementById('skills-card').style.display='block';
+  skillsSetupData.athletes = [''];
+  renderSetupSkills();
+  renderSetupAthletes();
 }
 
-function renderSkillsList(){
-  const list = document.getElementById('skills-list');
-  list.innerHTML = currentSkillsSession.map((s,i)=>`
-    <div class="skill-row">
-      <div>
-        <div style="font-weight:600;">${s.name}</div>
-        <div style="font-size:.72rem;color:var(--og-grey);">${s.category||''}</div>
+function renderSetupSkills(){
+  const list = document.getElementById('setup-skills-list');
+  if(!skillsSetupData.skills.length){
+    list.innerHTML='<div style="color:var(--og-grey);font-size:.82rem;padding:8px 0;">Keine Skills – füge welche hinzu.</div>';
+    return;
+  }
+  list.innerHTML = skillsSetupData.skills.map((s,i)=>`
+    <div class="skill-setup-row">
+      <div style="flex:1;">
+        <span style="font-weight:600;">${s.name}</span>
+        ${s.category?`<span style="font-size:.7rem;color:var(--og-grey);margin-left:6px;">${s.category}</span>`:''}
       </div>
-      <button class="attempt-btn v1 ${s.attempt===1?'active':''}" onclick="setAttempt(${i},1)" title="1. Versuch = 100 Pkt">V1</button>
-      <button class="attempt-btn v2 ${s.attempt===2?'active':''}" onclick="setAttempt(${i},2)" title="2. Versuch = 50 Pkt">V2</button>
-      <button class="attempt-btn v3 ${s.attempt===3?'active':''}" onclick="setAttempt(${i},3)" title="3. Versuch = 10 Pkt">V3</button>
+      <button onclick="removeSetupSkill(${i})" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.8rem;font-weight:700;">✕</button>
     </div>`).join('');
 }
 
-function setAttempt(idx, attempt){
+function removeSetupSkill(idx){
+  playSound('click');
+  skillsSetupData.skills.splice(idx,1);
+  renderSetupSkills();
+}
+
+function renderSetupAthletes(){
+  const list = document.getElementById('setup-athletes-list');
+  list.innerHTML = skillsSetupData.athletes.map((a,i)=>`
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+      <input type="text" class="form-control" value="${a.replace(/"/g,'&quot;')}"
+        oninput="skillsSetupData.athletes[${i}]=this.value"
+        placeholder="Athlet ${i+1}" list="athletes-datalist" autocomplete="off" style="flex:1;"/>
+      ${i>0?`<button onclick="removeSkillAthleteRow(${i})" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:none;border-radius:6px;padding:7px 11px;cursor:pointer;font-weight:700;">✕</button>`:''}
+    </div>`).join('');
+}
+
+function addSkillAthleteRow(){
+  skillsSetupData.athletes.push('');
+  renderSetupAthletes();
+}
+
+function removeSkillAthleteRow(idx){
+  skillsSetupData.athletes.splice(idx,1);
+  renderSetupAthletes();
+}
+
+function openAddSkillSetup(){
+  playSound('click');
+  document.getElementById('new-skill-name').value='';
+  document.getElementById('new-skill-cat').value='';
+  window._skillModalCtx = 'setup';
+  openModal('skill-modal');
+}
+
+function startSkillsSession(){
+  playSound('click');
+  const athletes = skillsSetupData.athletes.map(a=>a.trim()).filter(Boolean);
+  if(!athletes.length){ toast('Mind. 1 Athlet eingeben','error'); return; }
+  if(!skillsSetupData.skills.length){ toast('Mind. 1 Skill eintragen','error'); return; }
+
+  skillsSessionAthletes = athletes.map(name=>({
+    name,
+    skills: skillsSetupData.skills.map(s=>({...s, attempt:null})),
+    saved: false
+  }));
+  skillsCurrentAthleteIdx = 0;
+  skillsSessionActive = true;
+
+  const cat   = document.getElementById('skills-category').value;
+  const group = document.getElementById('skills-group').value;
+  document.getElementById('skills-session-info').textContent =
+    `${cat}${group?' · '+group:''} · ${skillsSetupData.skills.length} Skills · ${athletes.length} Athlet${athletes.length!==1?'en':''}`;
+
+  document.getElementById('skills-setup-phase').style.display='none';
+  document.getElementById('skills-session-phase').style.display='block';
+
+  renderSkillsAthleteTabs();
+  renderCurrentAthleteSkills();
+}
+
+function renderSkillsAthleteTabs(){
+  const tabs = document.getElementById('skills-athlete-tabs');
+  tabs.innerHTML = skillsSessionAthletes.map((a,i)=>`
+    <button class="tab-btn ${i===skillsCurrentAthleteIdx?'active':''}"
+      onclick="switchSkillsAthlete(${i})" style="${a.saved?'border-color:#27AE60;':''}"
+    >${a.saved?'✓ ':''}${a.name}</button>`).join('');
+}
+
+function switchSkillsAthlete(idx){
+  playSound('click');
+  skillsCurrentAthleteIdx = idx;
+  renderSkillsAthleteTabs();
+  renderCurrentAthleteSkills();
+}
+
+function renderCurrentAthleteSkills(){
+  const athlete = skillsSessionAthletes[skillsCurrentAthleteIdx];
+  document.getElementById('skills-athlete-name').textContent = athlete.name;
+
+  const pts = {1:100,2:50,3:10,0:0};
+  const scored = athlete.skills.filter(s=>s.attempt!==null).length;
+  const total  = athlete.skills.reduce((sum,s)=>sum+(s.attempt!==null?pts[s.attempt]||0:0),0);
+
+  const statusEl = document.getElementById('skills-save-status');
+  statusEl.innerHTML = athlete.saved
+    ? '<span class="athlete-saved-badge">✓ Gespeichert</span>'
+    : `<span style="color:var(--og-grey);">${scored}/${athlete.skills.length} bewertet · ${total} Pkt</span>`;
+
+  const list = document.getElementById('skills-list');
+  list.innerHTML = athlete.skills.map((s,i)=>`
+    <div class="skill-row">
+      <div>
+        <div style="font-weight:600;font-size:.9rem;">${s.name}</div>
+        <div style="font-size:.68rem;color:var(--og-grey);">${s.category||''}</div>
+      </div>
+      <button class="attempt-btn v1 ${s.attempt===1?'active':''}" onclick="setSkillAttempt(${i},1)" title="1. Versuch = 100 Pkt">V1</button>
+      <button class="attempt-btn v2 ${s.attempt===2?'active':''}" onclick="setSkillAttempt(${i},2)" title="2. Versuch = 50 Pkt">V2</button>
+      <button class="attempt-btn v3 ${s.attempt===3?'active':''}" onclick="setSkillAttempt(${i},3)" title="3. Versuch = 10 Pkt">V3</button>
+      <button class="attempt-btn vx ${s.attempt===0?'active':''}" onclick="setSkillAttempt(${i},0)" title="Nicht geschafft">✗</button>
+    </div>`).join('');
+}
+
+function setSkillAttempt(idx, attempt){
   playSound('checkpoint');
-  currentSkillsSession[idx].attempt = currentSkillsSession[idx].attempt===attempt ? null : attempt;
-  if(currentSkillsSession[idx].attempt) playSound('checkpoint');
-  renderSkillsList();
+  const athlete = skillsSessionAthletes[skillsCurrentAthleteIdx];
+  // Toggle off if same button pressed again
+  athlete.skills[idx].attempt = athlete.skills[idx].attempt===attempt ? null : attempt;
+  athlete.saved = false;
+  renderCurrentAthleteSkills();
+  renderSkillsAthleteTabs();
 }
 
 async function saveSkillsResult(){
-  const athlete = document.getElementById('skills-athlete').value || 'Athlet';
+  await _saveAthleteSkills(skillsCurrentAthleteIdx);
+}
+
+async function saveAllSkillsResults(){
+  for(let i=0;i<skillsSessionAthletes.length;i++){
+    await _saveAthleteSkills(i);
+  }
+  renderSkillsAthleteTabs();
+}
+
+async function _saveAthleteSkills(idx){
+  const athlete = skillsSessionAthletes[idx];
   const cat     = document.getElementById('skills-category').value;
-  const coach   = document.getElementById('skills-coach').value || state.currentCoach;
+  const coach   = document.getElementById('skills-coach').value || state.currentCoach || '';
   const group   = document.getElementById('skills-group').value;
 
-  const scored = currentSkillsSession.filter(s=>s.attempt);
-  if(!scored.length){ toast('Kein Skill bewertet','error'); return; }
+  const pts = {1:100,2:50,3:10,0:0};
+  const anyScored = athlete.skills.some(s=>s.attempt!==null);
+  if(!anyScored){ toast(`${athlete.name}: Kein Skill bewertet`,'error'); return; }
 
-  const pts = {1:100,2:50,3:10};
-  const total = scored.reduce((s,sk)=>s+(pts[sk.attempt]||0),0);
+  const total = athlete.skills.reduce((sum,s)=>sum+(s.attempt!==null?pts[s.attempt]||0:0),0);
 
   const result = {
-    id: Date.now(),
-    athlete, category:cat, coach, group,
-    skills: currentSkillsSession.map(s=>({name:s.name,attempt:s.attempt,points:pts[s.attempt]||0})),
+    id: Date.now() + idx,
+    athlete: athlete.name,
+    category: cat, coach, group,
+    skills: athlete.skills.map(s=>({name:s.name, attempt:s.attempt, points:s.attempt!==null?pts[s.attempt]||0:null})),
     totalPoints: total,
     date: new Date().toISOString(),
     dateStr: new Date().toLocaleDateString('de-CH')
   };
 
   if(firebaseReady && db){
-    try{ await db.collection('skillResults').add(result); }catch(e){
-      state.skillResults.push(result);
-      LS.set('skillResults', state.skillResults);
-    }
+    try{ await db.collection('skillResults').add(result); }
+    catch(e){ state.skillResults.push(result); LS.set('skillResults', state.skillResults); }
   } else {
     state.skillResults.push(result);
     LS.set('skillResults', state.skillResults);
   }
-  addAutoCalendarEntry(coach, 'Skills Challenge', group, `${athlete}: ${total} Punkte`);
+  addAutoCalendarEntry(coach, 'Skills Challenge', group, `${athlete.name}: ${total} Punkte`);
 
+  athlete.saved = true;
+  if(idx===skillsCurrentAthleteIdx){ renderCurrentAthleteSkills(); renderSkillsAthleteTabs(); }
   playSound('success');
-  toast(`✓ ${athlete} – ${total} Punkte`,'success');
+  toast(`✓ ${athlete.name} – ${total} Pkt`, 'success');
   renderSkillsLeaderboard();
-  // Direkt zur gespeicherten Kategorie springen
+
+  // Jump to category tab in leaderboard
   const stabs = document.getElementById('skills-cat-tabs');
   const stargetTab = Array.from(stabs.querySelectorAll('.tab-btn')).find(b=>b.textContent.trim()===cat);
   if(stargetTab){
@@ -1900,6 +2061,15 @@ async function saveSkillsResult(){
     stargetTab.classList.add('active');
     renderSkillsTable(cat);
   }
+}
+
+function endSkillsSession(){
+  const unsaved = skillsSessionAthletes.filter(a=>!a.saved);
+  if(unsaved.length && !confirm(`${unsaved.length} Athlet(en) noch nicht gespeichert.\nTrotzdem beenden?`)) return;
+  skillsSessionActive = false;
+  document.getElementById('skills-session-phase').style.display='none';
+  document.getElementById('skills-setup-phase').style.display='block';
+  initSkillsSetup();
 }
 
 function renderSkillsLeaderboard(){
@@ -1960,14 +2130,24 @@ async function deleteSkillResult(id){
 
 function addCustomSkill(){
   playSound('click');
+  document.getElementById('new-skill-name').value='';
+  document.getElementById('new-skill-cat').value='';
+  window._skillModalCtx = skillsSessionActive ? 'session' : 'setup';
   openModal('skill-modal');
 }
 function confirmAddSkill(){
   const name = document.getElementById('new-skill-name').value.trim();
   const cat  = document.getElementById('new-skill-cat').value.trim();
   if(!name){ toast('Name eingeben','error'); return; }
-  currentSkillsSession.push({name, category:cat, attempt:null});
-  renderSkillsList();
+  const ctx = window._skillModalCtx || 'setup';
+  if(ctx==='setup'){
+    skillsSetupData.skills.push({name, category:cat});
+    renderSetupSkills();
+  } else {
+    // Add to active session for all athletes
+    skillsSessionAthletes.forEach(a=>a.skills.push({name, category:cat, attempt:null}));
+    renderCurrentAthleteSkills();
+  }
   closeModal('skill-modal');
   toast(`Skill "${name}" hinzugefügt`,'success');
 }
