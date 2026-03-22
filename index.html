@@ -670,6 +670,23 @@ body{
         <label class="form-label">Gruppe / Kurs</label>
         <input type="text" class="form-control" id="skills-group" placeholder="z.B. Ninja U12"/>
       </div>
+      <div class="form-row" style="margin-top:4px;">
+        <div class="form-group">
+          <label class="form-label">⏱ Challenge-Timer</label>
+          <select class="form-control" id="skills-timer-mode" onchange="toggleSkillsTimerCustom()">
+            <option value="0">Kein Timer</option>
+            <option value="10">10 Minuten</option>
+            <option value="15" selected>15 Minuten</option>
+            <option value="20">20 Minuten</option>
+            <option value="30">30 Minuten</option>
+            <option value="custom">Eigene Zeit...</option>
+          </select>
+        </div>
+        <div class="form-group" id="skills-timer-custom-wrap" style="display:none;">
+          <label class="form-label">Minuten</label>
+          <input type="number" class="form-control" id="skills-timer-custom" value="15" min="1" max="120"/>
+        </div>
+      </div>
     </div>
 
     <!-- Skills Liste -->
@@ -692,11 +709,27 @@ body{
   <!-- ── PHASE 2: AKTIVE SESSION ───────────── -->
   <div id="skills-session-phase" style="display:none;">
 
-    <div class="card" style="padding:10px 14px;margin-bottom:10px;">
+    <!-- Session Header mit Timer -->
+    <div class="card" style="padding:12px 16px;margin-bottom:10px;">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-        <div id="skills-session-info" style="font-size:.8rem;color:var(--og-grey);"></div>
-        <button onclick="endSkillsSession()" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:5px 12px;font-size:.78rem;font-weight:700;cursor:pointer;">✕ Session beenden</button>
+        <div>
+          <div id="skills-session-info" style="font-size:.78rem;color:var(--og-grey);"></div>
+          <div id="skills-timer-wrap" style="display:none;margin-top:4px;display:flex;align-items:center;gap:8px;">
+            <span style="font-size:.72rem;color:var(--og-grey);">⏱</span>
+            <span id="skills-timer-display" style="font-family:'Courier New',monospace;font-size:1.5rem;font-weight:900;color:#5dde8e;letter-spacing:1px;"></span>
+          </div>
+        </div>
+        <button onclick="endSkillsSession()" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:6px 13px;font-size:.78rem;font-weight:700;cursor:pointer;">✕ Beenden</button>
       </div>
+    </div>
+
+    <!-- 🔴 Live Rangliste (sichtbar wenn ≥2 Athleten) -->
+    <div class="card" id="skills-live-board" style="display:none;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <div class="card-title" style="margin-bottom:0;">🔴 Live Rangliste</div>
+        <span style="font-size:.68rem;color:#ff8a7a;font-weight:700;animation:pulse 1.2s infinite;">LIVE</span>
+      </div>
+      <div id="skills-live-list"></div>
     </div>
 
     <!-- Athleten-Tabs -->
@@ -1856,6 +1889,9 @@ let skillsSetupData = { skills: [], athletes: [] };
 let skillsSessionAthletes = []; // [{name, skills:[{name,category,attempt}], saved}]
 let skillsCurrentAthleteIdx = 0;
 let skillsSessionActive = false;
+let skillsTimer = null;
+let skillsTimerSeconds = 0;
+let skillsTimerTotal = 0;
 
 function initSkillsSetup(){
   // Populate coach if logged in
@@ -1927,6 +1963,11 @@ function openAddSkillSetup(){
   openModal('skill-modal');
 }
 
+function toggleSkillsTimerCustom(){
+  const mode = document.getElementById('skills-timer-mode').value;
+  document.getElementById('skills-timer-custom-wrap').style.display = mode==='custom' ? '' : 'none';
+}
+
 function startSkillsSession(){
   playSound('click');
   const athletes = skillsSetupData.athletes.map(a=>a.trim()).filter(Boolean);
@@ -1949,8 +1990,118 @@ function startSkillsSession(){
   document.getElementById('skills-setup-phase').style.display='none';
   document.getElementById('skills-session-phase').style.display='block';
 
+  // Start timer if configured
+  const timerMode = document.getElementById('skills-timer-mode').value;
+  let timerMins = parseInt(timerMode)||0;
+  if(timerMode==='custom') timerMins = parseInt(document.getElementById('skills-timer-custom').value)||15;
+  if(timerMins>0) startSkillsTimer(timerMins);
+
   renderSkillsAthleteTabs();
   renderCurrentAthleteSkills();
+  renderSessionLiveBoard();
+}
+
+function startSkillsTimer(minutes){
+  skillsTimerSeconds = minutes*60;
+  skillsTimerTotal   = minutes*60;
+  const wrap = document.getElementById('skills-timer-wrap');
+  if(wrap) wrap.style.display='flex';
+  updateSkillsTimerDisplay();
+  skillsTimer = setInterval(()=>{
+    skillsTimerSeconds--;
+    updateSkillsTimerDisplay();
+    if(skillsTimerSeconds<=0){
+      clearInterval(skillsTimer); skillsTimer=null;
+      skillsTimerExpired();
+    }
+  },1000);
+}
+
+function stopSkillsTimer(){
+  if(skillsTimer){ clearInterval(skillsTimer); skillsTimer=null; }
+  const wrap = document.getElementById('skills-timer-wrap');
+  if(wrap) wrap.style.display='none';
+}
+
+function updateSkillsTimerDisplay(){
+  const el = document.getElementById('skills-timer-display');
+  if(!el) return;
+  const m = Math.floor(skillsTimerSeconds/60);
+  const s = skillsTimerSeconds%60;
+  el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  const ratio = skillsTimerTotal>0 ? skillsTimerSeconds/skillsTimerTotal : 1;
+  el.style.color = ratio<=0.1 ? '#e74c3c' : ratio<=0.25 ? 'var(--og-amber)' : '#5dde8e';
+}
+
+async function skillsTimerExpired(){
+  playSound('success');
+  // Auto-save every unsaved athlete silently
+  for(let i=0;i<skillsSessionAthletes.length;i++){
+    if(!skillsSessionAthletes[i].saved) await _saveAthleteSkills(i, true);
+  }
+  renderSkillsAthleteTabs();
+  showSkillsFinalStandings();
+}
+
+function showSkillsFinalStandings(){
+  const pts = {1:100,2:50,3:10,0:0};
+  const sorted = [...skillsSessionAthletes]
+    .map((a,origIdx)=>({
+      name: a.name,
+      total: a.skills.reduce((sum,s)=>sum+(s.attempt!==null?pts[s.attempt]||0:0),0),
+      done: a.skills.filter(s=>s.attempt!==null).length,
+      total_skills: a.skills.length, origIdx
+    }))
+    .sort((a,b)=>b.total-a.total);
+
+  const timerEl = document.getElementById('skills-timer-display');
+  if(timerEl){ timerEl.textContent='0:00'; timerEl.style.color='#e74c3c'; }
+
+  const liveBoard = document.getElementById('skills-live-board');
+  liveBoard.style.display='block';
+  document.getElementById('skills-live-list').innerHTML = `
+    <div style="text-align:center;padding:10px 0 14px;background:rgba(231,76,60,.12);border-radius:10px;border:1px solid rgba(231,76,60,.3);margin-bottom:14px;">
+      <div style="font-size:1.3rem;font-weight:900;color:#ff8a7a;">⏰ CHALLENGE BEENDET!</div>
+      <div style="font-size:.78rem;color:var(--og-grey);margin-top:3px;">Endwertung</div>
+    </div>
+    ${sorted.map((a,i)=>`
+      <div onclick="switchSkillsAthlete(${a.origIdx})" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,${i===0?.1:.04});border-radius:10px;margin-bottom:8px;border:1px solid rgba(255,255,255,${i===0?.2:.06});cursor:pointer;">
+        <div style="font-size:1.4rem;width:32px;text-align:center;">${['🥇','🥈','🥉'][i]||i+1}</div>
+        <div style="flex:1;">
+          <div style="font-weight:800;font-size:.95rem;">${a.name}</div>
+          <div style="font-size:.7rem;color:var(--og-grey);">${a.done}/${a.total_skills} Skills bewertet</div>
+        </div>
+        <div style="font-family:'Courier New',monospace;font-weight:900;font-size:1.4rem;color:${i===0?'var(--og-amber)':'var(--og-white)'};">${a.total}</div>
+      </div>`).join('')}`;
+}
+
+function renderSessionLiveBoard(){
+  const liveBoard = document.getElementById('skills-live-board');
+  if(!skillsSessionActive || skillsSessionAthletes.length<2){ liveBoard.style.display='none'; return; }
+  // Don't overwrite final standings overlay if already shown
+  if(skillsTimer===null && skillsTimerTotal>0 && skillsTimerSeconds<=0) return;
+  liveBoard.style.display='block';
+
+  const pts = {1:100,2:50,3:10,0:0};
+  const sorted = [...skillsSessionAthletes]
+    .map((a,origIdx)=>({
+      name:a.name,
+      total: a.skills.reduce((sum,s)=>sum+(s.attempt!==null?pts[s.attempt]||0:0),0),
+      done: a.skills.filter(s=>s.attempt!==null).length,
+      total_skills: a.skills.length,
+      saved: a.saved, origIdx
+    }))
+    .sort((a,b)=>b.total-a.total);
+
+  document.getElementById('skills-live-list').innerHTML = sorted.map((a,i)=>`
+    <div onclick="switchSkillsAthlete(${a.origIdx})" style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(255,255,255,${a.origIdx===skillsCurrentAthleteIdx?.1:.03});border-radius:8px;margin-bottom:6px;border:1px solid rgba(255,255,255,${a.origIdx===skillsCurrentAthleteIdx?.18:.05});cursor:pointer;">
+      <div style="font-size:1.1rem;width:28px;text-align:center;">${['🥇','🥈','🥉'][i]||i+1}</div>
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:.88rem;">${a.name}${a.saved?' <span class="athlete-saved-badge">✓</span>':''}</div>
+        <div style="font-size:.68rem;color:var(--og-grey);">${a.done}/${a.total_skills} Skills</div>
+      </div>
+      <div style="font-family:'Courier New',monospace;font-weight:900;font-size:1.2rem;color:${i===0?'var(--og-amber)':'var(--og-white)'};">${a.total}</div>
+    </div>`).join('');
 }
 
 function renderSkillsAthleteTabs(){
@@ -1966,6 +2117,7 @@ function switchSkillsAthlete(idx){
   skillsCurrentAthleteIdx = idx;
   renderSkillsAthleteTabs();
   renderCurrentAthleteSkills();
+  renderSessionLiveBoard();
 }
 
 function renderCurrentAthleteSkills(){
@@ -2003,6 +2155,13 @@ function setSkillAttempt(idx, attempt){
   athlete.saved = false;
   renderCurrentAthleteSkills();
   renderSkillsAthleteTabs();
+  renderSessionLiveBoard();
+
+  // Auto-save when all skills have been evaluated (none are null)
+  const allDone = athlete.skills.every(s=>s.attempt!==null);
+  if(allDone && !athlete.saved){
+    _saveAthleteSkills(skillsCurrentAthleteIdx);
+  }
 }
 
 async function saveSkillsResult(){
@@ -2014,17 +2173,19 @@ async function saveAllSkillsResults(){
     await _saveAthleteSkills(i);
   }
   renderSkillsAthleteTabs();
+  renderSessionLiveBoard();
 }
 
-async function _saveAthleteSkills(idx){
+async function _saveAthleteSkills(idx, silent=false){
   const athlete = skillsSessionAthletes[idx];
+  if(athlete.saved) return; // already saved
   const cat     = document.getElementById('skills-category').value;
   const coach   = document.getElementById('skills-coach').value || state.currentCoach || '';
   const group   = document.getElementById('skills-group').value;
 
   const pts = {1:100,2:50,3:10,0:0};
   const anyScored = athlete.skills.some(s=>s.attempt!==null);
-  if(!anyScored){ toast(`${athlete.name}: Kein Skill bewertet`,'error'); return; }
+  if(!anyScored){ if(!silent) toast(`${athlete.name}: Kein Skill bewertet`,'error'); return; }
 
   const total = athlete.skills.reduce((sum,s)=>sum+(s.attempt!==null?pts[s.attempt]||0:0),0);
 
@@ -2049,9 +2210,9 @@ async function _saveAthleteSkills(idx){
 
   athlete.saved = true;
   if(idx===skillsCurrentAthleteIdx){ renderCurrentAthleteSkills(); renderSkillsAthleteTabs(); }
-  playSound('success');
-  toast(`✓ ${athlete.name} – ${total} Pkt`, 'success');
+  if(!silent){ playSound('success'); toast(`✓ ${athlete.name} – ${total} Pkt`, 'success'); }
   renderSkillsLeaderboard();
+  renderSessionLiveBoard();
 
   // Jump to category tab in leaderboard
   const stabs = document.getElementById('skills-cat-tabs');
@@ -2066,7 +2227,9 @@ async function _saveAthleteSkills(idx){
 function endSkillsSession(){
   const unsaved = skillsSessionAthletes.filter(a=>!a.saved);
   if(unsaved.length && !confirm(`${unsaved.length} Athlet(en) noch nicht gespeichert.\nTrotzdem beenden?`)) return;
+  stopSkillsTimer();
   skillsSessionActive = false;
+  skillsTimerSeconds = 0; skillsTimerTotal = 0;
   document.getElementById('skills-session-phase').style.display='none';
   document.getElementById('skills-setup-phase').style.display='block';
   initSkillsSetup();
