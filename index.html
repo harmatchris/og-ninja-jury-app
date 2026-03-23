@@ -490,7 +490,7 @@ body{
     <div class="header-sub">Overground Basel – Coach Tools</div>
   </div>
   <div class="header-right">
-    <div id="coach-badge" onclick="openCoachModal()">👤 <span id="coach-name-display">Kein Coach</span></div>
+    <div id="coach-badge" onclick="openCoachModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span id="coach-name-display">Kein Coach</span></div>
   </div>
 </header>
 
@@ -541,14 +541,14 @@ body{
 <section id="screen-ninja" class="screen active">
   <div class="section-header">
     <div>
-      <div class="section-title">🥷 Ninja Stage Timer</div>
+      <div class="section-title"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M9 9h.01M15 9h.01M9.5 14a3.5 3.5 0 0 0 5 0"/></svg> Ninja Stage Timer</div>
       <div class="section-sub">Messe jede Stage auf die Hundertstelsekunde</div>
     </div>
   </div>
 
   <!-- Setup -->
   <div class="card" id="ninja-setup">
-    <div class="card-title">⚙️ Setup</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Setup</div>
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Stage Name</label>
@@ -564,7 +564,7 @@ body{
     </div>
     <!-- Gruppen-Athleten-Queue -->
     <div id="ninja-group-queue" style="display:none;margin-bottom:14px;">
-      <div style="font-size:.72rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">👥 Athleten in dieser Gruppe – tippe zum Auswählen</div>
+      <div style="font-size:.72rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Athleten in dieser Gruppe – tippe zum Auswählen</div>
       <div id="ninja-group-athletes" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
     </div>
     <div class="form-row">
@@ -575,9 +575,9 @@ body{
       <div class="form-group">
         <label class="form-label">Aktivitätstyp</label>
         <select class="form-control" id="ninja-activity-type">
-          <option value="ninja">🥷 Ninja</option>
-          <option value="polysport">🤸 Polysport</option>
-          <option value="parkour">🏃 Parkour</option>
+          <option value="ninja">Ninja</option>
+          <option value="polysport">Polysport</option>
+          <option value="parkour">Parkour</option>
           <option value="freerun">⭐ Freerun</option>
         </select>
       </div>
@@ -622,7 +622,7 @@ body{
     <div id="obstacle-container" style="margin-bottom:16px;"></div>
     <!-- Zwischenzeiten (live + wählbar nach Stopp) -->
     <div id="ninja-splits" style="display:none;margin-bottom:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);padding:12px;">
-      <div style="font-size:.72rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;" id="ninja-splits-label">⏱ Zwischenzeiten</div>
+      <div style="font-size:.72rem;color:var(--og-grey);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;" id="ninja-splits-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><circle cx="12" cy="13" r="7"/><polyline points="12 10 12 13 14 15"/><path d="M9.5 2h5"/><path d="M12 2v2"/></svg> Zwischenzeiten</div>
       <div id="ninja-splits-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
       <div id="ninja-splits-selected" style="margin-top:8px;font-size:.82rem;color:var(--og-success);display:none;"></div>
     </div>
@@ -630,7 +630,7 @@ body{
       <button class="btn btn-primary btn-xl" id="ninja-start-btn" onclick="startNinjaTimer()">▶ START</button>
       <button class="btn btn-danger btn-xl" id="ninja-stop-btn" onclick="stopNinjaTimer()" disabled>⏹ STOP</button>
       <button class="btn btn-navy btn-lg" onclick="resetNinjaTimer()">↺ RESET</button>
-      <button class="btn btn-success btn-lg" id="ninja-save-btn" onclick="saveNinjaResult()" disabled>💾 SPEICHERN</button>
+      <button class="btn btn-success btn-lg" id="ninja-save-btn" onclick="saveNinjaResult()" disabled><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> SPEICHERN</button>
     </div>
     <div id="ninja-result-info" style="text-align:center;margin-top:14px;font-size:.9rem;color:var(--og-grey);"></div>
     <!-- Nächster Athlet Quick-Button (erscheint nach Speichern) -->
@@ -644,7 +644,7 @@ body{
 
   <!-- Leaderboard -->
   <div class="card">
-    <div class="card-title">🏆 Tages-Rangliste</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="8 21 12 21 16 21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M7 4h10l1 6a6 6 0 0 1-12 0z"/><path d="M5 9H3a2 2 0 0 1-2-2V6h6"/><path d="M19 9h2a2 2 0 0 0 2-2V6h-6"/></svg> Tages-Rangliste</div>
     <div class="tab-row" id="ninja-cat-tabs"></div>
     <div id="ninja-leaderboard"></div>
   </div>
@@ -654,7 +654,7 @@ body{
 <section id="screen-skills" class="screen">
   <div class="section-header">
     <div>
-      <div class="section-title">⭐ Skills Challenge</div>
+      <div class="section-title"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Skills Challenge</div>
       <div class="section-sub">V1=100 · V2=50 · V3=10 · ✗=0 Punkte</div>
     </div>
   </div>
@@ -664,7 +664,7 @@ body{
 
     <!-- Session Info -->
     <div class="card">
-      <div class="card-title">⚙️ Session Info</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Session Info</div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Coach</label>
@@ -690,7 +690,7 @@ body{
       </div>
       <div class="form-row" style="margin-top:4px;">
         <div class="form-group">
-          <label class="form-label">⏱ Challenge-Timer</label>
+          <label class="form-label"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><circle cx="12" cy="13" r="7"/><polyline points="12 10 12 13 14 15"/><path d="M9.5 2h5"/><path d="M12 2v2"/></svg> Challenge-Timer</label>
           <select class="form-control" id="skills-timer-mode" onchange="toggleSkillsTimerCustom()">
             <option value="0">Kein Timer</option>
             <option value="10">10 Minuten</option>
@@ -709,19 +709,19 @@ body{
 
     <!-- Skills Liste -->
     <div class="card">
-      <div class="card-title">📋 Skills für diese Session</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> Skills für diese Session</div>
       <div id="setup-skills-list"></div>
       <button class="btn btn-navy" style="margin-top:12px;" onclick="openAddSkillSetup()">+ Skill hinzufügen</button>
     </div>
 
     <!-- Athleten -->
     <div class="card">
-      <div class="card-title">👥 Athleten</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Athleten</div>
       <div id="setup-athletes-list"></div>
       <button class="btn btn-navy" style="margin-top:10px;" onclick="addSkillAthleteRow()">+ Athlet hinzufügen</button>
     </div>
 
-    <button class="btn btn-primary btn-lg" style="width:100%;margin-bottom:16px;" onclick="startSkillsSession()">🚀 Session starten</button>
+    <button class="btn btn-primary btn-lg" style="width:100%;margin-bottom:16px;" onclick="startSkillsSession()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polygon points="5 3 19 12 5 21 5 3"/></svg> Session starten</button>
   </div>
 
   <!-- ── PHASE 2: AKTIVE SESSION ───────────── -->
@@ -733,18 +733,18 @@ body{
         <div>
           <div id="skills-session-info" style="font-size:.78rem;color:var(--og-grey);"></div>
           <div id="skills-timer-wrap" style="display:none;margin-top:4px;display:flex;align-items:center;gap:8px;">
-            <span style="font-size:.72rem;color:var(--og-grey);">⏱</span>
+            <span style="color:var(--og-grey);display:flex;align-items:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:0px;flex-shrink:0;"><circle cx="12" cy="13" r="7"/><polyline points="12 10 12 13 14 15"/><path d="M9.5 2h5"/><path d="M12 2v2"/></svg></span>
             <span id="skills-timer-display" style="font-family:'Courier New',monospace;font-size:1.5rem;font-weight:900;color:#5dde8e;letter-spacing:1px;"></span>
           </div>
         </div>
-        <button onclick="endSkillsSession()" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:6px 13px;font-size:.78rem;font-weight:700;cursor:pointer;">✕ Beenden</button>
+        <button onclick="endSkillsSession()" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:1px solid rgba(231,76,60,.3);border-radius:8px;padding:6px 13px;font-size:.78rem;font-weight:700;cursor:pointer;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Beenden</button>
       </div>
     </div>
 
-    <!-- 🔴 Live Rangliste (sichtbar wenn ≥2 Athleten) -->
+    <!-- Live Rangliste (sichtbar wenn ≥2 Athleten) -->
     <div class="card" id="skills-live-board" style="display:none;margin-bottom:10px;">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-        <div class="card-title" style="margin-bottom:0;">🔴 Live Rangliste</div>
+        <div class="card-title" style="margin-bottom:0;display:flex;align-items:center;gap:6px;"><svg width="8" height="8" viewBox="0 0 10 10" style="vertical-align:middle;"><circle cx="5" cy="5" r="5" fill="#ef4444" opacity="0.3"/><circle cx="5" cy="5" r="3" fill="#ef4444"/></svg> Live Rangliste</div>
         <span style="font-size:.68rem;color:#ff8a7a;font-weight:700;animation:pulse 1.2s infinite;">LIVE</span>
       </div>
       <div id="skills-live-list"></div>
@@ -756,20 +756,20 @@ body{
     <!-- Skills des aktuellen Athleten -->
     <div class="card" id="skills-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-        <div style="font-weight:800;font-size:1rem;color:var(--og-white);">📋 <span id="skills-athlete-name"></span></div>
+        <div style="font-weight:800;font-size:1rem;color:var(--og-white);display:flex;align-items:center;gap:6px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:0px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span id="skills-athlete-name"></span></div>
         <div id="skills-save-status" style="font-size:.8rem;"></div>
       </div>
       <div id="skills-list"></div>
       <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="saveSkillsResult()">💾 Speichern</button>
-        <button class="btn btn-navy" onclick="saveAllSkillsResults()">💾 Alle speichern</button>
+        <button class="btn btn-primary" onclick="saveSkillsResult()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Speichern</button>
+        <button class="btn btn-navy" onclick="saveAllSkillsResults()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Alle speichern</button>
       </div>
     </div>
   </div>
 
   <!-- Live Tabelle -->
   <div class="card">
-    <div class="card-title">🏆 Live Tabelle</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="8 21 12 21 16 21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M7 4h10l1 6a6 6 0 0 1-12 0z"/><path d="M5 9H3a2 2 0 0 1-2-2V6h6"/><path d="M19 9h2a2 2 0 0 0 2-2V6h-6"/></svg> Live Tabelle</div>
     <div class="tab-row" id="skills-cat-tabs"></div>
     <div id="skills-leaderboard"></div>
   </div>
@@ -779,21 +779,21 @@ body{
 <section id="screen-chasetag" class="screen">
   <div class="section-header">
     <div>
-      <div class="section-title">🏃 Chasetag</div>
+      <div class="section-title"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M13 4a1 1 0 1 0 2 0 1 1 0 0 0-2 0"/><path d="M7.5 14.5L6 21M16 14.5L18 21M8 14.5h8l-1-6H9l-1 6zM14 8.5l2 3M10 8.5l-2 3"/></svg> Chasetag</div>
       <div class="section-sub">20 Sek. Timer · Bis zu 6vs6 · Max. 16 Runden</div>
     </div>
   </div>
 
   <!-- Tab: Setup / Game -->
   <div class="tab-row">
-    <button class="tab-btn active" onclick="switchChasetag('setup')" id="ctab-setup">🔧 Setup</button>
-    <button class="tab-btn" onclick="switchChasetag('game')" id="ctab-game">🎮 Spiel</button>
+    <button class="tab-btn active" onclick="switchChasetag('setup')" id="ctab-setup"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;flex-shrink:0;"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Setup</button>
+    <button class="tab-btn" onclick="switchChasetag('game')" id="ctab-game"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;flex-shrink:0;"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4m-2-2v4"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r="1" fill="currentColor" stroke="none"/></svg> Spiel</button>
   </div>
 
   <!-- Setup -->
   <div id="chasetag-setup">
     <div class="card">
-      <div class="card-title">👥 Teams</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Teams</div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Team A Name</label>
@@ -823,7 +823,7 @@ body{
         <input type="checkbox" id="ct-anon" style="width:18px;height:18px;accent-color:var(--og-orange);"/>
         <span style="font-size:.88rem;">Anonym spielen (Nummern statt Namen)</span>
       </label>
-      <button class="btn btn-primary btn-lg" onclick="initChasetag()">🚀 Spiel starten</button>
+      <button class="btn btn-primary btn-lg" onclick="initChasetag()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polygon points="5 3 19 12 5 21 5 3"/></svg> Spiel starten</button>
     </div>
   </div>
 
@@ -852,15 +852,15 @@ body{
       <div class="chasetag-timer" id="ct-timer">20.0</div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;">
         <button class="btn btn-primary btn-xl" id="ct-start-btn" onclick="startChasetag()">▶ START</button>
-        <button class="btn btn-danger" id="ct-caught-btn" onclick="caughtEvader()" disabled>🏴 GEFANGEN</button>
+        <button class="btn btn-danger" id="ct-caught-btn" onclick="caughtEvader()" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> GEFANGEN</button>
         <button class="btn btn-navy" id="ct-next-btn" onclick="nextChasetag()" disabled>→ WEITER</button>
       </div>
-      <button class="btn btn-warn btn-sm" onclick="activateSuddenDeath()" style="margin-top:12px;" id="ct-sd-btn">⚡ Sudden Death aktivieren</button>
+      <button class="btn btn-warn btn-sm" onclick="activateSuddenDeath()" style="margin-top:12px;" id="ct-sd-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Sudden Death aktivieren</button>
     </div>
 
     <!-- Queue -->
     <div class="card">
-      <div class="card-title">🔄 Nächste Spieler (Drag & Drop)</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg> Nächste Spieler (Drag & Drop)</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
         <div>
           <div style="font-size:.75rem;color:var(--og-grey);font-weight:700;margin-bottom:8px;text-transform:uppercase;" id="ct-qA-label">Team A Queue</div>
@@ -875,11 +875,11 @@ body{
 
     <!-- History -->
     <div class="card">
-      <div class="card-title">📋 Rundenlog</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> Rundenlog</div>
       <div id="ct-history" style="max-height:220px;overflow-y:auto;"></div>
     </div>
 
-    <button class="btn btn-danger" onclick="resetChasetag()" style="margin-top:10px;">✕ Spiel beenden</button>
+    <button class="btn btn-danger" onclick="resetChasetag()" style="margin-top:10px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Spiel beenden</button>
   </div>
 </section>
 
@@ -887,13 +887,13 @@ body{
 <section id="screen-speedrun" class="screen">
   <div class="section-header">
     <div>
-      <div class="section-title">⚡ Parkour Speedrun</div>
+      <div class="section-title"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> Parkour Speedrun</div>
       <div class="section-sub">Timer nach Stage, Schwierigkeit und Gruppe</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">⚙️ Setup</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Setup</div>
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Athlet</label>
@@ -908,11 +908,11 @@ body{
       <div class="form-group">
         <label class="form-label">Schwierigkeitsgrad</label>
         <select class="form-control" id="sr-difficulty">
-          <option>⭐ Einfach</option>
-          <option>⭐⭐ Mittel</option>
-          <option>⭐⭐⭐ Schwer</option>
-          <option>⭐⭐⭐⭐ Expert</option>
-          <option>⭐⭐⭐⭐⭐ Elite</option>
+          <option>★ Einfach</option>
+          <option>★★ Mittel</option>
+          <option>★★★ Schwer</option>
+          <option>★★★★ Expert</option>
+          <option>★★★★★ Elite</option>
         </select>
       </div>
       <div class="form-group">
@@ -932,12 +932,12 @@ body{
       <button class="btn btn-primary btn-xl" onclick="startSpeedrun()">▶ START</button>
       <button class="btn btn-danger btn-xl" id="sr-stop-btn" onclick="stopSpeedrun()" disabled>⏹ STOP</button>
       <button class="btn btn-navy btn-lg" onclick="resetSpeedrun()">↺ RESET</button>
-      <button class="btn btn-success btn-lg" id="sr-save-btn" onclick="saveSpeedrun()" disabled>💾 SPEICHERN</button>
+      <button class="btn btn-success btn-lg" id="sr-save-btn" onclick="saveSpeedrun()" disabled><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> SPEICHERN</button>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">🏆 Bestzeiten</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="8 21 12 21 16 21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M7 4h10l1 6a6 6 0 0 1-12 0z"/><path d="M5 9H3a2 2 0 0 1-2-2V6h6"/><path d="M19 9h2a2 2 0 0 0 2-2V6h-6"/></svg> Bestzeiten</div>
     <div id="sr-leaderboard"></div>
   </div>
 </section>
@@ -946,7 +946,7 @@ body{
 <section id="screen-calendar" class="screen">
   <div class="section-header">
     <div>
-      <div class="section-title">📅 Trainer Kalender</div>
+      <div class="section-title"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Trainer Kalender</div>
       <div class="section-sub">Wer hat wann welche Challenge gemacht?</div>
     </div>
     <button class="btn btn-primary btn-sm" onclick="openCalendarModal()">+ Eintrag</button>
@@ -972,7 +972,7 @@ body{
 
 <!-- ─── SCREEN: HEADCOACH ─────────────────────── -->
 <section id="screen-headcoach" class="screen">
-  <div class="section-title" style="margin-bottom:18px;">🔐 HeadCoach Bereich</div>
+  <div class="section-title" style="margin-bottom:18px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> HeadCoach Bereich</div>
 
   <!-- Login -->
   <div id="hc-login" class="card">
@@ -994,44 +994,44 @@ body{
     </div>
 
     <div class="card">
-      <div class="card-title">👤 Coach Aktivität</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Coach Aktivität</div>
       <div id="hc-coach-activity"></div>
     </div>
 
     <div class="card">
-      <div class="card-title">📊 Letzte Ergebnisse</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg> Letzte Ergebnisse</div>
       <div id="hc-recent-results"></div>
     </div>
 
     <!-- Coach Verwaltung / Logins -->
     <div class="card">
-      <div class="card-title">🔑 Coach Logins & PINs</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> Coach Logins & PINs</div>
       <div style="font-size:.8rem;color:var(--og-grey);margin-bottom:12px;">Coaches ohne PIN können sich ohne Bestätigung einloggen. Mit PIN ist eine Bestätigung erforderlich.</div>
       <div id="hc-coach-pins"></div>
       <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
         <input type="text" class="form-control" id="hc-new-coach-name" placeholder="Coach Name" style="max-width:180px;" list="coach-datalist"/>
         <input type="password" class="form-control" id="hc-new-coach-pin" placeholder="PIN (4-stellig)" maxlength="4" style="max-width:130px;letter-spacing:4px;text-align:center;font-size:1rem;"/>
-        <button class="btn btn-primary btn-sm" onclick="hcSetCoachPin()">✓ PIN setzen</button>
+        <button class="btn btn-primary btn-sm" onclick="hcSetCoachPin()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg> PIN setzen</button>
       </div>
     </div>
 
     <!-- QR-Code für schnellen Zugriff der Coaches -->
     <div class="card">
-      <div class="card-title">📱 App-Link & QR-Code</div>
+      <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> App-Link &amp; QR-Code</div>
       <div style="font-size:.82rem;color:var(--og-grey);margin-bottom:12px;">Coaches können diesen QR-Code scannen um die App direkt zu öffnen.</div>
       <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
         <div id="hc-qr-code" style="background:#fff;padding:8px;border-radius:8px;display:inline-block;"></div>
         <div>
           <div id="hc-app-url" style="font-size:.78rem;color:var(--og-amber);word-break:break-all;margin-bottom:10px;"></div>
-          <button class="btn btn-navy btn-sm" onclick="copyAppUrl()">📋 Link kopieren</button>
+          <button class="btn btn-navy btn-sm" onclick="copyAppUrl()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link kopieren</button>
         </div>
       </div>
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-      <button class="btn btn-primary" onclick="exportAllDay()">📥 Tages-Export (Excel)</button>
-      <button class="btn btn-navy" onclick="printResults()">🖨️ Drucken</button>
-      <button class="btn btn-navy" onclick="showScreen('history')" style="background:rgba(100,160,255,.15);border:1px solid rgba(100,160,255,.3);color:#8ecfff;">📋 Alle Resultate (History)</button>
+      <button class="btn btn-primary" onclick="exportAllDay()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Tages-Export (Excel)</button>
+      <button class="btn btn-navy" onclick="printResults()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Drucken</button>
+      <button class="btn btn-navy" onclick="showScreen('history')" style="background:rgba(100,160,255,.15);border:1px solid rgba(100,160,255,.3);color:#8ecfff;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> Alle Resultate (History)</button>
       <button class="btn btn-danger btn-sm" onclick="hcLogout()">Logout</button>
     </div>
   </div>
@@ -1041,15 +1041,15 @@ body{
 <section id="screen-import" class="screen">
   <div class="section-header">
     <div>
-      <div class="section-title">📥 Excel Import</div>
+      <div class="section-title"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Excel Import</div>
       <div class="section-sub">Athleten, Stages, Trainer & Skills importieren</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">📤 Excel Datei hochladen</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Excel Datei hochladen</div>
     <div class="drop-zone" id="import-dropzone" onclick="document.getElementById('import-file').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleImportDrop(event)">
-      <div style="font-size:2.5rem;margin-bottom:10px;">📊</div>
+      <div style="margin-bottom:10px;opacity:.5;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:0px;flex-shrink:0;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
       <div style="font-weight:700;margin-bottom:6px;">Excel Datei hier ablegen</div>
       <div style="font-size:.82rem;color:var(--og-grey);">oder klicken zum Auswählen (.xlsx)</div>
     </div>
@@ -1058,7 +1058,7 @@ body{
   </div>
 
   <div class="card">
-    <div class="card-title">🔊 Sounds hochladen (optional)</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Sounds hochladen (optional)</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div>
         <label class="form-label">Start-Signal (Beep)</label>
@@ -1078,16 +1078,16 @@ body{
       </div>
     </div>
     <div style="margin-top:12px;">
-      <button class="btn btn-navy btn-sm" onclick="testSounds()">🔊 Sounds testen</button>
+      <button class="btn btn-navy btn-sm" onclick="testSounds()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg> Sounds testen</button>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">🔧 Firebase Echtzeit-Sync</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg> Firebase Echtzeit-Sync</div>
     <div style="font-size:.82rem;color:var(--og-grey);margin-bottom:12px;">
       Für Echtzeit-Sync über alle Geräte: Firebase-Projekt erstellen auf <a href="https://console.firebase.google.com" target="_blank" style="color:var(--og-amber);">console.firebase.google.com</a>,
       dann unter Projekteinstellungen → Web-App → Firebase SDK-Konfiguration den JSON-Block einfügen.<br>
-      <span style="color:var(--og-success);">✅ Sobald konfiguriert sehen alle Coaches & Geräte alle Ergebnisse sofort in Echtzeit.</span>
+      <span style="color:var(--og-success);display:flex;align-items:center;gap:5px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Sobald konfiguriert sehen alle Coaches &amp; Geräte alle Ergebnisse sofort in Echtzeit.</span>
     </div>
     <div id="firebase-status" style="margin-bottom:10px;font-size:.82rem;font-weight:600;"></div>
     <div class="form-group">
@@ -1095,16 +1095,16 @@ body{
       <textarea class="form-control" id="firebase-config-input" rows="7" placeholder='{"apiKey":"AIza...","authDomain":"xxx.firebaseapp.com","projectId":"xxx","storageBucket":"xxx.appspot.com","messagingSenderId":"000","appId":"1:000:web:000"}'></textarea>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <button class="btn btn-primary" onclick="saveFirebaseConfig()">💾 Config speichern & verbinden</button>
-      <button class="btn btn-navy btn-sm" onclick="clearFirebaseConfig()" style="font-size:.78rem;">🗑 Config löschen (lokaler Modus)</button>
+      <button class="btn btn-primary" onclick="saveFirebaseConfig()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Config speichern &amp; verbinden</button>
+      <button class="btn btn-navy btn-sm" onclick="clearFirebaseConfig()" style="font-size:.78rem;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg> Config löschen (lokaler Modus)</button>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">📥 Export</div>
+    <div class="card-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export</div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <button class="btn btn-primary" onclick="exportAllDay()">📊 Tages-Export (Excel)</button>
-      <button class="btn btn-navy" onclick="printResults()">🖨️ Ergebnisse drucken</button>
+      <button class="btn btn-primary" onclick="exportAllDay()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg> Tages-Export (Excel)</button>
+      <button class="btn btn-navy" onclick="printResults()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Ergebnisse drucken</button>
     </div>
   </div>
 </section>
@@ -1116,7 +1116,7 @@ body{
 <section id="screen-history" class="screen">
   <div class="section-header">
     <div>
-      <div class="section-title">📋 Ergebnis-History</div>
+      <div class="section-title"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> Ergebnis-History</div>
       <div class="section-sub">Alle Resultate – vollständig und chronologisch</div>
     </div>
     <div id="hist-coach-hint" style="font-size:.78rem;color:var(--og-amber);text-align:right;line-height:1.4;display:none;"></div>
@@ -1129,10 +1129,10 @@ body{
         <label class="form-label" style="font-size:.72rem;">Aktivität</label>
         <select class="form-control" id="hist-filter-type" onchange="renderHistory()" style="padding:7px 10px;font-size:.82rem;">
           <option value="">Alle Typen</option>
-          <option value="ninja">🥷 Ninja Stage</option>
+          <option value="ninja">Ninja Stage</option>
           <option value="skills">⭐ Skills</option>
-          <option value="speedrun">⚡ Speedrun</option>
-          <option value="chasetag">🏃 Chasetag</option>
+          <option value="speedrun">Speedrun</option>
+          <option value="chasetag">Chasetag</option>
         </select>
       </div>
       <div style="flex:1;min-width:130px;">
@@ -1147,7 +1147,7 @@ body{
         <label class="form-label" style="font-size:.72rem;">Bis</label>
         <input type="date" class="form-control" id="hist-filter-to" onchange="renderHistory()" style="padding:7px 10px;font-size:.82rem;"/>
       </div>
-      <button class="btn btn-navy btn-sm" onclick="clearHistoryFilters()" style="white-space:nowrap;font-size:.78rem;padding:7px 12px;">✕ Filter</button>
+      <button class="btn btn-navy btn-sm" onclick="clearHistoryFilters()" style="white-space:nowrap;font-size:.78rem;padding:7px 12px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Filter</button>
     </div>
     <div id="hist-count" style="margin-top:8px;font-size:.75rem;color:var(--og-grey);"></div>
   </div>
@@ -1165,7 +1165,7 @@ body{
 <!-- Coach Select Modal -->
 <div class="modal-overlay" id="coach-modal">
   <div class="modal">
-    <div class="modal-title">👤 Coach auswählen</div>
+    <div class="modal-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Coach auswählen</div>
     <div class="form-group">
       <label class="form-label">Coach Name</label>
       <input type="text" class="form-control" id="coach-name-input" placeholder="Name eingeben..." list="coach-datalist" oninput="checkCoachPin()"/>
@@ -1176,12 +1176,12 @@ body{
       <input type="password" class="form-control" id="coach-pin-input" maxlength="4" placeholder="••••" style="font-size:1.3rem;letter-spacing:6px;text-align:center;" onkeydown="if(event.key==='Enter')setCoach()"/>
     </div>
     <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-      <button class="btn btn-primary" onclick="setCoach()">✓ Bestätigen</button>
+      <button class="btn btn-primary" onclick="setCoach()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg> Bestätigen</button>
       <button class="btn btn-navy" onclick="closeModal('coach-modal')">Abbrechen</button>
     </div>
     <div id="coach-history-link" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);">
       <button onclick="closeModal('coach-modal');goToMyHistory()" style="width:100%;background:rgba(100,160,255,.1);border:1px solid rgba(100,160,255,.25);color:#8ecfff;border-radius:10px;padding:9px;font-size:.82rem;font-weight:700;cursor:pointer;">
-        📋 Meine Resultate ansehen →
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg> Meine Resultate ansehen <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:0px;flex-shrink:0;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </button>
     </div>
   </div>
@@ -1190,7 +1190,7 @@ body{
 <!-- Calendar Entry Modal -->
 <div class="modal-overlay" id="calendar-modal">
   <div class="modal">
-    <div class="modal-title">📅 Kalender Eintrag</div>
+    <div class="modal-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Kalender Eintrag</div>
     <div class="form-group">
       <label class="form-label">Trainer</label>
       <input type="text" class="form-control" id="cal-trainer" placeholder="Trainer Name"/>
@@ -1218,7 +1218,7 @@ body{
       </div>
     </div>
     <div style="display:flex;gap:10px;margin-top:16px;">
-      <button class="btn btn-primary" onclick="saveCalendarEntry()">💾 Speichern</button>
+      <button class="btn btn-primary" onclick="saveCalendarEntry()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Speichern</button>
       <button class="btn btn-navy" onclick="closeModal('calendar-modal')">Abbrechen</button>
     </div>
   </div>
@@ -1227,7 +1227,7 @@ body{
 <!-- Add Skill Modal -->
 <div class="modal-overlay" id="skill-modal">
   <div class="modal">
-    <div class="modal-title">⭐ Skill hinzufügen</div>
+    <div class="modal-title"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Skill hinzufügen</div>
     <div class="form-group">
       <label class="form-label">Skill Name</label>
       <input type="text" class="form-control" id="new-skill-name" placeholder="z.B. Precision Jump"/>
@@ -1237,7 +1237,7 @@ body{
       <input type="text" class="form-control" id="new-skill-cat" placeholder="z.B. Sprung, Vault, Balance"/>
     </div>
     <div style="display:flex;gap:10px;margin-top:16px;">
-      <button class="btn btn-primary" onclick="confirmAddSkill()">✓ Hinzufügen</button>
+      <button class="btn btn-primary" onclick="confirmAddSkill()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg> Hinzufügen</button>
       <button class="btn btn-navy" onclick="closeModal('skill-modal')">Abbrechen</button>
     </div>
   </div>
@@ -1251,6 +1251,51 @@ body{
 ══════════════════════════════════════════ -->
 <script>
 // ════════════════════════════════════════════════
+// SVG ICON LIBRARY
+// ════════════════════════════════════════════════
+const IC = {
+  s:`stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`,
+  _v(p,w=14){return`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" ${this.s}>${p}</svg>`;},
+  timer(w){return this._v(`<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>`,w);},
+  star(w){return this._v(`<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`,w);},
+  zap(w){return this._v(`<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>`,w);},
+  activity(w){return this._v(`<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>`,w);},
+  calendar(w){return this._v(`<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>`,w);},
+  shield(w){return this._v(`<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`,w);},
+  download(w){return this._v(`<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>`,w);},
+  upload(w){return this._v(`<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>`,w);},
+  list(w){return this._v(`<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>`,w);},
+  trophy(w){return this._v(`<polyline points="8 21 12 21 16 21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M7 4h10l1 6a6 6 0 0 1-12 0z"/><path d="M5 9H3a2 2 0 0 1-2-2V6h6"/><path d="M19 9h2a2 2 0 0 0 2-2V6h-6"/>`,w);},
+  save(w){return this._v(`<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>`,w);},
+  play(w){return`<svg width="${w||14}" height="${w||14}" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;},
+  users(w){return this._v(`<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>`,w);},
+  user(w){return this._v(`<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>`,w);},
+  sliders(w){return this._v(`<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>`,w);},
+  gamepad(w){return this._v(`<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4m-2-2v4"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="18" cy="13" r="1" fill="currentColor" stroke="none"/>`,w);},
+  barChart(w){return this._v(`<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/>`,w);},
+  smartphone(w){return this._v(`<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>`,w);},
+  key(w){return this._v(`<path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>`,w);},
+  volume(w){return this._v(`<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>`,w);},
+  refresh(w){return this._v(`<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>`,w);},
+  trash(w){return this._v(`<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>`,w);},
+  printer(w){return this._v(`<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>`,w);},
+  flag(w){return this._v(`<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>`,w);},
+  link(w){return this._v(`<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>`,w);},
+  check(w){return this._v(`<polyline points="20 6 9 17 4 12"/>`,w);},
+  checkCircle(w){return this._v(`<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>`,w);},
+  alert(w){return this._v(`<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>`,w);},
+  wifi(w){return this._v(`<path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/>`,w);},
+  xCircle(w){return this._v(`<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>`,w);},
+  shuffle(w){return this._v(`<polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>`,w);},
+  arrowUp(w){return this._v(`<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>`,w);},
+  trend(w){return this._v(`<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>`,w);},
+  live(w=8){return`<svg width="${w}" height="${w}" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="#ef4444" opacity="0.3"/><circle cx="5" cy="5" r="3" fill="#ef4444"/></svg>`;},
+  stopwatch(w){return this._v(`<path d="M12 2a9 9 0 1 0 9 9"/><path d="M12 2v4"/><path d="M12 11l4-4"/><path d="M15.5 2.1l3 1.4"/>`,w);},
+};
+// shorthand helper: ico('star') or ico('star', 16)
+function ico(name, size=14){ return IC[name] ? IC[name](size) : ''; }
+
+// ════════════════════════════════════════════════
 // FIREBASE INIT
 // ════════════════════════════════════════════════
 let db = null;
@@ -1262,7 +1307,7 @@ function initFirebase(){
   let config = null;
   if(stored){ try{ config = JSON.parse(stored); }catch(e){} }
   if(!config || config.apiKey === 'REPLACE_WITH_YOUR_KEY'){
-    document.getElementById('firebase-status').textContent = '⚠️ Kein Firebase – lokaler Modus aktiv';
+    document.getElementById('firebase-status').innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg> Kein Firebase – lokaler Modus aktiv</span>';
     console.warn('Firebase nicht konfiguriert – lokaler Modus aktiv');
     return;
   }
@@ -1270,7 +1315,7 @@ function initFirebase(){
     if(!firebase.apps.length){ firebase.initializeApp(config); }
     db = firebase.firestore();
     firebaseReady = true;
-    document.getElementById('firebase-status').textContent = '🔄 Verbinde…';
+    document.getElementById('firebase-status').innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><polyline points=\"23 4 23 10 17 10\"/><polyline points=\"1 20 1 14 7 14\"/><path d=\"M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15\"/></svg> Verbinde…</span>';
 
     // ── Unsubscribe old listeners ──
     _fsUnsubs.forEach(u=>u());
@@ -1321,10 +1366,10 @@ function initFirebase(){
       }, e=>console.warn('config sync',e))
     );
 
-    document.getElementById('firebase-status').textContent = '✅ Firebase verbunden – Echtzeit-Sync aktiv';
+    document.getElementById('firebase-status').innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;color:var(--og-success)"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><path d=\"M22 11.08V12a10 10 0 1 1-5.93-9.14\"/><polyline points=\"22 4 12 14.01 9 11.01\"/></svg> Firebase verbunden – Echtzeit-Sync aktiv</span>';
   }catch(e){
     console.warn('Firebase init error:', e);
-    document.getElementById('firebase-status').textContent = '❌ Firebase Fehler: '+e.message;
+    document.getElementById('firebase-status').innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;color:var(--og-danger)"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"15\" y1=\"9\" x2=\"9\" y2=\"15\"/><line x1=\"9\" y1=\"9\" x2=\"15\" y2=\"15\"/></svg> Firebase Fehler: '+e.message+'</span>';
   }
 }
 
@@ -1561,8 +1606,8 @@ function renderObstacles(){
     container.innerHTML = `<div style="text-align:center;padding:8px 0;font-size:.9rem;color:var(--og-grey);">
       Checkpoint Modus – <span id="cp-cleared">0</span> / ${count} Hindernisse geschafft
       <div style="display:flex;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
-        <button class="btn btn-success btn-sm" onclick="addCheckpoint()">✓ Checkpoint</button>
-        <button class="btn btn-danger btn-sm" onclick="removeCheckpoint()">✗ Zurück</button>
+        <button class="btn btn-success btn-sm" onclick="addCheckpoint()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg> Checkpoint</button>
+        <button class="btn btn-danger btn-sm" onclick="removeCheckpoint()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px;flex-shrink:0;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Zurück</button>
       </div>
     </div>`;
   }
@@ -1866,7 +1911,7 @@ function renderNinjaTable(cat){
   if(!results.length){ lb.innerHTML='<div style="color:var(--og-grey);padding:14px;">Keine Ergebnisse in dieser Kategorie.</div>'; return; }
   lb.innerHTML = results.map((r,i)=>`
     <div class="leaderboard-row" style="grid-template-columns:40px 1fr auto auto auto;">
-      <div class="rank-badge rank-${i+1}">${i<3?['🥇','🥈','🥉'][i]:i+1}</div>
+      <div class="rank-badge rank-${i+1}">${i<3?['<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#FFD700;color:#000;font-size:.7rem;font-weight:900;">1</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#C0C0C0;color:#000;font-size:.7rem;font-weight:900;">2</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#CD7F32;color:#fff;font-size:.7rem;font-weight:900;">3</span>'][i]:i+1}</div>
       <div>
         <div style="font-weight:700;">${r.athlete}</div>
         <div style="font-size:.75rem;color:var(--og-grey);">${r.stage} · ${r.dateStr} · ${r.coach||''}</div>
@@ -1878,7 +1923,7 @@ function renderNinjaTable(cat){
         <div style="font-family:'Courier New',monospace;font-weight:700;font-size:1rem;">${r.timeStr}</div>
         ${r.usedSplit ? `<div style="font-size:.65rem;color:var(--og-amber);">⏱ Zwischenzeit</div>` : ''}
       </div>
-      <button onclick="deleteNinjaResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:.85rem;flex-shrink:0;" class="no-print">✕</button>
+      <button onclick="deleteNinjaResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;" class="no-print"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>`).join('');
 }
 
@@ -1942,7 +1987,7 @@ function renderSetupSkills(){
         <span style="font-weight:600;">${s.name}</span>
         ${s.category?`<span style="font-size:.7rem;color:var(--og-grey);margin-left:6px;">${s.category}</span>`:''}
       </div>
-      <button onclick="removeSetupSkill(${i})" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.8rem;font-weight:700;">✕</button>
+      <button onclick="removeSetupSkill(${i})" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:none;border-radius:6px;padding:4px 8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>`).join('');
 }
 
@@ -1959,7 +2004,7 @@ function renderSetupAthletes(){
       <input type="text" class="form-control" value="${a.replace(/"/g,'&quot;')}"
         oninput="skillsSetupData.athletes[${i}]=this.value"
         placeholder="Athlet ${i+1}" list="athletes-datalist" autocomplete="off" style="flex:1;"/>
-      ${i>0?`<button onclick="removeSkillAthleteRow(${i})" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:none;border-radius:6px;padding:7px 11px;cursor:pointer;font-weight:700;">✕</button>`:''}
+      ${i>0?`<button onclick="removeSkillAthleteRow(${i})" style="background:rgba(231,76,60,.18);color:#ff8a7a;border:none;border-radius:6px;padding:6px 10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`:''}
     </div>`).join('');
 }
 
@@ -2084,7 +2129,7 @@ function showSkillsFinalStandings(){
     </div>
     ${sorted.map((a,i)=>`
       <div onclick="switchSkillsAthlete(${a.origIdx})" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,${i===0?.1:.04});border-radius:10px;margin-bottom:8px;border:1px solid rgba(255,255,255,${i===0?.2:.06});cursor:pointer;">
-        <div style="font-size:1.4rem;width:32px;text-align:center;">${['🥇','🥈','🥉'][i]||i+1}</div>
+        <div style="font-size:1.4rem;width:32px;text-align:center;">${['<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#FFD700;color:#000;font-size:.7rem;font-weight:900;">1</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#C0C0C0;color:#000;font-size:.7rem;font-weight:900;">2</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#CD7F32;color:#fff;font-size:.7rem;font-weight:900;">3</span>'][i]||i+1}</div>
         <div style="flex:1;">
           <div style="font-weight:800;font-size:.95rem;">${a.name}</div>
           <div style="font-size:.7rem;color:var(--og-grey);">${a.done}/${a.total_skills} Skills bewertet</div>
@@ -2113,9 +2158,9 @@ function renderSessionLiveBoard(){
 
   document.getElementById('skills-live-list').innerHTML = sorted.map((a,i)=>`
     <div onclick="switchSkillsAthlete(${a.origIdx})" style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(255,255,255,${a.origIdx===skillsCurrentAthleteIdx?.1:.03});border-radius:8px;margin-bottom:6px;border:1px solid rgba(255,255,255,${a.origIdx===skillsCurrentAthleteIdx?.18:.05});cursor:pointer;">
-      <div style="font-size:1.1rem;width:28px;text-align:center;">${['🥇','🥈','🥉'][i]||i+1}</div>
+      <div style="font-size:1.1rem;width:28px;text-align:center;">${['<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#FFD700;color:#000;font-size:.7rem;font-weight:900;">1</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#C0C0C0;color:#000;font-size:.7rem;font-weight:900;">2</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#CD7F32;color:#fff;font-size:.7rem;font-weight:900;">3</span>'][i]||i+1}</div>
       <div style="flex:1;">
-        <div style="font-weight:700;font-size:.88rem;">${a.name}${a.saved?' <span class="athlete-saved-badge">✓</span>':''}</div>
+        <div style="font-weight:700;font-size:.88rem;">${a.name}${a.saved?' <span class="athlete-saved-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><polyline points="20 6 9 17 4 12"/></svg></span>':''}</div>
         <div style="font-size:.68rem;color:var(--og-grey);">${a.done}/${a.total_skills} Skills</div>
       </div>
       <div style="font-family:'Courier New',monospace;font-weight:900;font-size:1.2rem;color:${i===0?'var(--og-amber)':'var(--og-white)'};">${a.total}</div>
@@ -2127,7 +2172,7 @@ function renderSkillsAthleteTabs(){
   tabs.innerHTML = skillsSessionAthletes.map((a,i)=>`
     <button class="tab-btn ${i===skillsCurrentAthleteIdx?'active':''}"
       onclick="switchSkillsAthlete(${i})" style="${a.saved?'border-color:#27AE60;':''}"
-    >${a.saved?'✓ ':''}${a.name}</button>`).join('');
+    >${a.saved?'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><polyline points="20 6 9 17 4 12"/></svg> ':''}&shy;${a.name}</button>`).join('');
 }
 
 function switchSkillsAthlete(idx){
@@ -2148,7 +2193,7 @@ function renderCurrentAthleteSkills(){
 
   const statusEl = document.getElementById('skills-save-status');
   statusEl.innerHTML = athlete.saved
-    ? '<span class="athlete-saved-badge">✓ Gespeichert</span>'
+    ? '<span class="athlete-saved-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><polyline points="20 6 9 17 4 12"/></svg> Gespeichert</span>'
     : `<span style="color:var(--og-grey);">${scored}/${athlete.skills.length} bewertet · ${total} Pkt</span>`;
 
   const list = document.getElementById('skills-list');
@@ -2161,7 +2206,7 @@ function renderCurrentAthleteSkills(){
       <button class="attempt-btn v1 ${s.attempt===1?'active':''}" onclick="setSkillAttempt(${i},1)" title="1. Versuch = 100 Pkt">V1</button>
       <button class="attempt-btn v2 ${s.attempt===2?'active':''}" onclick="setSkillAttempt(${i},2)" title="2. Versuch = 50 Pkt">V2</button>
       <button class="attempt-btn v3 ${s.attempt===3?'active':''}" onclick="setSkillAttempt(${i},3)" title="3. Versuch = 10 Pkt">V3</button>
-      <button class="attempt-btn vx ${s.attempt===0?'active':''}" onclick="setSkillAttempt(${i},0)" title="Nicht geschafft">✗</button>
+      <button class="attempt-btn vx ${s.attempt===0?'active':''}" onclick="setSkillAttempt(${i},0)" title="Nicht geschafft" style="font-size:.9rem;font-weight:700;">×</button>
     </div>`).join('');
 }
 
@@ -2282,13 +2327,13 @@ function renderSkillsTable(cat){
   if(!results.length){ lb.innerHTML='<div style="color:var(--og-grey);padding:14px;">Keine Ergebnisse.</div>'; return; }
   lb.innerHTML = results.map((r,i)=>`
     <div class="leaderboard-row" style="grid-template-columns:40px 1fr auto auto;">
-      <div class="rank-badge rank-${i+1}">${i<3?['🥇','🥈','🥉'][i]:i+1}</div>
+      <div class="rank-badge rank-${i+1}">${i<3?['<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#FFD700;color:#000;font-size:.7rem;font-weight:900;">1</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#C0C0C0;color:#000;font-size:.7rem;font-weight:900;">2</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#CD7F32;color:#fff;font-size:.7rem;font-weight:900;">3</span>'][i]:i+1}</div>
       <div>
         <div style="font-weight:700;">${r.athlete}</div>
         <div style="font-size:.75rem;color:var(--og-grey);">${r.dateStr} · ${r.skills.filter(s=>s.attempt).length} Skills · ${r.coach||''}</div>
       </div>
       <div style="font-family:'Courier New',monospace;font-weight:900;font-size:1.3rem;color:var(--og-amber);">${r.totalPoints}</div>
-      <button onclick="deleteSkillResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:.85rem;flex-shrink:0;" class="no-print">✕</button>
+      <button onclick="deleteSkillResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;" class="no-print"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>`).join('');
 }
 
@@ -2411,12 +2456,12 @@ function updateChasetag(){
   document.getElementById('ct-scoreA').textContent = ct.scoreA;
   document.getElementById('ct-scoreB').textContent = ct.scoreB;
   document.getElementById('ct-round-display').textContent =
-    ct.suddenDeath ? '⚡ SUDDEN DEATH' : `Runde ${ct.round} / ${ct.maxRounds}`;
+    ct.suddenDeath ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> SUDDEN DEATH' : `Runde ${ct.round} / ${ct.maxRounds}`;
   document.getElementById('ct-timer').textContent = ct.timerDur.toFixed(1);
   document.getElementById('ct-role-display').textContent =
     `Evader: ${ct.currentEvader||'–'} (${ct.evaderTeam==='A'?ct.teamA:ct.teamB}) | Chaser: ${ct.currentChaser||'–'}`;
-  document.getElementById('ct-runnerA').textContent = ct.evaderTeam==='A' ? `▶ ${ct.currentEvader}` : `🏃 ${ct.currentChaser}`;
-  document.getElementById('ct-runnerB').textContent = ct.evaderTeam==='B' ? `▶ ${ct.currentEvader}` : `🏃 ${ct.currentChaser}`;
+  document.getElementById('ct-runnerA').textContent = ct.evaderTeam==='A' ? `▶ ${ct.currentEvader}` : `» ${ct.currentChaser}`;
+  document.getElementById('ct-runnerB').textContent = ct.evaderTeam==='B' ? `▶ ${ct.currentEvader}` : `» ${ct.currentChaser}`;
 
   renderQueueChips();
   renderChasetHistory();
@@ -2517,8 +2562,8 @@ function activateSuddenDeath(){
   playSound('click');
   ct.suddenDeath = true;
   ct.round = ct.maxRounds+1;
-  document.getElementById('ct-round-display').textContent = '⚡ SUDDEN DEATH';
-  toast('⚡ Sudden Death aktiviert!','success');
+  document.getElementById('ct-round-display').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> SUDDEN DEATH';
+  toast('Sudden Death aktiviert!','success');
   beep(440,0.3,0.6,'sawtooth');
 }
 
@@ -2526,7 +2571,7 @@ function endChasetag(){
   clearInterval(ct.timer);
   const winner = ct.scoreA>ct.scoreB ? ct.teamA : ct.scoreB>ct.scoreA ? ct.teamB : 'Unentschieden';
   playSound('success');
-  toast(`🏆 Spiel beendet! Gewinner: ${winner} (${ct.scoreA}:${ct.scoreB})`,'success');
+  toast(`Spiel beendet! Gewinner: ${winner} (${ct.scoreA}:${ct.scoreB})`,'success');
   document.getElementById('ct-start-btn').disabled = true;
   document.getElementById('ct-caught-btn').disabled = true;
   addAutoCalendarEntry(state.currentCoach,'Chasetag',`${ct.teamA} vs ${ct.teamB}`,`${ct.scoreA}:${ct.scoreB} – Gewinner: ${winner}`);
@@ -2616,14 +2661,14 @@ function renderSpeedrunLeaderboard(){
   if(!results.length){ lb.innerHTML='<div style="color:var(--og-grey);text-align:center;padding:20px;">Noch keine Ergebnisse</div>'; return; }
   lb.innerHTML=results.map((r,i)=>`
     <div class="speedrun-row" style="grid-template-columns:auto 1fr auto auto auto;">
-      <div class="rank-badge rank-${i+1}">${i<3?['🥇','🥈','🥉'][i]:i+1}</div>
+      <div class="rank-badge rank-${i+1}">${i<3?['<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#FFD700;color:#000;font-size:.7rem;font-weight:900;">1</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#C0C0C0;color:#000;font-size:.7rem;font-weight:900;">2</span>','<span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#CD7F32;color:#fff;font-size:.7rem;font-weight:900;">3</span>'][i]:i+1}</div>
       <div>
         <div style="font-weight:700;">${r.athlete}</div>
         <div style="font-size:.72rem;color:var(--og-grey);">${r.stage} · ${r.difficulty} · ${r.dateStr}</div>
       </div>
       <div class="badge badge-blue">${r.group||'–'}</div>
       <div style="font-family:'Courier New',monospace;font-weight:700;">${r.timeStr}</div>
-      <button onclick="deleteSpeedrunResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;font-size:.85rem;" class="no-print">✕</button>
+      <button onclick="deleteSpeedrunResult(${r.id})" title="Ergebnis löschen" style="background:transparent;border:1px solid rgba(231,76,60,.4);color:#ff8077;border-radius:6px;width:28px;height:28px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;" class="no-print"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>`).join('');
 }
 
@@ -2737,7 +2782,7 @@ function renderCalendar(){
       </div>
       <div style="font-weight:600;margin-bottom:4px;">${e.group||'–'}</div>
       <div style="font-size:.82rem;color:var(--og-grey);">${e.result||''}</div>
-      ${e.participants?`<div style="font-size:.72rem;color:var(--og-grey);margin-top:4px;">👤 ${e.participants} Teilnehmer</div>`:''}
+      ${e.participants?`<div style="font-size:.72rem;color:var(--og-grey);margin-top:4px;display:flex;align-items:center;gap:3px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${e.participants} Teilnehmer</div>`:''}
     </div>`).join('');
 }
 
@@ -2808,7 +2853,7 @@ function renderCoachPins(){
       <span style="font-weight:600;flex:1;">${name}</span>
       ${hasPin
         ? `<span class="badge badge-green">PIN gesetzt</span>
-           <button class="btn btn-danger btn-sm" style="padding:3px 10px;font-size:.72rem;" onclick="hcRemoveCoachPin('${name}')">✕ Entfernen</button>`
+           <button class="btn btn-danger btn-sm" style="padding:3px 10px;font-size:.72rem;" onclick="hcRemoveCoachPin('${name}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Entfernen</button>`
         : `<span class="badge badge-orange">Kein PIN</span>`}
     </div>`;
   }).join('');
@@ -2843,9 +2888,9 @@ function renderHeadcoachDashboard(){
 
   // Recent results (last 8, newest first)
   const allResults=[
-    ...state.ninjaResults.map(r=>({type:'🥷 Ninja',badge:'hist-badge-ninja',name:r.athlete,info:r.timeStr,date:r.date||r.dateStr,dateStr:r.dateStr,coach:r.coach})),
+    ...state.ninjaResults.map(r=>({type:'Ninja',badge:'hist-badge-ninja',name:r.athlete,info:r.timeStr,date:r.date||r.dateStr,dateStr:r.dateStr,coach:r.coach})),
     ...state.skillResults.map(r=>({type:'⭐ Skills',badge:'hist-badge-skills',name:r.athlete,info:r.totalPoints+' Pkt',date:r.date||r.dateStr,dateStr:r.dateStr,coach:r.coach})),
-    ...state.speedrunResults.map(r=>({type:'⚡ Speed',badge:'hist-badge-speedrun',name:r.athlete,info:r.timeStr,date:r.date||r.dateStr,dateStr:r.dateStr,coach:r.coach})),
+    ...state.speedrunResults.map(r=>({type:'Speed',badge:'hist-badge-speedrun',name:r.athlete,info:r.timeStr,date:r.date||r.dateStr,dateStr:r.dateStr,coach:r.coach})),
   ].sort((a,b)=>new Date(b.date)-new Date(a.date));
   const recent = allResults.slice(0,8);
   const totalCount = allResults.length + (state.calendarEntries||[]).filter(e=>e.auto&&e.activity==='Chasetag').length;
@@ -2860,7 +2905,7 @@ function renderHeadcoachDashboard(){
     </div>`).join('')||'<div style="color:var(--og-grey);padding:8px 0;">Noch keine Ergebnisse</div>')
     + `<div style="text-align:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.07);">
       <button onclick="showScreen('history')" style="background:rgba(100,160,255,.12);border:1px solid rgba(100,160,255,.25);color:#8ecfff;border-radius:8px;padding:7px 18px;font-size:.8rem;font-weight:700;cursor:pointer;">
-        📋 Alle ${totalCount} Resultate in der History anzeigen →
+        <svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><rect x=\"8\" y=\"2\" width=\"8\" height=\"4\" rx=\"1\"/><path d=\"M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2\"/><line x1=\"9\" y1=\"12\" x2=\"15\" y2=\"12\"/><line x1=\"9\" y1=\"16\" x2=\"13\" y2=\"16\"/></svg> Alle ${totalCount} Resultate in der History anzeigen →
       </button>
     </div>`;
 
@@ -2901,7 +2946,7 @@ function clearFirebaseConfig(){
   localStorage.removeItem('og_firebase_config');
   _fsUnsubs.forEach(u=>u()); _fsUnsubs=[];
   firebaseReady=false; db=null;
-  document.getElementById('firebase-status').textContent='⚠️ Config gelöscht – lokaler Modus aktiv';
+  document.getElementById('firebase-status').innerHTML='<span style="display:inline-flex;align-items:center;gap:4px;"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><path d=\"M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg> Config gelöscht – lokaler Modus aktiv</span>';
   document.getElementById('firebase-config-input').value='';
   toast('Firebase Config entfernt – lokaler Modus aktiv','success');
 }
@@ -2964,11 +3009,11 @@ function processImportFile(file){
 
       populateDropdowns();
       _syncConfigToFirestore(); // Sync imported data to all devices
-      status.innerHTML=`<span style="color:var(--og-success);">✅ Import erfolgreich: ${counts.athletes} Athleten · ${counts.stages} Stages · ${counts.trainers} Trainer · ${counts.skills} Skills${firebaseReady?' – Sync aktiv':''}</span>`;
+      status.innerHTML=`<span style="color:var(--og-success);display:inline-flex;align-items:center;gap:4px;"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><path d=\"M22 11.08V12a10 10 0 1 1-5.93-9.14\"/><polyline points=\"22 4 12 14.01 9 11.01\"/></svg> Import erfolgreich: ${counts.athletes} Athleten · ${counts.stages} Stages · ${counts.trainers} Trainer · ${counts.skills} Skills${firebaseReady?' – Sync aktiv':''}</span>`;
       toast('Import abgeschlossen ✓','success');
       playSound('success');
     }catch(err){
-      status.innerHTML=`<span style="color:var(--og-danger);">❌ Fehler: ${err.message}</span>`;
+      status.innerHTML=`<span style="color:var(--og-danger);display:inline-flex;align-items:center;gap:4px;"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"15\" y1=\"9\" x2=\"9\" y2=\"15\"/><line x1=\"9\" y1=\"9\" x2=\"15\" y2=\"15\"/></svg> Fehler: ${err.message}</span>`;
     }
   };
   reader.readAsArrayBuffer(file);
@@ -3130,17 +3175,17 @@ document.addEventListener('DOMContentLoaded',()=>{
       if(isIOS){
         steps = `
           <div class="ipu-step"><span class="ipu-icon">1</span><div><strong>Safari öffnen</strong> (falls noch nicht offen)</div></div>
-          <div class="ipu-step"><span class="ipu-icon">2</span><div>Auf <strong>Teilen</strong> tippen <span style="font-size:1.2em">⬆️</span> (unten in der Leiste)</div></div>
+          <div class="ipu-step"><span class="ipu-icon">2</span><div>Auf <strong>Teilen</strong> tippen ↑ (unten in der Leiste)</div></div>
           <div class="ipu-step"><span class="ipu-icon">3</span><div><strong>„Zum Home-Bildschirm"</strong> wählen</div></div>
-          <div class="ipu-step"><span class="ipu-icon">4</span><div>Mit <strong>„Hinzufügen"</strong> bestätigen – fertig! 🎉</div></div>`;
+          <div class="ipu-step"><span class="ipu-icon">4</span><div>Mit <strong>„Hinzufügen"</strong> bestätigen – fertig!</div></div>`;
       } else if(isAndroid){
         steps = `
           <div class="ipu-step"><span class="ipu-icon">1</span><div>Im Browser oben rechts auf <strong>⋮ Menü</strong> tippen</div></div>
           <div class="ipu-step"><span class="ipu-icon">2</span><div><strong>„Zum Startbildschirm hinzufügen"</strong> wählen</div></div>
-          <div class="ipu-step"><span class="ipu-icon">3</span><div>Mit <strong>„Hinzufügen"</strong> bestätigen – fertig! 🎉</div></div>`;
+          <div class="ipu-step"><span class="ipu-icon">3</span><div>Mit <strong>„Hinzufügen"</strong> bestätigen – fertig!</div></div>`;
       } else {
         steps = `
-          <div class="ipu-step"><span class="ipu-icon">📱</span><div>Auf dem <strong>Handy</strong> diese Seite öffnen und dann über das Browser-Menü <strong>„Zum Home-Bildschirm hinzufügen"</strong> wählen.</div></div>`;
+          <div class="ipu-step"><span class="ipu-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:0px;flex-shrink:0;"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span><div>Auf dem <strong>Handy</strong> diese Seite öffnen und dann über das Browser-Menü <strong>„Zum Home-Bildschirm hinzufügen"</strong> wählen.</div></div>`;
       }
       document.getElementById('ipu-steps').innerHTML = steps;
       document.getElementById('install-popup').style.display = 'flex';
@@ -3273,7 +3318,7 @@ function renderHistory(){
   if(!listEl) return;
 
   if(!items.length){
-    listEl.innerHTML = '<div class="hist-empty">📭 Keine Einträge gefunden</div>';
+    listEl.innerHTML = '<div class="hist-empty"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><polyline points=\"22 12 16 12 14 15 10 15 8 12 2 12\"/><path d=\"M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z\"/></svg> Keine Einträge gefunden</div>';
     return;
   }
 
@@ -3373,7 +3418,7 @@ function renderHistoryCard(item, idx){
 
   const title = item.athlete ? `${item.athlete}` : (item.group||'–');
   const stageLine = item.stage ? ` · ${item.stage}` : (item.group ? ` · ${item.group}` : '');
-  const coachLine = item.coach ? `👤 ${item.coach}` : '';
+  const coachLine = item.coach ? `<span style="display:inline-flex;align-items:center;gap:3px;"><svg width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"vertical-align:-2px;\"><path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/></svg> ${item.coach}</span>` : '';
   const dateLine  = item.dateStr || '';
 
   return `<div class="hist-card" id="hcard-${idx}">
@@ -3418,7 +3463,7 @@ function goToMyHistory(){
 ══════════════════════════════════════════ -->
 <div id="install-popup" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;padding:16px;background:linear-gradient(0deg,rgba(6,6,10,.98) 80%,transparent);align-items:flex-end;justify-content:center;">
   <div style="background:#111118;border:1px solid rgba(59,130,246,.3);border-radius:20px;padding:22px 20px 18px;width:min(420px,100%);box-shadow:0 -4px 40px rgba(0,0,0,.7);position:relative;">
-    <button onclick="closeInstallPopup()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#4B5563;font-size:1.3rem;cursor:pointer;line-height:1;">✕</button>
+    <button onclick="closeInstallPopup()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#4B5563;cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
       <div style="width:48px;height:48px;background:#3B82F6;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 12px rgba(59,130,246,.4);">
         <span style="font-size:17px;font-weight:900;color:#fff;line-height:1;">OG</span>
